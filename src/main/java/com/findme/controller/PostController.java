@@ -2,8 +2,8 @@ package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
-import com.findme.models.User;
-import com.findme.service.UserService;
+import com.findme.models.Post;
+import com.findme.service.PostService;
 import com.findme.util.Verification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,26 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
-    private UserService userService;
+@RequestMapping("/post")
+public class PostController {
+    private PostService postService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
-    @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
-    public String getUser(Model model, @PathVariable String userId) throws DaoException {
-/*
-        Example from lesson!!!
-        User user = new User();
-        user.setFirstName("Andrey");
-        user.setCity("TestCity");
-        model.addAttribute("text", "value");
- */
+
+    @RequestMapping(path = "/{postId}", method = RequestMethod.GET)
+    public String getPost(Model model, @PathVariable String postId) throws DaoException {
 
         try {
-            model.addAttribute("user", userService.findById(Verification.idTest(userId)));
+            model.addAttribute("post", postService.findById(Verification.idTest(postId)));
             return "profile";
         } catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -51,7 +45,7 @@ public class UserController {
             produces = "text/plain")
     public ResponseEntity<String> findById(@RequestParam(value = "id") Long id) throws DaoException {
         try {
-            userService.findById(id);
+            postService.findById(id);
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -64,10 +58,10 @@ public class UserController {
             method = RequestMethod.POST,
             value = "/save",
             produces = "text/plain")
-    public ResponseEntity<String> save(@RequestBody User user) throws DaoException {
+    public ResponseEntity<String> save(@RequestBody Post post) throws DaoException {
         try {
-            userService.save(user);
-            return new ResponseEntity<>(" User was saved", HttpStatus.CREATED);
+            postService.save(post);
+            return new ResponseEntity<>(" Post was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -79,10 +73,10 @@ public class UserController {
             method = RequestMethod.PUT,
             value = "/update",
             produces = "text/plain")
-    public ResponseEntity<String> update(@RequestBody User user) throws DaoException {
+    public ResponseEntity<String> update(@RequestBody Post post) throws DaoException {
         try {
-            userService.update(user);
-            return new ResponseEntity<>(" User was updated", HttpStatus.OK);
+            postService.update(post);
+            return new ResponseEntity<>(" Post was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -94,10 +88,10 @@ public class UserController {
             method = RequestMethod.DELETE,
             value = "/deletePost",
             produces = "text/plain")
-    public ResponseEntity<String> delete(@RequestBody User user) throws DaoException {
+    public ResponseEntity<String> delete(@RequestBody Post post) throws DaoException {
         try {
-            userService.delete(user);
-            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
+            postService.delete(post);
+            return new ResponseEntity<>(" Post was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -107,13 +101,13 @@ public class UserController {
 
     @RequestMapping(
             method = RequestMethod.DELETE,
-            value = "/delete/{userId}",
+            value = "/delete/{postId}",
             produces = "text/plain")
-    public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
+    public ResponseEntity<String> deleteById(@PathVariable String postId) throws DaoException {
 
         try {
-            userService.deleteById(Verification.idTest(userId));
-            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
+            postService.deleteById(Verification.idTest(postId));
+            return new ResponseEntity<>(" Post was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -125,9 +119,9 @@ public class UserController {
             method = RequestMethod.GET,
             value = "/findAll",
             produces = "text/plain")
-    public ResponseEntity<List<User>> getAll() throws DaoException {
+    public ResponseEntity<List<Post>> getAll() throws DaoException {
         try {
-            return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {

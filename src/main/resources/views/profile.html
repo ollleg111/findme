@@ -8,17 +8,27 @@
 <div class="left">
 
     <div class="starter-template">
-        <h1>Photo</h1>h1>
-
+        <h1>Photo</h1>
         <div>
-            <button class="">Send message</button>
+            <button class="btn">Send message</button>
         </div>
     </div>
 
-    <div class="right">
-        Styled text here
-    </div>
+</div>
 
+<div class="right">
+    <p th:text="${user.firstName}"></p>
+    <p th:text="${user.lastName}"></p>
+    <p th:text="${user.phoneNumber}"></p>
+    <p th:text="${user.country}"></p>
+    <p th:text="${user.city}"></p>
+    <p th:text="${user.age}"></p>
+    <p th:text="${user.dateRegistered}"></p>
+    <p th:text="${user.dateLastActive}"></p>
+    <p th:text="${user.relationshipStatus}"></p>
+    <p th:text="${user.religion}"></p>
+    <p th:text="${user.school}"></p>
+    <p th:text="${user.university}"></p>
 </div>
 
 </body>
@@ -33,8 +43,8 @@
     .right {
         margin-left: 300px;
     }
-    .btn{
-
+    .btn {
+        margin-top: 250px;
     }
 </style>
 </html>
