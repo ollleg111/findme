@@ -19,12 +19,10 @@ class GeneralDAO<T> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public void setTypeParameterClass(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
     }
 
-    @Autowired
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
