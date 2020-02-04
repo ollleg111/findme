@@ -19,9 +19,6 @@ class GeneralDAO<T> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final String SELECT_FROM = "SELECT * FROM = ?";
-    private String className = typeParameterClass.getName();
-
     @Autowired
     public void setTypeParameterClass(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
@@ -32,6 +29,8 @@ class GeneralDAO<T> {
         this.entityManager = entityManager;
     }
 
+    private static final String SELECT_FROM = "SELECT * FROM = ?";
+
     public T findById(Long id) throws DaoException {
         try {
             return entityManager.find(typeParameterClass, id);
@@ -39,7 +38,7 @@ class GeneralDAO<T> {
             System.err.println("findById is failed");
             System.err.println(exception.getMessage());
             throw new HibernateException(" The method findById(Long id) was failed in class "
-                    + className);
+                    + typeParameterClass.getName());
         }
     }
 
@@ -50,7 +49,7 @@ class GeneralDAO<T> {
             System.err.println("save is failed");
             System.err.println(exception.getMessage());
             throw new HibernateException(" The method save(T t) was failed in class "
-                    + className);
+                    + typeParameterClass.getName());
         }
         return t;
     }
@@ -62,7 +61,7 @@ class GeneralDAO<T> {
             System.err.println("update is failed");
             System.err.println(exception.getMessage());
             throw new HibernateException(" The method update(T t) was failed in class "
-                    + className);
+                    + typeParameterClass.getName());
         }
         return t;
     }
@@ -74,18 +73,18 @@ class GeneralDAO<T> {
             System.err.println("delete is failed");
             System.err.println(exception.getMessage());
             throw new HibernateException(" The method delete(T t) was failed in class "
-                    + className);
+                    + typeParameterClass.getName());
         }
     }
 
     public List<T> findAll() throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(SELECT_FROM, String.class);
-            query.setParameter(1, className);
+            query.setParameter(1, typeParameterClass.getName());
             return query.getResultList();
         } catch (DaoException e) {
             throw new HibernateException("Operation filed in method findAll() from class "
-                    + className);
+                    + typeParameterClass.getName());
         }
     }
 }

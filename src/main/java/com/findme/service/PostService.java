@@ -6,9 +6,11 @@ import com.findme.exceptions.DaoException;
 import com.findme.exceptions.ServiceException;
 import com.findme.models.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PostService {
     private PostDAO postDAO;
 

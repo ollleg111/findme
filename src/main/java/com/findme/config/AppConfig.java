@@ -28,8 +28,12 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com"})
 public class AppConfig implements WebMvcConfigurer {
-    @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    public AppConfig(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {

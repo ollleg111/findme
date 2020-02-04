@@ -18,11 +18,14 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
+    private Verification verification;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Verification verification) {
         this.userService = userService;
+        this.verification = verification;
     }
+
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     public String getUser(Model model, @PathVariable String userId) throws DaoException {
 /*
@@ -32,9 +35,8 @@ public class UserController {
         user.setCity("TestCity");
         model.addAttribute("text", "value");
  */
-
         try {
-            model.addAttribute("user", userService.findById(Verification.idTest(userId)));
+            model.addAttribute("user", userService.findById(verification.stringToLong(userId)));
             return "profile";
         } catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -110,9 +112,8 @@ public class UserController {
             value = "/delete/{userId}",
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
-
         try {
-            userService.deleteById(Verification.idTest(userId));
+            userService.deleteById(verification.stringToLong(userId));
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

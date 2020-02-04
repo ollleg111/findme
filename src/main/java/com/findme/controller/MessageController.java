@@ -18,17 +18,18 @@ import java.util.List;
 @RequestMapping("/message")
 public class MessageController {
     private MessageService messageService;
+    private Verification verification;
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService, Verification verification) {
         this.messageService = messageService;
+        this.verification = verification;
     }
 
     @RequestMapping(path = "/{messageId}", method = RequestMethod.GET)
     public String getMessage(Model model, @PathVariable String messageId) throws DaoException {
-
         try {
-            model.addAttribute("message", messageService.findById(Verification.idTest(messageId)));
+            model.addAttribute("message", messageService.findById(verification.stringToLong(messageId)));
             return "profile";
         } catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -104,9 +105,8 @@ public class MessageController {
             value = "/delete/{messageId}",
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String messageId) throws DaoException {
-
         try {
-            messageService.deleteById(Verification.idTest(messageId));
+            messageService.deleteById(verification.stringToLong(messageId));
             return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

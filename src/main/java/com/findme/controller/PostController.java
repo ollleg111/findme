@@ -18,17 +18,18 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostController {
     private PostService postService;
+    private Verification verification;
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, Verification verification) {
         this.postService = postService;
+        this.verification = verification;
     }
 
     @RequestMapping(path = "/{postId}", method = RequestMethod.GET)
     public String getPost(Model model, @PathVariable String postId) throws DaoException {
-
         try {
-            model.addAttribute("post", postService.findById(Verification.idTest(postId)));
+            model.addAttribute("post", postService.findById(verification.stringToLong(postId)));
             return "profile";
         } catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -104,9 +105,8 @@ public class PostController {
             value = "/delete/{postId}",
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String postId) throws DaoException {
-
         try {
-            postService.deleteById(Verification.idTest(postId));
+            postService.deleteById(verification.stringToLong(postId));
             return new ResponseEntity<>(" Post was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
