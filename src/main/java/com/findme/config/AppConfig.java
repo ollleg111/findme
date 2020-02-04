@@ -20,7 +20,6 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
@@ -66,17 +65,16 @@ public class AppConfig implements WebMvcConfigurer {
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(additionalProperties());
         return em;
     }
 
     @Bean
-    public DriverManagerDataSource dataSource() {
+    public DriverManagerDataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.ckzanzkzkznq.us-east-2.rds.amazonaws.com:1521:ORCL");
+        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.chwj6uiyvsme.us-east-2.rds.amazonaws.com:1521:ORCL");
         dataSource.setUsername("main");
-        dataSource.setPassword("W1DdNDwypsUyohttCttN");
+        dataSource.setPassword("q2301299266");
         return dataSource;
     }
 
@@ -84,14 +82,6 @@ public class AppConfig implements WebMvcConfigurer {
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
-    }
+        return transactionManager;    }
 
-    @Bean
-    public Properties additionalProperties() {
-        Properties properties =new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
-        properties.setProperty("hibernate.show_sql", "true");
-        return properties;
-    }
 }
