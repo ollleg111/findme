@@ -82,6 +82,6 @@ public class AppConfig implements WebMvcConfigurer {
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;    }
-
+        return transactionManager;
+    }
 }
