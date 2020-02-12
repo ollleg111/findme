@@ -4,7 +4,7 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.models.Post;
 import com.findme.service.PostService;
-import com.findme.util.Verification;
+import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +18,21 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostController {
     private PostService postService;
-    private Verification verification;
 
     @Autowired
-    public PostController(PostService postService, Verification verification) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.verification = verification;
     }
 
     @RequestMapping(path = "/{postId}", method = RequestMethod.GET)
     public String getPost(Model model, @PathVariable String postId) throws DaoException {
         try {
-            model.addAttribute("post", postService.findById(verification.stringToLong(postId)));
+            model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
             return "profile";
         } catch (BadRequestException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , BadRequestException";
+            return "BadRequestException " + e.getMessage();
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , InternalServerException";
+            return "System Error " + e.getMessage();
         }
     }
 
@@ -106,7 +102,7 @@ public class PostController {
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String postId) throws DaoException {
         try {
-            postService.deleteById(verification.stringToLong(postId));
+            postService.deleteById(Utils.stringToLong(postId));
             return new ResponseEntity<>(" Post was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

@@ -4,7 +4,7 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.models.Message;
 import com.findme.service.MessageService;
-import com.findme.util.Verification;
+import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +18,21 @@ import java.util.List;
 @RequestMapping("/message")
 public class MessageController {
     private MessageService messageService;
-    private Verification verification;
 
     @Autowired
-    public MessageController(MessageService messageService, Verification verification) {
+    public MessageController(MessageService messageService) {
         this.messageService = messageService;
-        this.verification = verification;
     }
 
     @RequestMapping(path = "/{messageId}", method = RequestMethod.GET)
     public String getMessage(Model model, @PathVariable String messageId) throws DaoException {
         try {
-            model.addAttribute("message", messageService.findById(verification.stringToLong(messageId)));
+            model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             return "profile";
         } catch (BadRequestException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , BadRequestException";
+            return "BadRequestException " + e.getMessage();
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , InternalServerException";
+            return "System Error " + e.getMessage();
         }
     }
 
@@ -106,7 +102,7 @@ public class MessageController {
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String messageId) throws DaoException {
         try {
-            messageService.deleteById(verification.stringToLong(messageId));
+            messageService.deleteById(Utils.stringToLong(messageId));
             return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

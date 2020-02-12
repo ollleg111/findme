@@ -21,8 +21,10 @@ public class PostService {
 
     public Post findById(Long id) throws DaoException {
         Post post = postDAO.findById(id);
-        postNullValidator(post);
-        return postDAO.findById(id);
+        if (post == null) throw
+                new BadRequestException("Post does not exist in method findById(Long id) from class " +
+                PostService.class.getName());
+        return post;
     }
 
     public Post save(Post post) throws DaoException {
@@ -39,17 +41,13 @@ public class PostService {
 
     public void deleteById(Long id) throws DaoException {
         Post post = postDAO.findById(id);
-        postNullValidator(post);
+        if (post == null) throw
+                new BadRequestException("Post does not exist in method postNullValidator(Post post) from class " +
+                PostService.class.getName());
         postDAO.delete(post);
     }
 
     public List<Post> findAll() throws DaoException {
         return postDAO.findAll();
-    }
-
-    private void postNullValidator(Post post) throws ServiceException {
-        if (post == null) throw new BadRequestException("Post does not exist in method" +
-                " postNullValidator(Post post) from class " +
-                PostService.class.getName());
     }
 }

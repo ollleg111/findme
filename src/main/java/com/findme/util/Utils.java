@@ -1,11 +1,9 @@
 package com.findme.util;
 
 import com.findme.exceptions.BadRequestException;
-import org.springframework.stereotype.Component;
 
-@Component
-public class Verification {
-    public Long stringToLong(String number) throws BadRequestException {
+public class Utils {
+    public static Long stringToLong(String number) throws BadRequestException {
         try {
             long id = Long.parseLong(number);
             if (id <= 0) {

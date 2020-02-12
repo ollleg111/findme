@@ -3,7 +3,6 @@ package com.findme.service;
 import com.findme.dao.UserDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
-import com.findme.exceptions.ServiceException;
 import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,10 @@ public class UserService {
 
     public User findById(Long id) throws DaoException {
         User user = userDAO.findById(id);
-        userNullValidator(user);
-        return userDAO.findById(id);
+        if (user == null) throw
+                new BadRequestException("User does not exist in method findById(Long id) from class " +
+                UserService.class.getName());
+        return user;
     }
 
     public User save(User user) throws DaoException {
@@ -39,17 +40,13 @@ public class UserService {
 
     public void deleteById(Long id) throws DaoException {
         User user = userDAO.findById(id);
-        userNullValidator(user);
+        if (user == null) throw
+                new BadRequestException("User does not exist in method deleteById(Long id) from class " +
+                UserService.class.getName());
         userDAO.delete(user);
     }
 
     public List<User> findAll() throws DaoException {
         return userDAO.findAll();
-    }
-
-    private void userNullValidator(User user) throws ServiceException {
-        if (user == null) throw new BadRequestException("Post does not exist in method" +
-                " postNullValidator(Post post) from class " +
-                UserService.class.getName());
     }
 }

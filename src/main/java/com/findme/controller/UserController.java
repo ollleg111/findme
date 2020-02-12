@@ -4,7 +4,7 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import com.findme.util.Verification;
+import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,10 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
-    private Verification verification;
 
     @Autowired
-    public UserController(UserService userService, Verification verification) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.verification = verification;
     }
 
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
@@ -36,14 +34,12 @@ public class UserController {
         model.addAttribute("text", "value");
  */
         try {
-            model.addAttribute("user", userService.findById(verification.stringToLong(userId)));
+            model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
             return "profile";
         } catch (BadRequestException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , BadRequestException";
+            return "BadRequestException " + e.getMessage();
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error , InternalServerException";
+            return "System Error " + e.getMessage();
         }
     }
 
@@ -113,7 +109,7 @@ public class UserController {
             produces = "text/plain")
     public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
         try {
-            userService.deleteById(verification.stringToLong(userId));
+            userService.deleteById(Utils.stringToLong(userId));
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

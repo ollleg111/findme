@@ -21,8 +21,10 @@ public class MessageService {
 
     public Message findById(Long id) throws DaoException {
         Message message = messageDAO.findById(id);
-        messageNullValidator(message);
-        return messageDAO.findById(id);
+        if (message == null) throw
+                new BadRequestException("Message does not exist in method findById(Long id) from class " +
+                UserService.class.getName());
+        return message;
     }
 
     public Message save(Message message) throws DaoException {
@@ -39,17 +41,13 @@ public class MessageService {
 
     public void deleteById(Long id) throws DaoException {
         Message message = messageDAO.findById(id);
-        messageNullValidator(message);
+        if (message == null) throw
+                new BadRequestException("Message does not exist in method deleteById(Long id) from class " +
+                UserService.class.getName());
         messageDAO.delete(message);
     }
 
     public List<Message> findAll() throws DaoException {
         return messageDAO.findAll();
-    }
-
-    private void messageNullValidator(Message message) throws ServiceException {
-        if (message == null) throw new BadRequestException("Message does not exist in method" +
-                " messageNullValidator(Message message) from class " +
-                UserService.class.getName());
     }
 }
