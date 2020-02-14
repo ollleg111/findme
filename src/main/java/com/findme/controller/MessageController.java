@@ -2,6 +2,8 @@ package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.InternalServerException;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
 import com.findme.service.MessageService;
 import com.findme.util.Utils;
@@ -31,7 +33,9 @@ public class MessageController {
             return "profile";
         } catch (BadRequestException e) {
             return "BadRequestException " + e.getMessage();
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return "Error 404 " + e.getMessage();
+        } catch (InternalServerException e) {
             return "System Error " + e.getMessage();
         }
     }

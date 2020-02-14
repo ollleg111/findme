@@ -2,6 +2,8 @@ package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.InternalServerException;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import com.findme.util.Utils;
@@ -38,7 +40,9 @@ public class UserController {
             return "profile";
         } catch (BadRequestException e) {
             return "BadRequestException " + e.getMessage();
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return "Error 404 " + e.getMessage();
+        } catch (InternalServerException e) {
             return "System Error " + e.getMessage();
         }
     }
