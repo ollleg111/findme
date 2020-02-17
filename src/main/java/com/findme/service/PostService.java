@@ -1,8 +1,8 @@
 package com.findme.service;
 
 import com.findme.dao.PostDAO;
-import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class PostService {
         this.postDAO = postDAO;
     }
 
-    public Post findById(Long id) throws DaoException {
+    public Post findById(Long id) throws DaoException, NotFoundException {
         Post post = postDAO.findById(id);
         if (post == null) throw
-                new BadRequestException("Post does not exist in method findById(Long id) from class " +
+                new NotFoundException("Post does not exist in method findById(Long id) from class " +
                 PostService.class.getName());
         return post;
     }
@@ -38,10 +38,10 @@ public class PostService {
         postDAO.delete(post);
     }
 
-    public void deleteById(Long id) throws DaoException {
+    public void deleteById(Long id) throws DaoException, NotFoundException {
         Post post = postDAO.findById(id);
         if (post == null) throw
-                new BadRequestException("Post does not exist in method postNullValidator(Post post) from class " +
+                new NotFoundException("Post does not exist in method postNullValidator(Post post) from class " +
                 PostService.class.getName());
         postDAO.delete(post);
     }

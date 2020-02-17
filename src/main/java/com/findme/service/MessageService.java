@@ -1,8 +1,8 @@
 package com.findme.service;
 
 import com.findme.dao.MessageDAO;
-import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
-    public Message findById(Long id) throws DaoException {
+    public Message findById(Long id) throws DaoException, NotFoundException{
         Message message = messageDAO.findById(id);
         if (message == null) throw
-                new BadRequestException("Message does not exist in method findById(Long id) from class " +
+                new NotFoundException("Message does not exist in method findById(Long id) from class " +
                 UserService.class.getName());
         return message;
     }
@@ -38,10 +38,10 @@ public class MessageService {
         messageDAO.delete(message);
     }
 
-    public void deleteById(Long id) throws DaoException {
+    public void deleteById(Long id) throws DaoException, NotFoundException {
         Message message = messageDAO.findById(id);
         if (message == null) throw
-                new BadRequestException("Message does not exist in method deleteById(Long id) from class " +
+                new NotFoundException("Message does not exist in method deleteById(Long id) from class " +
                 UserService.class.getName());
         messageDAO.delete(message);
     }

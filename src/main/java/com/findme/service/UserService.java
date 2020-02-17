@@ -1,8 +1,8 @@
 package com.findme.service;
 
 import com.findme.dao.UserDAO;
-import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
-    public User findById(Long id) throws DaoException {
+    public User findById(Long id) throws DaoException, NotFoundException {
         User user = userDAO.findById(id);
         if (user == null) throw
-                new BadRequestException("User does not exist in method findById(Long id) from class " +
+                new NotFoundException("User does not exist in method findById(Long id) from class " +
                 UserService.class.getName());
         return user;
     }
@@ -38,10 +38,10 @@ public class UserService {
         userDAO.delete(user);
     }
 
-    public void deleteById(Long id) throws DaoException {
+    public void deleteById(Long id) throws DaoException, NotFoundException {
         User user = userDAO.findById(id);
         if (user == null) throw
-                new BadRequestException("User does not exist in method deleteById(Long id) from class " +
+                new NotFoundException("User does not exist in method deleteById(Long id) from class " +
                 UserService.class.getName());
         userDAO.delete(user);
     }
