@@ -78,6 +78,21 @@ public class UserController {
     }
 
     @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/register-user",
+            produces = "text/plain")
+    public ResponseEntity<String> registerUser(@PathVariable User user) throws DaoException {
+        try {
+            userService.save(user);
+            return new ResponseEntity<>(" User was registered", HttpStatus.CREATED);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(
             method = RequestMethod.PUT,
             value = "/update",
             produces = "text/plain")

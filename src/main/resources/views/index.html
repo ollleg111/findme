@@ -6,14 +6,84 @@
 <header>
     Header
 </header>
-<body>
-    <div>
-        <h1>Welcome to Find me</h1>
-        Some Text
-    </div>
+<!--    <div>-->
+<h1>Welcome to Find me</h1>
+Some Text
+<!--    </div>-->
+
+<form id="registration-form">
+    <p>First Name: <input type="text" name="firstName"/></p>
+    <p>Last Name: <input type="text" name="lastName"/></p>
+    <p>Phone Number: <input type="text" name="phoneNumber"/></p>
+    <p>Country: <input type="text" name="country"/></p>
+    <p>City: <input type="text" name="city"/></p>
+    <p>Age: <input type="text" name="age"/></p>
+    <p>Relationship Status: <select type="text" name="relationshipStatus">
+        <option value="SINGLE">Single</option>
+        <option value="MARRIED">Married</option>
+    </select>
+    </p>
+    <p>Religion: <select type="text" name="religion">
+        <option value="CHRISTIAN">Christian</option>
+        <option value="BUDDHIST">Buddhist</option>
+        <option value="CATHOLIC">Catholic</option>
+        <option value="MUSLIM">Muslim</option>
+    </select>
+    </p>
+    <p>School: <input type="text" name="school"/></p>
+    <p>University: <input type="text" name="university"/></p>
+
+    <button type="submit">Register</button>
+</form>
+
+<button id="test-ajax">Click here!</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </body>
 <footer>
     Footer
 </footer>
+<script>
+
+    // first javascript code
+    // first jquery usage
+
+    // selector by id = #
+    // selector by class = .
+
+    // alert($("#test-ajax").text());
+
+    // $("#test-ajax").click(function () {
+    //     $.ajax({
+    //         type: "GET",
+    //         url:"/test-ajax",
+    //         data:{
+    //         },
+    //         success: function sucsess() {
+    //             // debugger;
+    //             alert("success!");
+    //         },
+    //         error: function error(xhr) {
+    //             // debugger;
+    //             alert("error!");
+    //         }
+    //     });
+    // });
+
+    $("#registration-form").submit(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/register-user",
+            data: $('registration-form').serialize(),
+            success: function sucsess(data) {
+                alert("success!");
+            },
+            error: function error(xhr) {
+                alert("error!");
+            }
+        });
+    });
+</script>
+
 </html>

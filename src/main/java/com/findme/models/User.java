@@ -13,6 +13,7 @@ ID NUMBER PRIMARY KEY,
 FIRST_NAME NVARCHAR2(50) NOT NULL,
 LAST_NAME NVARCHAR2(50) NOT NULL,
 PHONE_NUMBER NVARCHAR2(15) NOT NULL,
+E_MAIL NVARCHAR2(50) NOT NULL,
 COUNTRY NVARCHAR2(50) NOT NULL,
 CITY NVARCHAR2(50) NOT NULL,
 AGE NUMBER NOT NULL,
@@ -44,6 +45,9 @@ public class User {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
     //TODO from existed data
+
+    @Column(name = "E_MAIL")
+    private String mail;
 
     @Column(name = "COUNTRY")
     private String country;
@@ -98,6 +102,10 @@ public class User {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getMail() {
+        return mail;
     }
 
     public String getCountry() {
@@ -160,6 +168,10 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -211,6 +223,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", mail='" + mail + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", age=" + age +
