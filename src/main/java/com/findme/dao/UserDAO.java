@@ -58,7 +58,9 @@ public class UserDAO extends GeneralDAO<User> {
             Query query = entityManager.createNativeQuery(VALIDATION_MAIL_AND_PHONE_NUMBER, Boolean.class);
             query.setParameter(1, phoneNumber);
             query.setParameter(2, mail);
-            return (boolean) query.getSingleResult();
+
+            return query.getSingleResult() == null;
+
         } catch (DaoException exception) {
             System.err.println(exception.getMessage());
             throw new HibernateException("Operation with User was filed in method" +
