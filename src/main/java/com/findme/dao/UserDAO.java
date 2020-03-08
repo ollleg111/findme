@@ -1,6 +1,7 @@
 package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.InternalServerException;
 import com.findme.models.User;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
@@ -53,7 +54,7 @@ public class UserDAO extends GeneralDAO<User> {
     }
 
     @Transactional
-    public boolean testPhoneAndMail(String phoneNumber, String mail) throws DaoException {
+    public boolean validationMailAndPhoneNumber(String phoneNumber, String mail) throws InternalServerException {
         try {
             Query query = entityManager.createNativeQuery(VALIDATION_MAIL_AND_PHONE_NUMBER, Boolean.class);
             query.setParameter(1, phoneNumber);
@@ -61,9 +62,9 @@ public class UserDAO extends GeneralDAO<User> {
 
             return query.getSingleResult() == null;
 
-        } catch (DaoException exception) {
+        } catch (InternalServerException exception) {
             System.err.println(exception.getMessage());
-            throw new HibernateException("Operation with User was filed in method" +
+            throw new InternalServerException("Operation with User was filed in method" +
                     " testPhoneAndMail(String phoneNumber, String mail) from class " +
                     UserDAO.class.getName());
         }

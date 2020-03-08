@@ -29,12 +29,11 @@ public class UserService {
     }
 
     public User save(User user) throws ServiceException {
-        registrationValidation(user);
+        validation(user);
         return userDAO.save(user);
     }
 
     public User update(User user) throws DaoException {
-        nullValidation(user);
         return userDAO.update(user);
     }
 
@@ -54,30 +53,8 @@ public class UserService {
         return userDAO.findAll();
     }
 
-    public void nullValidation(User user) throws ServiceException {
-        if (user.getFirstName() == null || user.getFirstName().isEmpty())
-            throw new BadRequestException("You do not write first name");
-        if (user.getLastName() == null || user.getLastName().isEmpty())
-            throw new BadRequestException("You do not write last name");
-        if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty())
-            throw new BadRequestException("You do not write phone number");
-        if (user.getMail() == null || user.getMail().isEmpty())
-            throw new BadRequestException("You do not write e-mail");
-        if (user.getCountry() == null || user.getCountry().isEmpty())
-            throw new BadRequestException("You do not write country");
-        if (user.getCity() == null || user.getCity().isEmpty())
-            throw new BadRequestException("You do not write city");
-        if (user.getAge() == null)
-            throw new BadRequestException("You do not write age");
-        if (user.getSchool() == null || user.getSchool().isEmpty())
-            throw new BadRequestException("You do not write school");
-        if (user.getUniversity() == null || user.getUniversity().isEmpty())
-            throw new BadRequestException("You do not write university");
-    }
-
-    public void registrationValidation(User user) throws ServiceException {
-        nullValidation(user);
-        if(!userDAO.testPhoneAndMail(user.getPhoneNumber(), user.getMail()))
+    public void validation(User user) throws ServiceException {
+        if(!userDAO.validationMailAndPhoneNumber(user.getPhoneNumber(), user.getMail()))
             throw new BadRequestException("User is already exist");
     }
 }
