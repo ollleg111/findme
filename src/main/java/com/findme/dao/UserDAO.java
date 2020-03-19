@@ -3,7 +3,6 @@ package com.findme.dao;
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerException;
 import com.findme.models.User;
-import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +26,14 @@ public class UserDAO extends GeneralDAO<User> {
                     " USERS WHERE" +
                     " USERS.PHONE_NUMBER = ? AND" +
                     " USERS.E_MAIL = ?";
+
+    private static final String GET_USER =
+            "SELECT * FROM" +
+                    " USERS WHERE" +
+                    " USERS.E_MAIL = ? AND" +
+                    " USERS.PASSWORD = ?";
+
+    private String alarmMessage = UserDAO.class.getName();
 
     @Override
     public User findById(Long id) throws DaoException {
@@ -65,8 +72,21 @@ public class UserDAO extends GeneralDAO<User> {
         } catch (InternalServerException exception) {
             System.err.println(exception.getMessage());
             throw new InternalServerException("Operation with User was filed in method" +
-                    " testPhoneAndMail(String phoneNumber, String mail) from class " +
-                    UserDAO.class.getName());
+                    " testPhoneAndMail(String phoneNumber, String mail) from class " + alarmMessage);
+        }
+    }
+
+    @Transactional
+    public User getUser(String email, String password) throws InternalServerException {
+        try {
+            Query query = entityManager.createNativeQuery(GET_USER, Boolean.class);
+            query.setParameter(1, email);
+            query.setParameter(2, password);
+
+            return (User) query.getSingleResult();
+        } catch (InternalServerException e) {
+            throw new InternalServerException("Operation with user data was filed in method" +
+                    "getUser(String email, String password) from class " + alarmMessage);
         }
     }
 }

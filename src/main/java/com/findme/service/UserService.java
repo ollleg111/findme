@@ -53,4 +53,12 @@ public class UserService {
     public List<User> findAll() throws DaoException {
         return userDAO.findAll();
     }
+
+    public User login(String email, String password) throws ServiceException {
+        if (email.isEmpty() || password.isEmpty()) throw new BadRequestException("Incorrect email or password");
+
+        User user = userDAO.getUser(email, password);
+        if (user == null) throw new BadRequestException("User with email or password does not exist");
+        return user;
+    }
 }

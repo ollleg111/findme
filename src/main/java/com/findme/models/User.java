@@ -49,6 +49,9 @@ public class User {
     @Column(name = "E_MAIL")
     private String mail;
 
+    @Column(name = "PASSWORD")
+    private String password;
+
     @Column(name = "COUNTRY")
     private String country;
 
@@ -106,6 +109,10 @@ public class User {
 
     public String getMail() {
         return mail;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getCountry() {
@@ -172,6 +179,10 @@ public class User {
         this.mail = mail;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -224,6 +235,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", age=" + age +

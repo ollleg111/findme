@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -92,6 +95,24 @@ public class UserController {
         }
     }
 
+    /*
+    Example from lesson!!!
+        @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/register-user",
+            produces = "text/plain")
+    public String registerUser(HttpSession session,
+                               HttpServletRequest request,
+                               HttpServletResponse response,
+                               @ModelAttribute User user) throws DaoException {
+
+        session.setAttribute("product1", "iphone6s");
+        session.setAttribute("product2", "...");
+
+        return "ok";
+    }
+     */
+
     @RequestMapping(
             method = RequestMethod.PUT,
             value = "/update",
@@ -148,6 +169,43 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/login",
+            produces = "text/plain")
+    public ResponseEntity<String> login(HttpSession session,
+                                        HttpServletRequest request) {
+        try {
+            User user = userService.login(
+                    request.getParameter("email"),
+                    request.getParameter("password"));
+            session.setAttribute("USER", user);
+
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/logout",
+            produces = "text/plain")
+    public ResponseEntity<String> logout(HttpSession session) {
+
+        try {
+            session.invalidate();
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
