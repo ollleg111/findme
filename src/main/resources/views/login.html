@@ -3,30 +3,25 @@
 <head>
     <title>Find me</title>
 </head>
+
+<body>
 <header>
     Header
 </header>
-<!--    <div>-->
-<h1>Welcome to Find me</h1>
-Some Text
-<!--    </div>-->
+<h1>Login</h1>
 
 <form id="login-form">
-    <p>E-Mail: <input type="text" name="email"/></p>
-    <p>Password: <input type="text" name="password"/></p>
+    <p>e-mail: <input type="text" name="mail"/></p>
+    <p>password: <input type="text" name="password"/></p>
 
 
     <button type="submit">Login</button>
 </form>
 
-<button id="test-ajax">Click here!</button>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </body>
-<footer>
-    Footer
-</footer>
+
 <script>
 
     $("#login-form").submit(function (e) {
@@ -34,7 +29,7 @@ Some Text
             type: "POST",
             url: "/login",
             data: $('login-form').serialize(),
-            success: function sucsess(data) {
+            success: function sucsess(data, status, request) {
                 alert("success!");
             },
             error: function error(xhr) {

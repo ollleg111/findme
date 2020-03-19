@@ -95,24 +95,6 @@ public class UserController {
         }
     }
 
-    /*
-    Example from lesson!!!
-        @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/register-user",
-            produces = "text/plain")
-    public String registerUser(HttpSession session,
-                               HttpServletRequest request,
-                               HttpServletResponse response,
-                               @ModelAttribute User user) throws DaoException {
-
-        session.setAttribute("product1", "iphone6s");
-        session.setAttribute("product2", "...");
-
-        return "ok";
-    }
-     */
-
     @RequestMapping(
             method = RequestMethod.PUT,
             value = "/update",
@@ -171,6 +153,24 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /*
+    Example from lesson!!!
+        @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/register-user",
+            produces = "text/plain")
+    public String registerUser(HttpSession session,
+                               HttpServletRequest request,
+                               HttpServletResponse response,
+                               @ModelAttribute User user) throws DaoException {
+
+        session.setAttribute("product1", "iphone6s");
+        session.setAttribute("product2", "...");
+
+        return "ok";
+    }
+     */
 
     @RequestMapping(
             method = RequestMethod.POST,
