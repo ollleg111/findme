@@ -180,7 +180,7 @@ public class UserController {
                                         HttpServletRequest request) {
         try {
             User user = userService.login(
-                    request.getParameter("email"),
+                    request.getParameter("mail"),
                     request.getParameter("password"));
             session.setAttribute("USER", user);
 

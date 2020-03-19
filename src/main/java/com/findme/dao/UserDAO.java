@@ -77,10 +77,10 @@ public class UserDAO extends GeneralDAO<User> {
     }
 
     @Transactional
-    public User getUser(String email, String password) throws InternalServerException {
+    public User getUser(String mail, String password) throws InternalServerException {
         try {
             Query query = entityManager.createNativeQuery(GET_USER, Boolean.class);
-            query.setParameter(1, email);
+            query.setParameter(1, mail);
             query.setParameter(2, password);
 
             return (User) query.getSingleResult();
