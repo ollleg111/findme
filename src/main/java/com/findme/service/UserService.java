@@ -29,7 +29,8 @@ public class UserService {
     }
 
     public User save(User user) throws ServiceException {
-        validation(user);
+        if (!userDAO.validationMailAndPhoneNumber(user.getPhoneNumber(), user.getMail()))
+            throw new BadRequestException("User is already exist");
         return userDAO.save(user);
     }
 
@@ -51,10 +52,5 @@ public class UserService {
 
     public List<User> findAll() throws DaoException {
         return userDAO.findAll();
-    }
-
-    public void validation(User user) throws ServiceException {
-        if(!userDAO.validationMailAndPhoneNumber(user.getPhoneNumber(), user.getMail()))
-            throw new BadRequestException("User is already exist");
     }
 }
