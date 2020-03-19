@@ -172,10 +172,14 @@ public class UserController {
     }
      */
 
+    @RequestMapping(path = "/login", method = RequestMethod.GET)
+    public String home() {
+        return "login";
+    }
+
     @RequestMapping(
             method = RequestMethod.POST,
-            value = "/login",
-            produces = "text/plain")
+            path = "/login")
     public ResponseEntity<String> login(HttpSession session,
                                         HttpServletRequest request) {
         try {
@@ -189,14 +193,12 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
 
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/logout",
-            produces = "text/plain")
+            path = "/logout")
     public ResponseEntity<String> logout(HttpSession session) {
 
         try {
