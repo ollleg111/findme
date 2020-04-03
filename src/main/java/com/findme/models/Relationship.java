@@ -32,4 +32,46 @@ public class Relationship {
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private RelationshipStatus relationshipStatus;
+
+    public Long getId() {
+        return id;
+    }
+
+    public User getUserFrom() {
+        return userFrom;
+    }
+
+    public User getUserTo() {
+        return userTo;
+    }
+
+    public RelationshipStatus getRelationshipStatus() {
+        return relationshipStatus;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserFrom(User userFrom) {
+        this.userFrom = userFrom;
+    }
+
+    public void setUserTo(User userTo) {
+        this.userTo = userTo;
+    }
+
+    public void setRelationshipStatus(RelationshipStatus relationshipStatus) {
+        this.relationshipStatus = relationshipStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Relationship{" +
+                "id=" + id +
+                ", userFrom=" + userFrom +
+                ", userTo=" + userTo +
+                ", relationshipStatus=" + relationshipStatus +
+                '}';
+    }
 }

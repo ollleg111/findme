@@ -1,7 +1,7 @@
 package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
-import com.findme.exceptions.InternalServerException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +61,7 @@ public class UserDAO extends GeneralDAO<User> {
     }
 
     @Transactional
-    public boolean validationMailAndPhoneNumber(String phoneNumber, String mail) throws InternalServerException {
+    public boolean validationMailAndPhoneNumber(String phoneNumber, String mail) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(VALIDATION_MAIL_AND_PHONE_NUMBER, Boolean.class);
             query.setParameter(1, phoneNumber);
@@ -69,23 +69,23 @@ public class UserDAO extends GeneralDAO<User> {
 
             return query.getSingleResult() == null;
 
-        } catch (InternalServerException exception) {
+        } catch (InternalServerError exception) {
             System.err.println(exception.getMessage());
-            throw new InternalServerException("Operation with User was filed in method" +
+            throw new InternalServerError("Operation with User was filed in method" +
                     " testPhoneAndMail(String phoneNumber, String mail) from class " + alarmMessage);
         }
     }
 
     @Transactional
-    public User getUser(String mail, String password) throws InternalServerException {
+    public User getUser(String mail, String password) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(GET_USER, Boolean.class);
             query.setParameter(1, mail);
             query.setParameter(2, password);
 
             return (User) query.getSingleResult();
-        } catch (InternalServerException e) {
-            throw new InternalServerException("Operation with user data was filed in method" +
+        } catch (InternalServerError e) {
+            throw new InternalServerError("Operation with user data was filed in method" +
                     "getUser(String email, String password) from class " + alarmMessage);
         }
     }
