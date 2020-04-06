@@ -4,7 +4,6 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.DaoException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
-import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,27 +18,27 @@ public class RelationshipService {
         this.relationshipDAO = relationshipDAO;
     }
 
-    public void addRelationship(String userIdFrom, String userIdTo) throws DaoException {
+    public void addRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
         relationshipDAO.addRelationship(userIdFrom, userIdTo);
     }
 
-    public void updateRelationship(String userIdFrom, String userIdTo, String status) throws DaoException {
+    public void updateRelationship(Long userIdFrom, Long userIdTo, String status) throws DaoException {
         relationshipDAO.updateRelationship(userIdFrom, userIdTo, status);
     }
 
-    public List<User> getIn(String userId) throws DaoException {
+    public List<Relationship> getIn(Long userId) throws DaoException {
         return relationshipDAO.getIn(userId);
     }
 
-    public List<User> getOut(String userId) throws DaoException {
+    public List<Relationship> getOut(Long userId) throws DaoException {
         return relationshipDAO.getOut(userId);
     }
 
-    public Relationship getRelationship(String userIdFrom, String userIdTo) throws DaoException {
+    public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
         return relationshipDAO.getRelationship(userIdFrom, userIdTo);
     }
 
-    public RelationshipStatus getRelationshipStatus(String userIdFrom, String userIdTo) throws DaoException {
+    public RelationshipStatus getStatus(Long userIdFrom, Long userIdTo) throws DaoException {
         Relationship relationship = getRelationship(userIdFrom, userIdTo);
         return relationship == null ? null : relationship.getRelationshipStatus();
     }

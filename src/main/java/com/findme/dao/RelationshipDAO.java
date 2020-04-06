@@ -2,8 +2,6 @@ package com.findme.dao;
 
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
-import com.findme.models.RelationshipStatus;
-import com.findme.models.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +30,12 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     private String alarmMessage = RelationshipDAO.class.getName();
 
     @Transactional
-    public void addRelationship(String userIdFrom, String userIdTo) throws InternalServerError {
+    public void addRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {
         try {
             int result = entityManager
                     .createNativeQuery(RELATIONSHIP_SAVE)
-                    .setParameter(1, Long.valueOf(userIdFrom))
-                    .setParameter(2, Long.valueOf(userIdTo))
+                    .setParameter(1, userIdFrom)
+                    .setParameter(2, userIdTo)
                     .executeUpdate();
 
         } catch (InternalServerError exception) {
@@ -48,14 +46,14 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     }
 
     @Transactional
-    public void updateRelationship(String userIdFrom, String userIdTo, String status)
+    public void updateRelationship(Long userIdFrom, Long userIdTo, String status)
             throws InternalServerError {
         try {
             int result = entityManager
                     .createNativeQuery(RELATIONSHIP_UPDATE)
-                    .setParameter(1, Long.valueOf(userIdFrom))
-                    .setParameter(2, Long.valueOf(userIdTo))
-                    .setParameter(2, status.toString())
+                    .setParameter(1, userIdFrom)
+                    .setParameter(2, userIdTo)
+                    .setParameter(2, status)
                     .executeUpdate();
 
         } catch (InternalServerError exception) {
@@ -65,13 +63,12 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         }
     }
 
-
     @Transactional
-    public Relationship getRelationship(String userIdFrom, String userIdTo) throws InternalServerError {
+    public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {
         try {
-            Query query = entityManager.createNativeQuery(RELATIONSHIP_UPDATE, Relationship.class);
-            query.setParameter(1, Long.valueOf(userIdFrom));
-            query.setParameter(2, Long.valueOf(userIdTo));
+            Query query = entityManager.createNativeQuery(RELATIONSHIP_GET, Relationship.class);
+            query.setParameter(1, userIdFrom);
+            query.setParameter(2, userIdTo);
 
             return (Relationship) query.getSingleResult();
 
@@ -83,7 +80,7 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     }
 
     @Transactional
-    public List<User> getIn(String userId) throws InternalServerError {
+    public List<Relationship> getIn(Long userId) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_INPUT, Relationship.class);
             query.setParameter(1, userId);
@@ -95,7 +92,7 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     }
 
     @Transactional
-    public List<User> getOut(String userId) throws InternalServerError {
+    public List<Relationship> getOut(Long userId) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_OUTPUT, Relationship.class);
             query.setParameter(1, userId);

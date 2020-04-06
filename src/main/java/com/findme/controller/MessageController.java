@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -27,8 +28,12 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/{messageId}", method = RequestMethod.GET)
-    public String getMessage(Model model, @PathVariable String messageId) throws DaoException {
+    public String getMessage(
+            HttpSession session,
+            Model model,
+            @PathVariable String messageId) throws DaoException {
         try {
+            Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             return "profile";
         } catch (BadRequestException e) {
@@ -41,12 +46,34 @@ public class MessageController {
     }
 
     @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/delete/{messageId}",
+            produces = "text/plain")
+    public ResponseEntity<String> deleteById(
+            HttpSession session,
+            @PathVariable String messageId) throws DaoException {
+        try {
+            Utils.loginValidation(session);
+            messageService.deleteById(Utils.stringToLong(messageId));
+            return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------
+    @RequestMapping(
             method = RequestMethod.GET,
             value = "/findById",
             produces = "text/plain")
-    public ResponseEntity<String> findById(@RequestParam(value = "id") Long id) throws DaoException {
+    public ResponseEntity<String> findById(
+            HttpSession session,
+            @RequestParam(value = "id") String messageId) throws DaoException {
         try {
-            messageService.findById(id);
+            Utils.loginValidation(session);
+            messageService.findById(Utils.stringToLong(messageId));
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -59,8 +86,11 @@ public class MessageController {
             method = RequestMethod.POST,
             value = "/save",
             produces = "text/plain")
-    public ResponseEntity<String> save(@RequestBody Message message) throws DaoException {
+    public ResponseEntity<String> save(
+            HttpSession session,
+            @RequestBody Message message) throws DaoException {
         try {
+            Utils.loginValidation(session);
             messageService.save(message);
             return new ResponseEntity<>(" Message was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
@@ -74,8 +104,11 @@ public class MessageController {
             method = RequestMethod.PUT,
             value = "/update",
             produces = "text/plain")
-    public ResponseEntity<String> update(@RequestBody Message message) throws DaoException {
+    public ResponseEntity<String> update(
+            HttpSession session,
+            @RequestBody Message message) throws DaoException {
         try {
+            Utils.loginValidation(session);
             messageService.update(message);
             return new ResponseEntity<>(" Message was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
@@ -87,10 +120,13 @@ public class MessageController {
 
     @RequestMapping(
             method = RequestMethod.DELETE,
-            value = "/deletePost",
+            value = "/delete",
             produces = "text/plain")
-    public ResponseEntity<String> delete(@RequestBody Message message) throws DaoException {
+    public ResponseEntity<String> delete(
+            HttpSession session,
+            @RequestBody Message message) throws DaoException {
         try {
+            Utils.loginValidation(session);
             messageService.delete(message);
             return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
@@ -101,26 +137,12 @@ public class MessageController {
     }
 
     @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete/{messageId}",
-            produces = "text/plain")
-    public ResponseEntity<String> deleteById(@PathVariable String messageId) throws DaoException {
-        try {
-            messageService.deleteById(Utils.stringToLong(messageId));
-            return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(
             method = RequestMethod.GET,
-            value = "/findAll",
+            value = "/getAll",
             produces = "text/plain")
-    public ResponseEntity<List<Message>> getAll() throws DaoException {
+    public ResponseEntity<List<Message>> getAll(HttpSession session) throws DaoException {
         try {
+            Utils.loginValidation(session);
             return new ResponseEntity<>(messageService.findAll(), HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

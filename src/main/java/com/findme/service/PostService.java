@@ -22,7 +22,7 @@ public class PostService {
         Post post = postDAO.findById(id);
         if (post == null) throw
                 new NotFoundException("Post does not exist in method findById(Long id) from class " +
-                PostService.class.getName());
+                        PostService.class.getName());
         return post;
     }
 
@@ -42,7 +42,7 @@ public class PostService {
         Post post = postDAO.findById(id);
         if (post == null) throw
                 new NotFoundException("Post does not exist in method postNullValidator(Post post) from class " +
-                PostService.class.getName());
+                        PostService.class.getName());
         postDAO.delete(post);
     }
 

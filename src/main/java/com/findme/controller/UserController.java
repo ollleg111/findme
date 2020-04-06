@@ -50,12 +50,66 @@ public class UserController {
     }
 
     @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/delete/{userId}",
+            produces = "text/plain")
+    public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
+        try {
+            userService.deleteById(Utils.stringToLong(userId));
+            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.GET)
+    public String home() {
+        return "login";
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            path = "/login")
+    public ResponseEntity<String> login(HttpSession session,
+                                        HttpServletRequest request) {
+        try {
+            User user = userService.login(
+                    request.getParameter("mail"),
+                    request.getParameter("password"));
+            session.setAttribute("user", user);
+
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = "/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        try {
+            session.invalidate();
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------
+    @RequestMapping(
             method = RequestMethod.GET,
             value = "/findById",
             produces = "text/plain")
-    public ResponseEntity<String> findById(@RequestParam(value = "id") Long id) throws DaoException {
+    public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) throws DaoException {
         try {
-            userService.findById(id);
+            userService.findById(Utils.stringToLong(userId));
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -111,26 +165,11 @@ public class UserController {
 
     @RequestMapping(
             method = RequestMethod.DELETE,
-            value = "/deletePost",
+            value = "/delete",
             produces = "text/plain")
     public ResponseEntity<String> delete(@RequestBody User user) throws DaoException {
         try {
             userService.delete(user);
-            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete/{userId}",
-            produces = "text/plain")
-    public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
-        try {
-            userService.deleteById(Utils.stringToLong(userId));
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -170,43 +209,4 @@ public class UserController {
         return "ok";
     }
      */
-
-    @RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String home() {
-        return "login";
-    }
-
-    @RequestMapping(
-            method = RequestMethod.POST,
-            path = "/login")
-    public ResponseEntity<String> login(HttpSession session,
-                                        HttpServletRequest request) {
-        try {
-            User user = userService.login(
-                    request.getParameter("mail"),
-                    request.getParameter("password"));
-            session.setAttribute("USER", user);
-
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(
-            method = RequestMethod.GET,
-            path = "/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-
-        try {
-            session.invalidate();
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

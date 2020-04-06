@@ -4,16 +4,18 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
-import com.findme.models.User;
 import com.findme.service.RelationshipService;
+import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -30,10 +32,14 @@ public class RelationshipController {
             value = "/relationship-add",
             produces = "text/plain")
     public ResponseEntity<String> addRelationship(
+            HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
             @RequestParam(value = "userIdTo") String userIdTo) throws DaoException {
         try {
-            relationshipService.addRelationship(userIdFrom, userIdTo);
+            Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
+            relationshipService.addRelationship(
+                    Utils.stringToLong(userIdFrom),
+                    Utils.stringToLong(userIdTo));
             return new ResponseEntity<>(" Relationship was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -47,11 +53,16 @@ public class RelationshipController {
             value = "/relationship-update",
             produces = "text/plain")
     public ResponseEntity<String> updateRelationship(
+            HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
             @RequestParam(value = "userIdTo") String userIdTo,
             @RequestParam(value = "status") String status) throws DaoException {
         try {
-            relationshipService.updateRelationship(userIdFrom, userIdTo, status);
+            Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
+            relationshipService.updateRelationship(
+                    Utils.stringToLong(userIdFrom),
+                    Utils.stringToLong(userIdTo),
+                    status);
             return new ResponseEntity<>(" Relationship was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -62,43 +73,40 @@ public class RelationshipController {
 
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/relationship-getIn",
-            produces = "text/plain")
-    public ResponseEntity<List<User>> getIncomeRequest
-            (@RequestParam(value = "userId") String userId) throws DaoException {
-        try {
-            return new ResponseEntity<>(relationshipService.getIn(userId), HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            value = "/relationship-get-income/{userId}")
+    public ResponseEntity<List<Relationship>> getIncomeRequest(
+            HttpSession session,
+            @PathVariable String userId) throws DaoException {
+        Utils.isUserWithLogin(session, Utils.stringToLong(userId));
+        return new ResponseEntity<>(relationshipService.getIn(Utils.stringToLong(userId)), HttpStatus.OK);
     }
 
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/relationship-getOut",
-            produces = "text/plain")
-    public ResponseEntity<List<User>> getOutcomeRequest(
-            @RequestParam(value = "userId") String userId) throws DaoException {
-        try {
-            return new ResponseEntity<>(relationshipService.getOut(userId), HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            value = "/relationship-get-outcome/{userId}")
+    public ResponseEntity<List<Relationship>> getOutcomeRequest(
+            HttpSession session,
+            @PathVariable String userId) throws DaoException {
+        Utils.isUserWithLogin(session, Utils.stringToLong(userId));
+        return new ResponseEntity<>(relationshipService.getOut(Utils.stringToLong(userId)), HttpStatus.OK);
     }
 
+    //TODO
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/relationship-status",
             produces = "text/plain")
     public ResponseEntity<RelationshipStatus> getRelationshipStatus(
-            @RequestParam(value = "userId") String userFromTo,
-            @RequestParam(value = "userId") String userIdTo) throws DaoException {
+            HttpSession session,
+            @RequestParam(value = "userFromTo") String userFromTo,
+            @RequestParam(value = "userIdTo") String userIdTo) throws DaoException {
         try {
-            return new ResponseEntity<>(relationshipService.getRelationshipStatus(userFromTo, userIdTo), HttpStatus.OK);
+            Utils.isUserWithLogin(session, Utils.stringToLong(userFromTo));
+            return new ResponseEntity<>(relationshipService
+                    .getStatus(
+                            Utils.stringToLong(userFromTo),
+                            Utils.stringToLong(userIdTo)),
+                    HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
