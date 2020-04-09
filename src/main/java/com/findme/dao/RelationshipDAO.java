@@ -25,11 +25,11 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         setTypeParameterClass(Relationship.class);
     }
 
-    private static final String RELATIONSHIP_ADD = "INSERT INTO RELATIONSHIP(USER_FROM_ID,USER_TO_ID,STATUS) VALUES(?,?,?)";
-    private static final String RELATIONSHIP_UPDATE = "UPDATE RELATIONSHIP SET USER_FROM_ID = ?,USER_TO_ID = ?,STATUS = ?";
-    private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE USER_FROM_ID = ? AND USER_TO_ID = ?";
-    private static final String RELATIONSHIP_GET_INPUT = "SELECT r.userFrom FROM RELATIONSHIP r WHERE r.STATUS = 'WAITING_FOR_ACCEPT' AND r.userTo.id = ?";
-    private static final String RELATIONSHIP_GET_OUTPUT = "SELECT r.userTo FROM RELATIONSHIP r WHERE r.STATUS = 'WAITING_FOR_ACCEPT' AND r.userFrom.id = ?";
+    private static final String RELATIONSHIP_ADD = "INSERT INTO RELATIONSHIP(USER_FROM_ID,USER_TO_ID,STATUS) VALUES(?1,?2,?3)";
+    private static final String RELATIONSHIP_UPDATE = "UPDATE RELATIONSHIP SET USER_FROM_ID = ?1, USER_TO_ID = ?2, STATUS = ?3";
+    private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
+    private static final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
+    private static final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
 
     private String alarmMessage = RelationshipDAO.class.getName();
 
@@ -88,6 +88,7 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     public List<User> getIn(Long userId) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_INPUT, User.class);
+            query.setParameter(1, RelationshipStatus.WAITING_FOR_ACCEPT.toString());
             query.setParameter(1, userId);
             return query.getResultList();
         } catch (InternalServerError e) {
@@ -100,6 +101,7 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     public List<User> getOut(Long userId) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_OUTPUT, User.class);
+            query.setParameter(1, RelationshipStatus.WAITING_FOR_ACCEPT.toString());
             query.setParameter(1, userId);
             return query.getResultList();
         } catch (InternalServerError e) {
@@ -107,7 +109,6 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
                     + alarmMessage);
         }
     }
-
 
     @Override
     public Relationship findById(Long id) throws DaoException {
