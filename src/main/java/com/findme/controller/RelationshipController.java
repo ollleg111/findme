@@ -2,8 +2,10 @@ package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
+import com.findme.models.User;
 import com.findme.service.RelationshipService;
 import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +39,14 @@ public class RelationshipController {
             @RequestParam(value = "userIdTo") String userIdTo) throws DaoException {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
-            relationshipService.addRelationship(
-                    Utils.stringToLong(userIdFrom),
-                    Utils.stringToLong(userIdTo));
+            relationshipService
+                    .addRelationship(
+                            Utils.stringToLong(userIdFrom),
+                            Utils.stringToLong(userIdTo));
             return new ResponseEntity<>(" Relationship was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
+        } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -59,14 +62,15 @@ public class RelationshipController {
             @RequestParam(value = "status") String status) throws DaoException {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
-            relationshipService.updateRelationship(
-                    Utils.stringToLong(userIdFrom),
-                    Utils.stringToLong(userIdTo),
-                    status);
+            relationshipService
+                    .updateRelationship(
+                            Utils.stringToLong(userIdFrom),
+                            Utils.stringToLong(userIdTo),
+                            status);
             return new ResponseEntity<>(" Relationship was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
+        } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -74,42 +78,59 @@ public class RelationshipController {
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/relationship-get-income/{userId}")
-    public ResponseEntity<List<Relationship>> getIncomeRequest(
+    public ResponseEntity<List<User>> getIncomeRequest(
             HttpSession session,
             @PathVariable String userId) throws DaoException {
-        Utils.isUserWithLogin(session, Utils.stringToLong(userId));
-        return new ResponseEntity<>(relationshipService.getIn(Utils.stringToLong(userId)), HttpStatus.OK);
+        try {
+            Utils.isUserWithLogin(session, Utils.stringToLong(userId));
+            return new ResponseEntity<>(
+                    relationshipService
+                            .getIn(Utils.stringToLong(userId)),
+                    HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/relationship-get-outcome/{userId}")
-    public ResponseEntity<List<Relationship>> getOutcomeRequest(
+    public ResponseEntity<List<User>> getOutcomeRequest(
             HttpSession session,
             @PathVariable String userId) throws DaoException {
-        Utils.isUserWithLogin(session, Utils.stringToLong(userId));
-        return new ResponseEntity<>(relationshipService.getOut(Utils.stringToLong(userId)), HttpStatus.OK);
-    }
-
-    //TODO
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/relationship-status",
-            produces = "text/plain")
-    public ResponseEntity<RelationshipStatus> getRelationshipStatus(
-            HttpSession session,
-            @RequestParam(value = "userFromTo") String userFromTo,
-            @RequestParam(value = "userIdTo") String userIdTo) throws DaoException {
         try {
-            Utils.isUserWithLogin(session, Utils.stringToLong(userFromTo));
-            return new ResponseEntity<>(relationshipService
-                    .getStatus(
-                            Utils.stringToLong(userFromTo),
-                            Utils.stringToLong(userIdTo)),
+            Utils.isUserWithLogin(session, Utils.stringToLong(userId));
+            return new ResponseEntity<>(
+                    relationshipService
+                            .getOut(Utils.stringToLong(userId)),
                     HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/relationship-status/{userFromTo}/{userIdTo}")
+    public ResponseEntity<RelationshipStatus> getRelationshipStatus(
+            HttpSession session,
+            @PathVariable String userFromTo,
+            @PathVariable String userIdTo) throws DaoException {
+        try {
+            Utils.isUserWithLogin(session, Utils.stringToLong(userFromTo));
+            return new ResponseEntity<>(
+                    relationshipService
+                            .getStatus(
+                                    Utils.stringToLong(userFromTo),
+                                    Utils.stringToLong(userIdTo)),
+                    HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

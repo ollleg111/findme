@@ -1,9 +1,11 @@
 package com.findme.service;
 
 import com.findme.dao.RelationshipDAO;
+import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
+import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +21,20 @@ public class RelationshipService {
     }
 
     public void addRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
-        relationshipDAO.addRelationship(userIdFrom, userIdTo);
+        if (userIdFrom.equals(userIdTo))
+            throw new BadRequestException("You cannot add relationship to yourself");
+        relationshipDAO.addRelationship(userIdFrom, userIdTo, RelationshipStatus.WAITING_FOR_ACCEPT);
     }
 
     public void updateRelationship(Long userIdFrom, Long userIdTo, String status) throws DaoException {
         relationshipDAO.updateRelationship(userIdFrom, userIdTo, status);
     }
 
-    public List<Relationship> getIn(Long userId) throws DaoException {
+    public List<User> getIn(Long userId) throws DaoException {
         return relationshipDAO.getIn(userId);
     }
 
-    public List<Relationship> getOut(Long userId) throws DaoException {
+    public List<User> getOut(Long userId) throws DaoException {
         return relationshipDAO.getOut(userId);
     }
 
