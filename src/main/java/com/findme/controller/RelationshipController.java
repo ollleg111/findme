@@ -1,9 +1,7 @@
 package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
-import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import com.findme.service.RelationshipService;
@@ -12,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -29,14 +24,11 @@ public class RelationshipController {
         this.relationshipService = relationshipService;
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/relationship-add",
-            produces = "text/plain")
+    @PostMapping(value = "/relationship-add")
     public ResponseEntity<String> addRelationship(
             HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
-            @RequestParam(value = "userIdTo") String userIdTo) throws DaoException {
+            @RequestParam(value = "userIdTo") String userIdTo) {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService
@@ -51,15 +43,12 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/relationship-update",
-            produces = "text/plain")
+    @PutMapping(value = "/relationship-update")
     public ResponseEntity<String> updateRelationship(
             HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
             @RequestParam(value = "userIdTo") String userIdTo,
-            @RequestParam(value = "status") String status) throws DaoException {
+            @RequestParam(value = "status") String status) {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService
@@ -75,12 +64,10 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/relationship-get-income/{userId}")
+    @GetMapping(value = "/relationship-get-income/{userId}")
     public ResponseEntity<List<User>> getIncomeRequest(
             HttpSession session,
-            @PathVariable String userId) throws DaoException {
+            @PathVariable String userId) {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             return new ResponseEntity<>(
@@ -94,12 +81,10 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/relationship-get-outcome/{userId}")
+    @GetMapping(value = "/relationship-get-outcome/{userId}")
     public ResponseEntity<List<User>> getOutcomeRequest(
             HttpSession session,
-            @PathVariable String userId) throws DaoException {
+            @PathVariable String userId) {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             return new ResponseEntity<>(
@@ -113,13 +98,11 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/relationship-status/{userFromTo}/{userIdTo}")
+    @GetMapping(value = "/relationship-status/{userFromTo}/{userIdTo}")
     public ResponseEntity<RelationshipStatus> getRelationshipStatus(
             HttpSession session,
             @PathVariable String userFromTo,
-            @PathVariable String userIdTo) throws DaoException {
+            @PathVariable String userIdTo) {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userFromTo));
             return new ResponseEntity<>(

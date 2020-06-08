@@ -3,18 +3,17 @@ package com.findme.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @GetMapping(path = "/")
     public String home() {
         return "index";
     }
 
-    @RequestMapping(path = "/test-ajax", method = RequestMethod.GET)
+    @GetMapping(path = "/test-ajax")
 //    public String testAjax(){
 //        return "index";
 //    }

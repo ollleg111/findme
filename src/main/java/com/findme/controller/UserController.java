@@ -1,7 +1,6 @@
 package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
@@ -28,8 +27,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
-    public String getUser(Model model, @PathVariable String userId) throws DaoException {
+    @GetMapping(path = "/{userId}")
+    public String getUser(Model model, @PathVariable String userId) {
 /*
         Example from lesson!!!
         User user = new User();
@@ -49,11 +48,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete/{userId}",
-            produces = "text/plain")
-    public ResponseEntity<String> deleteById(@PathVariable String userId) throws DaoException {
+    @DeleteMapping(value = "/delete/{userId}")
+    public ResponseEntity<String> deleteById(@PathVariable String userId) {
         try {
             userService.deleteById(Utils.stringToLong(userId));
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
@@ -64,14 +60,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/login", method = RequestMethod.GET)
+    @GetMapping(path = "/index")
     public String home() {
-        return "login";
+        return "index";
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            path = "/login")
+    @PostMapping(path = "/login")
     public ResponseEntity<String> login(HttpSession session,
                                         HttpServletRequest request) {
         try {
@@ -88,9 +82,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            path = "/logout")
+    @GetMapping(path = "/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         try {
             session.invalidate();
@@ -103,11 +95,8 @@ public class UserController {
     }
 
     //-----------------------------------------------------------------------------------------------
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/findById",
-            produces = "text/plain")
-    public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) throws DaoException {
+    @GetMapping(value = "/findById")
+    public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) {
         try {
             userService.findById(Utils.stringToLong(userId));
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
@@ -118,11 +107,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/save",
-            produces = "text/plain")
-    public ResponseEntity<String> save(@RequestBody User user) throws DaoException {
+    @PostMapping(value = "/save")
+    public ResponseEntity<String> save(@RequestBody User user) {
         try {
             userService.save(user);
             return new ResponseEntity<>(" User was saved", HttpStatus.CREATED);
@@ -133,11 +119,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/register-user",
-            produces = "text/plain")
-    public ResponseEntity<String> registerUser(@PathVariable User user) throws DaoException {
+    @PostMapping(value = "/register-user")
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
             userService.save(user);
             return new ResponseEntity<>(" User was registered", HttpStatus.CREATED);
@@ -148,11 +131,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/update",
-            produces = "text/plain")
-    public ResponseEntity<String> update(@RequestBody User user) throws DaoException {
+    @PutMapping(value = "/update")
+    public ResponseEntity<String> update(@RequestBody User user) {
         try {
             userService.update(user);
             return new ResponseEntity<>(" User was updated", HttpStatus.OK);
@@ -163,11 +143,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete",
-            produces = "text/plain")
-    public ResponseEntity<String> delete(@RequestBody User user) throws DaoException {
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<String> delete(@RequestBody User user) {
         try {
             userService.delete(user);
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
@@ -178,11 +155,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/findAll",
-            produces = "text/plain")
-    public ResponseEntity<List<User>> getAll() throws DaoException {
+    @GetMapping(value = "/findAll")
+    public ResponseEntity<List<User>> getAll() {
         try {
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
         } catch (BadRequestException e) {
@@ -194,14 +168,11 @@ public class UserController {
 
     /*
     Example from lesson!!!
-        @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/register-user",
-            produces = "text/plain")
+        @PostMapping(value = "/register-user")
     public String registerUser(HttpSession session,
                                HttpServletRequest request,
                                HttpServletResponse response,
-                               @ModelAttribute User user) throws DaoException {
+                               @ModelAttribute User user)  {
 
         session.setAttribute("product1", "iphone6s");
         session.setAttribute("product2", "...");

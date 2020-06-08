@@ -1,7 +1,6 @@
 package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
@@ -27,11 +26,11 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @RequestMapping(path = "/{messageId}", method = RequestMethod.GET)
+    @GetMapping(path = "/{messageId}")
     public String getMessage(
             HttpSession session,
             Model model,
-            @PathVariable String messageId) throws DaoException {
+            @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
@@ -45,13 +44,10 @@ public class MessageController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete/{messageId}",
-            produces = "text/plain")
+    @DeleteMapping(value = "/delete/{messageId}")
     public ResponseEntity<String> deleteById(
             HttpSession session,
-            @PathVariable String messageId) throws DaoException {
+            @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
@@ -64,13 +60,10 @@ public class MessageController {
     }
 
     //-----------------------------------------------------------------------------------------------
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/findById",
-            produces = "text/plain")
+    @GetMapping(value = "/findById")
     public ResponseEntity<String> findById(
             HttpSession session,
-            @RequestParam(value = "id") String messageId) throws DaoException {
+            @RequestParam(value = "id") String messageId) {
         try {
             Utils.loginValidation(session);
             messageService.findById(Utils.stringToLong(messageId));
@@ -82,13 +75,10 @@ public class MessageController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/save",
-            produces = "text/plain")
+    @PostMapping(value = "/save")
     public ResponseEntity<String> save(
             HttpSession session,
-            @RequestBody Message message) throws DaoException {
+            @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.save(message);
@@ -100,13 +90,10 @@ public class MessageController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/update",
-            produces = "text/plain")
+    @PutMapping(value = "/update")
     public ResponseEntity<String> update(
             HttpSession session,
-            @RequestBody Message message) throws DaoException {
+            @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.update(message);
@@ -118,13 +105,10 @@ public class MessageController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete",
-            produces = "text/plain")
+    @DeleteMapping(value = "/delete")
     public ResponseEntity<String> delete(
             HttpSession session,
-            @RequestBody Message message) throws DaoException {
+            @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.delete(message);
@@ -136,11 +120,8 @@ public class MessageController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/getAll",
-            produces = "text/plain")
-    public ResponseEntity<List<Message>> getAll(HttpSession session) throws DaoException {
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<Message>> getAll(HttpSession session) {
         try {
             Utils.loginValidation(session);
             return new ResponseEntity<>(messageService.findAll(), HttpStatus.OK);

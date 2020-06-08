@@ -1,12 +1,10 @@
 package com.findme.controller;
 
 import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.Post;
 import com.findme.service.PostService;
-import com.findme.service.UserService;
 import com.findme.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,11 +26,11 @@ public class PostController {
         this.postService = postService;
     }
 
-    @RequestMapping(path = "/{postId}", method = RequestMethod.GET)
+    @GetMapping(path = "/{postId}")
     public String getPost(
             HttpSession session,
             Model model,
-            @PathVariable String postId) throws DaoException {
+            @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
@@ -46,13 +44,10 @@ public class PostController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/delete/{postId}",
-            produces = "text/plain")
+    @DeleteMapping(value = "/delete/{postId}")
     public ResponseEntity<String> deleteById(
             HttpSession session,
-            @PathVariable String postId) throws DaoException {
+            @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             postService.deleteById(Utils.stringToLong(postId));
@@ -65,13 +60,10 @@ public class PostController {
     }
 
     //------------------------------------------------------------------------------------------
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/findById",
-            produces = "text/plain")
+    @GetMapping(value = "/findById")
     public ResponseEntity<String> findById(
             HttpSession session,
-            @RequestParam(value = "id") String postId) throws DaoException {
+            @RequestParam(value = "id") String postId) {
         try {
             Utils.loginValidation(session);
             postService.findById(Utils.stringToLong(postId));
@@ -83,13 +75,10 @@ public class PostController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/save",
-            produces = "text/plain")
+    @PostMapping(value = "/save")
     public ResponseEntity<String> save(
             HttpSession session,
-            @RequestBody Post post) throws DaoException {
+            @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.save(post);
@@ -101,13 +90,10 @@ public class PostController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/update",
-            produces = "text/plain")
+    @PutMapping(value = "/update")
     public ResponseEntity<String> update(
             HttpSession session,
-            @RequestBody Post post) throws DaoException {
+            @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.update(post);
@@ -119,13 +105,10 @@ public class PostController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/deletePost",
-            produces = "text/plain")
+    @DeleteMapping(value = "/deletePost")
     public ResponseEntity<String> delete(
             HttpSession session,
-            @RequestBody Post post) throws DaoException {
+            @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.delete(post);
@@ -137,11 +120,8 @@ public class PostController {
         }
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/findAll",
-            produces = "text/plain")
-    public ResponseEntity<List<Post>> getAll(HttpSession session) throws DaoException {
+    @GetMapping(value = "/findAll")
+    public ResponseEntity<List<Post>> getAll(HttpSession session) {
         try {
             Utils.loginValidation(session);
             return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
