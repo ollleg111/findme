@@ -60,9 +60,9 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/index")
+    @GetMapping(path = "/login")
     public String home() {
-        return "index";
+        return "login";
     }
 
     @PostMapping(path = "/login")
