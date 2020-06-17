@@ -1,5 +1,9 @@
 package com.findme.models;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,6 +22,9 @@ CONSTRAINT USER_TO_FK FOREIGN KEY (USER_TO_ID) REFERENCES USERS(ID)
 
 @Entity
 @Table(name = "MESSAGE")
+@Getter
+@Setter
+@ToString
 public class Message {
     @Id
     @SequenceGenerator(name = "MESSAGES_SEQ", sequenceName = "MESSAGES_SEQ", allocationSize = 1)
@@ -40,64 +47,4 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "USER_TO_ID", nullable = false)
     private User userTo;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public Date getDateSent() {
-        return dateSent;
-    }
-
-    public Date getDateRead() {
-        return dateRead;
-    }
-
-    public User getUserFrom() {
-        return userFrom;
-    }
-
-    public User getUserTo() {
-        return userTo;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setDateSent(Date dateSent) {
-        this.dateSent = dateSent;
-    }
-
-    public void setDateRead(Date dateRead) {
-        this.dateRead = dateRead;
-    }
-
-    public void setUserFrom(User userFrom) {
-        this.userFrom = userFrom;
-    }
-
-    public void setUserTo(User userTo) {
-        this.userTo = userTo;
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", dateSent=" + dateSent +
-                ", dateRead=" + dateRead +
-                ", userFrom=" + userFrom +
-                ", userTo=" + userTo +
-                '}';
-    }
 }
