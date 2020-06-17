@@ -32,7 +32,7 @@ public class RelationshipController {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService
-                    .addRelationship(
+                    .save(
                             Utils.stringToLong(userIdFrom),
                             Utils.stringToLong(userIdTo));
             return new ResponseEntity<>(" Relationship was saved", HttpStatus.CREATED);

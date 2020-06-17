@@ -25,14 +25,15 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         setTypeParameterClass(Relationship.class);
     }
 
-    private static final String RELATIONSHIP_ADD = "INSERT INTO RELATIONSHIP(USER_FROM_ID,USER_TO_ID,STATUS) VALUES(?1,?2,?3)";
-    private static final String RELATIONSHIP_UPDATE = "UPDATE RELATIONSHIP SET USER_FROM_ID = ?1, USER_TO_ID = ?2, STATUS = ?3";
+    //private static final String RELATIONSHIP_ADD = "INSERT INTO RELATIONSHIP(USER_FROM_ID,USER_TO_ID,STATUS) VALUES(?1,?2,?3)";
+    //private static final String RELATIONSHIP_UPDATE = "UPDATE RELATIONSHIP SET USER_FROM_ID = ?1, USER_TO_ID = ?2, STATUS = ?3";
     private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
     private static final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
     private static final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
 
     private String alarmMessage = RelationshipDAO.class.getName();
 
+    /*
     @Transactional
     public void addRelationship(Long userIdFrom, Long userIdTo, RelationshipStatus status) throws InternalServerError {
         try {
@@ -67,6 +68,9 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
                     " update(String userIdFrom, String userIdTo, String status) from class " + alarmMessage);
         }
     }
+     */
+
+
 
     @Transactional
     public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {

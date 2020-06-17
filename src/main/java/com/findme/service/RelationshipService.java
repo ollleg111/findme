@@ -16,6 +16,12 @@ import java.util.List;
 public class RelationshipService {
     private RelationshipDAO relationshipDAO;
     private UserDAO userDAO;
+    private Relationship relationship;
+
+    @Autowired
+    public void setRelationship(Relationship relationship) {
+        this.relationship = relationship;
+    }
 
     @Autowired
     public RelationshipService(RelationshipDAO relationshipDAO, UserDAO userDAO) {
@@ -23,6 +29,7 @@ public class RelationshipService {
         this.userDAO = userDAO;
     }
 
+    /*
     public void addRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
         validateUsersId(userIdFrom, userIdTo);
         if (relationshipDAO.getRelationship(userIdFrom, userIdTo) == null) {
@@ -31,19 +38,46 @@ public class RelationshipService {
             throw new BadRequestException("You have had relationShip with id: " + userIdTo + " already");
         }
     }
+     */
 
-    public void updateRelationship(Long userIdFrom, Long userIdTo, String status) throws DaoException {
+    public Relationship save(Long userIdFrom, Long userIdTo) throws DaoException, BadRequestException {
         validateUsersId(userIdFrom, userIdTo);
+        return relationshipStatusCheck(userIdFrom, userIdTo);
+    }
+
+    public Relationship update(Long userIdFrom, Long userIdTo, String status) throws DaoException {
+        validateUsersId(userIdFrom, userIdTo);
+
+        String statusCheck = relationshipDAO.getRelationship(userIdFrom, userIdTo).getRelationshipStatus().toString();
+        if (statusCheck.equals(status)) throw new BadRequestException("You have some status");
+        if (statusCheck.equals("REQUEST_REJECTED")) throw new BadRequestException("Your request declined");
 
         /*
         WAITING_FOR_ACCEPT, REQUEST_REJECTED, FRIENDS, NOT_FRIENDS, DELETED
-         */
+        */
 
-        String statusCheck = relationshipDAO.getRelationship(userIdFrom,userIdTo).getRelationshipStatus().toString();
-        if(statusCheck.equals(status)) throw new BadRequestException("You have some status");
-        if(statusCheck.equals("REQUEST_REJECTED")) throw new BadRequestException("Your request declined");
+        return relationshipStatusCheck(userIdFrom, userIdTo);
+    }
+
+    /*
+    public void updateRelationship(Long userIdFrom, Long userIdTo, String status) throws DaoException {
+
+        String statusCheck = relationshipDAO.getRelationship(userIdFrom, userIdTo).getRelationshipStatus().toString();
+        if (statusCheck.equals(status)) throw new BadRequestException("You have some status");
+        if (statusCheck.equals("REQUEST_REJECTED")) throw new BadRequestException("Your request declined");
 
         relationshipDAO.updateRelationship(userIdFrom, userIdTo, status);
+    }
+    */
+
+    private Relationship relationshipStatusCheck(Long userIdFrom, Long userIdTo) throws BadRequestException {
+        if (relationshipDAO.getRelationship(userIdFrom, userIdTo) == null) {
+            relationship.setUserFrom(userDAO.findById(userIdFrom));
+            relationship.setUserTo(userDAO.findById(userIdTo));
+            relationship.setRelationshipStatus(RelationshipStatus.WAITING_FOR_ACCEPT);
+            return relationshipDAO.save(relationship);
+        }
+        throw new BadRequestException("You have relationShip status with id: " + userIdTo + " again");
     }
 
     public List<User> getIn(Long userId) throws DaoException {
