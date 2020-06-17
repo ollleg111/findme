@@ -52,7 +52,7 @@ public class RelationshipController {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService
-                    .updateRelationship(
+                    .update(
                             Utils.stringToLong(userIdFrom),
                             Utils.stringToLong(userIdTo),
                             status);
@@ -72,7 +72,7 @@ public class RelationshipController {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             return new ResponseEntity<>(
                     relationshipService
-                            .getIn(Utils.stringToLong(userId)),
+                            .getIncome(Utils.stringToLong(userId)),
                     HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,7 +89,7 @@ public class RelationshipController {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             return new ResponseEntity<>(
                     relationshipService
-                            .getOut(Utils.stringToLong(userId)),
+                            .getOutcome(Utils.stringToLong(userId)),
                     HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

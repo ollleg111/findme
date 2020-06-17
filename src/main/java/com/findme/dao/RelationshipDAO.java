@@ -43,7 +43,6 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
                     .setParameter(2, userIdTo)
                     .setParameter(3, status.toString())
                     .executeUpdate();
-
         } catch (InternalServerError exception) {
             System.err.println(exception.getMessage());
             throw new InternalServerError("Operation was filed in method" +
@@ -61,7 +60,6 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
                     .setParameter(2, userIdTo)
                     .setParameter(3, status)
                     .executeUpdate();
-
         } catch (InternalServerError exception) {
             System.err.println(exception.getMessage());
             throw new InternalServerError("Operation was filed in method" +
@@ -70,17 +68,13 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     }
      */
 
-
-
     @Transactional
     public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET, Relationship.class);
             query.setParameter(1, userIdFrom);
             query.setParameter(2, userIdTo);
-
             return (Relationship) query.getSingleResult();
-
         } catch (InternalServerError exception) {
             System.err.println(exception.getMessage());
             throw new InternalServerError("Operation was filed in method" +
