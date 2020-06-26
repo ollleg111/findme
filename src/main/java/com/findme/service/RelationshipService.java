@@ -49,14 +49,12 @@ public class RelationshipService {
         WAITING_FOR_ACCEPT, REQUEST_REJECTED, FRIENDS, NOT_FRIENDS, DELETED
         */
 
-        //могу сделать через switch - case !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        if (statusCheck.equals("REQUEST_REJECTED") || (statusCheck.equals("NOT_FRIENDS")))
+        if ((status.equals("REQUEST_REJECTED") || status.equals("NOT_FRIENDS") || status.equals("DELETED")) &&
+                (statusCheck.equals("WAITING_FOR_ACCEPT") || statusCheck.equals("FRIENDS")))
             throw new BadRequestException("Your request declined");
-        if (statusCheck.equals("FRIENDS")) throw new BadRequestException("You already have status: " +
-                "FRIENDS with this people");
-        if (statusCheck.equals("DELETED")) throw new BadRequestException("Your request was deleted");
-        if (statusCheck.equals("WAITING_FOR_ACCEPT")) {
+
+        if ((status.equals("FRIENDS") && statusCheck.equals("WAITING_FOR_ACCEPT")) ||
+                (status.equals("WAITING_FOR_ACCEPT") && statusCheck.equals("FRIENDS"))) {
             relationship.setRelationshipStatus(RelationshipStatus.FRIENDS);
         }
         return relationshipDAO.update(relationship);
