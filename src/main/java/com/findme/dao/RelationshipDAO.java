@@ -2,7 +2,6 @@ package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
-import com.findme.models.Message;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
@@ -131,5 +130,12 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     @Override
     public List<Relationship> findAll() throws DaoException {
         return super.findAll();
+    }
+
+    public Integer getRelationsByStatus(Long userIdFrom) throws InternalServerError {
+        List<User> users = getIn(userIdFrom);
+        if (users.isEmpty())
+            return null;
+        return users.size();
     }
 }
