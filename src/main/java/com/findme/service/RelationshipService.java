@@ -8,8 +8,9 @@ import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import com.findme.util.Constants;
-import com.findme.validator.GeneralRelationshipValidator;
-import com.findme.validator.WaitingRelationshipValidator;
+import com.findme.validator.GeneralValidator;
+import com.findme.validator.RejectedValidator;
+import com.findme.validator.WaitingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +37,6 @@ public class RelationshipService {
     public Relationship save(Long userIdFrom, Long userIdTo) throws DaoException, BadRequestException {
 
         validateUsersId(userIdFrom, userIdTo);
-        /*
-        максимальное ко-во исходящих заявок в друзья для одного пользователя - 10
-         */
         Integer quantity = relationshipDAO.getRelationsByStatus(userIdFrom);
         if (quantity != null && quantity >= Constants.MAX_QUANTITY_OF_STATUS_WAITING_FOR_ACCEPT)
             throw new BadRequestException("Too much requests WAITING_FOR_ACCEPT. You have only 10 requests");
@@ -55,24 +53,8 @@ public class RelationshipService {
     }
 
     public Relationship update(Long userIdFrom, Long userIdTo, String status) throws DaoException {
-
         validateUsersId(userIdFrom, userIdTo);
-        checkUpdateValidation(relationshipDAO.getRelationship(userIdFrom,userIdTo));
-
-        /*
-        Relationship relationship = relationshipDAO.getRelationship(userIdFrom, userIdTo);
-        String statusCheck = relationship.getRelationshipStatus().toString();
-        if (statusCheck.equals(status)) throw new BadRequestException("You already have status with this people");
-        if ((status.equals("REQUEST_REJECTED") || status.equals("NOT_FRIENDS") || status.equals("DELETED")) &&
-                (statusCheck.equals("WAITING_FOR_ACCEPT") || statusCheck.equals("FRIENDS")))
-            throw new BadRequestException("Your request declined");
-        if ((status.equals("FRIENDS") && statusCheck.equals("WAITING_FOR_ACCEPT")) ||
-                (status.equals("WAITING_FOR_ACCEPT") && statusCheck.equals("FRIENDS"))) {
-            relationship.setRelationshipStatus(RelationshipStatus.FRIENDS);
-        }
-        */
-
-        relationship.setDateModify(new Date());
+        updateCheck(relationshipDAO.getRelationship(userIdFrom, userIdTo), status);
         return relationshipDAO.update(relationship);
     }
 
@@ -98,7 +80,18 @@ public class RelationshipService {
         return relationship == null ? null : relationship.getRelationshipStatus();
     }
 
-    private void checkUpdateValidation(Relationship relationship) {
-        GeneralRelationshipValidator general = new WaitingRelationshipValidator()
+    private void updateCheck(Relationship relationship, String status) {
+        GeneralValidator waitingValidator = new WaitingValidator(RelationshipStatus.WAITING_FOR_ACCEPT);
+        GeneralValidator rejectedValidator = new RejectedValidator(RelationshipStatus.REQUEST_REJECTED);
+        GeneralValidator friendsValidator = new RejectedValidator(RelationshipStatus.FRIENDS);
+        GeneralValidator notFriendsValidator = new RejectedValidator(RelationshipStatus.NOT_FRIENDS);
+        GeneralValidator deletedValidator = new RejectedValidator(RelationshipStatus.DELETED);
+
+        waitingValidator.setNextValidation(rejectedValidator);
+        rejectedValidator.setNextValidation(friendsValidator);
+        friendsValidator.setNextValidation(notFriendsValidator);
+        notFriendsValidator.setNextValidation(deletedValidator);
+
+        waitingValidator.validationManager(relationship, status);
     }
 }

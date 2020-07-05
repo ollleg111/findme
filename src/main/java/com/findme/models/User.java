@@ -73,7 +73,6 @@ public class User {
     @Column(name = "DATE_LAST_ACTIVE")
     private Date dateLastActive;
 
-    //TODO enum
     @Column(name = "RELATIONSHIP_STATUS")
     private String relationshipStatus;
 
