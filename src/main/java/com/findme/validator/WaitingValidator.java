@@ -19,7 +19,7 @@ public class WaitingValidator extends GeneralValidator {
         if(inputStatus.equals(status.toString())){
             if(data.getRelationshipStatus() == status || data.getRelationshipStatus() == RelationshipStatus.FRIENDS)
                 throw new BadRequestException("Updating doesn`t allowed");
-            
+
             data.setRelationshipStatus(status);
             data.setDateModify(new Date());
         }
