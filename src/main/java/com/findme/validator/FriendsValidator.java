@@ -1,6 +1,5 @@
 package com.findme.validator;
 
-import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
@@ -11,15 +10,9 @@ import java.util.Date;
 
 @Component
 public class FriendsValidator extends GeneralValidator {
-    private RelationshipDAO dao;
 
     public FriendsValidator(RelationshipStatus status) {
         super(status);
-    }
-
-    public FriendsValidator(RelationshipStatus status, RelationshipDAO dao) {
-        super(status);
-        this.dao = dao;
     }
 
     @Override

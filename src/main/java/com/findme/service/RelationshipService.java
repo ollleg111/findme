@@ -8,9 +8,7 @@ import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import com.findme.util.Constants;
-import com.findme.validator.GeneralValidator;
-import com.findme.validator.RejectedValidator;
-import com.findme.validator.WaitingValidator;
+import com.findme.validator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,9 +83,9 @@ public class RelationshipService {
 
         GeneralValidator waitingValidator = new WaitingValidator(RelationshipStatus.WAITING_FOR_ACCEPT);
         GeneralValidator rejectedValidator = new RejectedValidator(RelationshipStatus.REQUEST_REJECTED);
-        GeneralValidator friendsValidator = new RejectedValidator(RelationshipStatus.FRIENDS);
-        GeneralValidator notFriendsValidator = new RejectedValidator(RelationshipStatus.NOT_FRIENDS);
-        GeneralValidator deletedValidator = new RejectedValidator(RelationshipStatus.DELETED);
+        GeneralValidator friendsValidator = new FriendsValidator(RelationshipStatus.FRIENDS);
+        GeneralValidator notFriendsValidator = new NotFriendValidator(RelationshipStatus.NOT_FRIENDS);
+        GeneralValidator deletedValidator = new DeletedValidator(RelationshipStatus.DELETED);
 
         waitingValidator.check(relationship,status);
         rejectedValidator.check(relationship,status);

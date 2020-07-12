@@ -4,6 +4,7 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /*
@@ -13,17 +14,17 @@ https://www.youtube.com/watch?v=HEExe3Bu_2k
 
 @Component
 public abstract class GeneralValidator {
-    private GeneralValidator nextValidation;
-    private RelationshipDAO dao;
+    GeneralValidator nextValidation;
     RelationshipStatus status;
+    RelationshipDAO dao;
 
     public GeneralValidator(RelationshipStatus status) {
         this.status = status;
     }
 
-    public GeneralValidator(RelationshipDAO dao, RelationshipStatus status) {
+    @Autowired
+    public GeneralValidator(RelationshipDAO dao) {
         this.dao = dao;
-        this.status = status;
     }
 
     public void setNextValidation(GeneralValidator nextValidation) {
