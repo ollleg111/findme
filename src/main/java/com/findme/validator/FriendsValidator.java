@@ -34,6 +34,7 @@ public class FriendsValidator extends GeneralValidator {
 
             data.setRelationshipStatus(status);
             data.setDateModify(new Date());
+            dao.update(data);
         }
     }
 }

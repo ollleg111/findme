@@ -1,5 +1,6 @@
 package com.findme.validator;
 
+import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
@@ -10,8 +11,15 @@ import java.util.Date;
 @Component
 public class NotFriendValidator extends GeneralValidator {
 
+    private RelationshipDAO dao;
+
     public NotFriendValidator(RelationshipStatus status) {
         super(status);
+    }
+
+    public NotFriendValidator(RelationshipStatus status, RelationshipDAO dao) {
+        super(status);
+        this.dao = dao;
     }
 
     @Override
@@ -21,6 +29,7 @@ public class NotFriendValidator extends GeneralValidator {
 
             data.setRelationshipStatus(status);
             data.setDateModify(new Date());
+            dao.update(data);
         }
     }
 }
