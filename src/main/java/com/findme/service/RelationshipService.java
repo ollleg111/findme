@@ -88,10 +88,6 @@ public class RelationshipService {
         GeneralValidator deletedValidator = new DeletedValidator(RelationshipStatus.DELETED);
 
         waitingValidator.check(relationship,status);
-        rejectedValidator.check(relationship,status);
-        friendsValidator.check(relationship,status);
-        notFriendsValidator.check(relationship,status);
-        deletedValidator.check(relationship,status);
 
         waitingValidator.setNextValidation(rejectedValidator);
         rejectedValidator.setNextValidation(friendsValidator);

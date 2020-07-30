@@ -4,12 +4,20 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class FriendsValidator extends GeneralValidator {
+
+    NotFriendValidator notFriendValidator;
+
+    @Autowired
+    public NotFriendValidator getNotFriendValidator() {
+        return notFriendValidator;
+    }
 
     public FriendsValidator(RelationshipStatus status) {
         super(status);
@@ -28,6 +36,8 @@ public class FriendsValidator extends GeneralValidator {
             data.setRelationshipStatus(status);
             data.setDateModify(new Date());
             dao.update(data);
+        } else {
+            notFriendValidator.check(data,inputStatus);
         }
     }
 }
