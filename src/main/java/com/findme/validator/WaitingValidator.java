@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class WaitingValidator extends GeneralValidator {
 
-    RejectedValidator rejectedValidator;
+    private RejectedValidator rejectedValidator;
 
     @Autowired
     public RejectedValidator getRejectedValidator() {

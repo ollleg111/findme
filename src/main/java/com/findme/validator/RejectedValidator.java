@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class RejectedValidator extends GeneralValidator {
 
-    FriendsValidator friendsValidator;
+    private FriendsValidator friendsValidator;
 
     @Autowired
     public FriendsValidator getFriendsValidator() {

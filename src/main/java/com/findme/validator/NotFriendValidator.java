@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class NotFriendValidator extends GeneralValidator {
 
-    DeletedValidator deletedValidator;
+    private DeletedValidator deletedValidator;
 
     @Autowired
     public DeletedValidator getDeletedValidator() {

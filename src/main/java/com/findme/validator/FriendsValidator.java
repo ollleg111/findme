@@ -12,7 +12,7 @@ import java.util.Date;
 @Component
 public class FriendsValidator extends GeneralValidator {
 
-    NotFriendValidator notFriendValidator;
+    private NotFriendValidator notFriendValidator;
 
     @Autowired
     public NotFriendValidator getNotFriendValidator() {

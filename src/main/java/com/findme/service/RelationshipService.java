@@ -39,7 +39,7 @@ public class RelationshipService {
         if (quantity != null && quantity >= Constants.MAX_QUANTITY_OF_STATUS_WAITING_FOR_ACCEPT)
             throw new BadRequestException("Too much requests WAITING_FOR_ACCEPT. You have only 10 requests");
 
-        if (relationshipDAO.getRelationship(userIdFrom, userIdTo) != null) throw
+        if (getRelationship(userIdFrom, userIdTo) != null) throw
                 new BadRequestException("You have relationShip status with id: " + userIdTo + " again");
 
         relationship.setUserFrom(userDAO.findById(userIdFrom));
@@ -52,7 +52,7 @@ public class RelationshipService {
 
     public Relationship update(Long userIdFrom, Long userIdTo, String status) throws DaoException {
         validateUsersId(userIdFrom, userIdTo);
-        Relationship relationUpdate = relationshipDAO.getRelationship(userIdFrom, userIdTo);
+        Relationship relationUpdate = getRelationship(userIdFrom, userIdTo);
         initCheck(relationUpdate, status);
         return relationUpdate;
     }
@@ -75,8 +75,12 @@ public class RelationshipService {
     }
 
     public RelationshipStatus getStatus(Long userIdFrom, Long userIdTo) throws DaoException {
-        Relationship relationship = relationshipDAO.getRelationship(userIdFrom, userIdTo);
+        Relationship relationship = getRelationship(userIdFrom, userIdTo);
         return relationship == null ? null : relationship.getRelationshipStatus();
+    }
+
+    public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
+        return relationshipDAO.getRelationship(userIdFrom, userIdTo);
     }
 
     private void initCheck(Relationship relationship, String status) {
@@ -87,7 +91,7 @@ public class RelationshipService {
         GeneralValidator notFriendsValidator = new NotFriendValidator(RelationshipStatus.NOT_FRIENDS);
         GeneralValidator deletedValidator = new DeletedValidator(RelationshipStatus.DELETED);
 
-        waitingValidator.check(relationship,status);
+        waitingValidator.check(relationship, status);
 
         waitingValidator.setNextValidation(rejectedValidator);
         rejectedValidator.setNextValidation(friendsValidator);
