@@ -4,12 +4,15 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class FriendsValidator extends GeneralValidator {
+
+    @Autowired
     public FriendsValidator(String status, Relationship relationship) {
         super(status, relationship);
     }
