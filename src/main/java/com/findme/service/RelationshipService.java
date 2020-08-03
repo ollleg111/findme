@@ -53,7 +53,7 @@ public class RelationshipService {
     public Relationship update(Long userIdFrom, Long userIdTo, String status) throws DaoException {
         validateUsersId(userIdFrom, userIdTo);
         Relationship relationUpdate = getRelationship(userIdFrom, userIdTo);
-        initCheck(relationUpdate, status);
+        initCheck(status, relationUpdate);
         return relationUpdate;
     }
 
@@ -83,15 +83,14 @@ public class RelationshipService {
         return relationshipDAO.getRelationship(userIdFrom, userIdTo);
     }
 
-    private void initCheck(Relationship relationship, String status) {
+    private void initCheck(String status, Relationship relationship) {
+        GeneralValidator waitingValidator = new WaitingValidator(status, relationship);
+        GeneralValidator rejectedValidator = new RejectedValidator(status, relationship);
+        GeneralValidator friendsValidator = new FriendsValidator(status, relationship);
+        GeneralValidator notFriendsValidator = new NotFriendValidator(status, relationship);
+        GeneralValidator deletedValidator = new DeletedValidator(status, relationship);
 
-        GeneralValidator waitingValidator = new WaitingValidator(RelationshipStatus.WAITING_FOR_ACCEPT);
-        GeneralValidator rejectedValidator = new RejectedValidator(RelationshipStatus.REQUEST_REJECTED);
-        GeneralValidator friendsValidator = new FriendsValidator(RelationshipStatus.FRIENDS);
-        GeneralValidator notFriendsValidator = new NotFriendValidator(RelationshipStatus.NOT_FRIENDS);
-        GeneralValidator deletedValidator = new DeletedValidator(RelationshipStatus.DELETED);
-
-        waitingValidator.check(relationship, status);
+        waitingValidator.check(status, relationship);
 
         waitingValidator.setNextValidation(rejectedValidator);
         rejectedValidator.setNextValidation(friendsValidator);

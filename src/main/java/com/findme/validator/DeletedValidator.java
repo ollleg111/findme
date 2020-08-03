@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class DeletedValidator extends GeneralValidator {
-
-    public DeletedValidator(RelationshipStatus status) {
-        super(status);
+    public DeletedValidator(String status, Relationship relationship) {
+        super(status, relationship);
     }
 
     @Override
-    public void check(Relationship data, String inputStatus) throws BadRequestException {
-        if (inputStatus.equals(status.toString())) {
+    public void check(String inputStatus, Relationship data) throws BadRequestException {
+        if (inputStatus.equals(RelationshipStatus.DELETED.toString())) {
             if (data.getRelationshipStatus() != RelationshipStatus.REQUEST_REJECTED)
                 throw new BadRequestException("Wrong DELETED status for relationship");
 
@@ -27,7 +26,7 @@ public class DeletedValidator extends GeneralValidator {
                 throw new BadRequestException("You cannot DELETE your friend, you must be waiting " +
                         Constants.MIN_DAYS_AS_FRIEND + " days");
 
-            data.setRelationshipStatus(status);
+            data.setRelationshipStatus(RelationshipStatus.DELETED);
             data.setDateModify(new Date());
             dao.update(data);
         }

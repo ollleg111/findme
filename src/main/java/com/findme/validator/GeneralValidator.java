@@ -3,8 +3,6 @@ package com.findme.validator;
 import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
-import com.findme.models.RelationshipStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /*
@@ -15,21 +13,22 @@ https://www.youtube.com/watch?v=HEExe3Bu_2k
 @Component
 public abstract class GeneralValidator {
     GeneralValidator nextValidation;
-    RelationshipStatus status;
     RelationshipDAO dao;
+    String status;
+    Relationship relationship;
 
-    public GeneralValidator(RelationshipStatus status) {
-        this.status = status;
+    public RelationshipDAO getDao() {
+        return dao;
     }
 
-    @Autowired
-    public GeneralValidator(RelationshipDAO dao) {
-        this.dao = dao;
+    public GeneralValidator(String status, Relationship relationship) {
+        this.status = status;
+        this.relationship = relationship;
     }
 
     public void setNextValidation(GeneralValidator nextValidation) {
         this.nextValidation = nextValidation;
     }
 
-    public abstract void check(Relationship data, String inputStatus) throws BadRequestException;
+    public abstract void check(String inputStatus, Relationship data) throws BadRequestException;
 }
