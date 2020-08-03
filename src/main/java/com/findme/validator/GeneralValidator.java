@@ -3,6 +3,7 @@ package com.findme.validator;
 import com.findme.dao.RelationshipDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.models.Relationship;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /*
@@ -17,10 +18,12 @@ public abstract class GeneralValidator {
     String status;
     Relationship relationship;
 
+    @Autowired
     public RelationshipDAO getDao() {
         return dao;
     }
 
+    @Autowired
     public GeneralValidator(String status, Relationship relationship) {
         this.status = status;
         this.relationship = relationship;
