@@ -32,6 +32,9 @@ public class DeletedValidator extends GeneralValidator {
             data.setRelationshipStatus(RelationshipStatus.DELETED);
             data.setDateModify(new Date());
             dao.update(data);
+        } else {
+            throw new BadRequestException("Updating from status " + data.getRelationshipStatus() +
+                    " to status " + inputStatus + " doesn't allowed");
         }
     }
 }
