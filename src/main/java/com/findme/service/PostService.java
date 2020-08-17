@@ -74,11 +74,10 @@ public class PostService {
         /*
         считаем что пользователь может оставлять посты на страницах всех людей с которыми он в друзьях, а так же у себя
          */
-        if ((relationship == null || !relationship.getRelationshipStatus().equals(RelationshipStatus.FRIENDS)))
-            throw new BadRequestException("You are not friends and don't have permission to publish posts");
-
-        if (!post.getUserPosted().equals(post.getUserPagePosted()))
-            throw new BadRequestException("You can publish posts to yourself");
+        if ((relationship == null || !relationship.getRelationshipStatus().equals(RelationshipStatus.FRIENDS)) &&
+                !post.getUserPosted().equals(post.getUserPagePosted()))
+            throw new BadRequestException("You are not friends and don't have permission to publish posts AND" +
+                    " you can publish posts to yourself");
 
         if (post.getMessage().length() == 0)
             throw new BadRequestException("Post's message cannot be empty");

@@ -48,7 +48,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{userId}")
+    @DeleteMapping(value = "/delete-user/{userId}")
     public ResponseEntity<String> deleteById(@PathVariable String userId) {
         try {
             userService.deleteById(Utils.stringToLong(userId));
@@ -66,8 +66,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<String> login(HttpSession session,
-                                        HttpServletRequest request) {
+    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
         try {
             User user = userService.login(
                     request.getParameter("mail"),
@@ -95,7 +94,7 @@ public class UserController {
     }
 
     //-----------------------------------------------------------------------------------------------
-    @GetMapping(value = "/findById")
+    @GetMapping(value = "/findById-users")
     public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) {
         try {
             userService.findById(Utils.stringToLong(userId));
@@ -107,7 +106,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/add-User")
     public ResponseEntity<String> save(@RequestBody User user) {
         try {
             userService.save(user);
@@ -131,7 +130,7 @@ public class UserController {
         }
     }
 
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/update-user")
     public ResponseEntity<String> update(@RequestBody User user) {
         try {
             userService.update(user);
@@ -143,7 +142,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "/delete-user")
     public ResponseEntity<String> delete(@RequestBody User user) {
         try {
             userService.delete(user);
@@ -155,7 +154,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/findAll")
+    @GetMapping(value = "/findAll-users")
     public ResponseEntity<List<User>> getAll() {
         try {
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);

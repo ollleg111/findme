@@ -27,10 +27,7 @@ public class MessageController {
     }
 
     @GetMapping(path = "/{messageId}")
-    public String getMessage(
-            HttpSession session,
-            Model model,
-            @PathVariable String messageId) {
+    public String getMessage(HttpSession session, Model model, @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
@@ -44,10 +41,8 @@ public class MessageController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{messageId}")
-    public ResponseEntity<String> deleteById(
-            HttpSession session,
-            @PathVariable String messageId) {
+    @DeleteMapping(value = "/delete-message/{messageId}")
+    public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
@@ -60,10 +55,8 @@ public class MessageController {
     }
 
     //-----------------------------------------------------------------------------------------------
-    @GetMapping(value = "/findById")
-    public ResponseEntity<String> findById(
-            HttpSession session,
-            @RequestParam(value = "id") String messageId) {
+    @GetMapping(value = "/findById-message")
+    public ResponseEntity<String> findById(HttpSession session, @RequestParam(value = "id") String messageId) {
         try {
             Utils.loginValidation(session);
             messageService.findById(Utils.stringToLong(messageId));
@@ -75,10 +68,8 @@ public class MessageController {
         }
     }
 
-    @PostMapping(value = "/save")
-    public ResponseEntity<String> save(
-            HttpSession session,
-            @RequestBody Message message) {
+    @PostMapping(value = "/add-message")
+    public ResponseEntity<String> save(HttpSession session, @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.save(message);
@@ -90,10 +81,8 @@ public class MessageController {
         }
     }
 
-    @PutMapping(value = "/update")
-    public ResponseEntity<String> update(
-            HttpSession session,
-            @RequestBody Message message) {
+    @PutMapping(value = "/update-message")
+    public ResponseEntity<String> update(HttpSession session, @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.update(message);
@@ -105,10 +94,8 @@ public class MessageController {
         }
     }
 
-    @DeleteMapping(value = "/delete")
-    public ResponseEntity<String> delete(
-            HttpSession session,
-            @RequestBody Message message) {
+    @DeleteMapping(value = "/delete-message")
+    public ResponseEntity<String> delete(HttpSession session, @RequestBody Message message) {
         try {
             Utils.loginValidation(session);
             messageService.delete(message);
@@ -120,7 +107,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping(value = "/getAll")
+    @GetMapping(value = "/getAll-messages")
     public ResponseEntity<List<Message>> getAll(HttpSession session) {
         try {
             Utils.loginValidation(session);

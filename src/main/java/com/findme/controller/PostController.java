@@ -27,10 +27,7 @@ public class PostController {
     }
 
     @GetMapping(path = "/{postId}")
-    public String getPost(
-            HttpSession session,
-            Model model,
-            @PathVariable String postId) {
+    public String getPost(HttpSession session, Model model, @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
@@ -44,10 +41,8 @@ public class PostController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{postId}")
-    public ResponseEntity<String> deleteById(
-            HttpSession session,
-            @PathVariable String postId) {
+    @DeleteMapping(value = "/delete-post/{postId}")
+    public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             postService.deleteById(Utils.stringToLong(postId));
@@ -60,10 +55,8 @@ public class PostController {
     }
 
     //------------------------------------------------------------------------------------------
-    @GetMapping(value = "/findById")
-    public ResponseEntity<String> findById(
-            HttpSession session,
-            @RequestParam(value = "id") String postId) {
+    @GetMapping(value = "/findById-post")
+    public ResponseEntity<String> findById(HttpSession session, @RequestParam(value = "id") String postId) {
         try {
             Utils.loginValidation(session);
             postService.findById(Utils.stringToLong(postId));
@@ -75,10 +68,8 @@ public class PostController {
         }
     }
 
-    @PostMapping(value = "/save")
-    public ResponseEntity<String> save(
-            HttpSession session,
-            @RequestBody Post post) {
+    @PostMapping(value = "/add-post")
+    public ResponseEntity<String> save(HttpSession session, @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.save(post);
@@ -90,10 +81,8 @@ public class PostController {
         }
     }
 
-    @PutMapping(value = "/update")
-    public ResponseEntity<String> update(
-            HttpSession session,
-            @RequestBody Post post) {
+    @PutMapping(value = "/update-post")
+    public ResponseEntity<String> update(HttpSession session, @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.update(post);
@@ -105,10 +94,8 @@ public class PostController {
         }
     }
 
-    @DeleteMapping(value = "/deletePost")
-    public ResponseEntity<String> delete(
-            HttpSession session,
-            @RequestBody Post post) {
+    @DeleteMapping(value = "/delete-post")
+    public ResponseEntity<String> delete(HttpSession session, @RequestBody Post post) {
         try {
             Utils.loginValidation(session);
             postService.delete(post);
@@ -120,7 +107,7 @@ public class PostController {
         }
     }
 
-    @GetMapping(value = "/findAll")
+    @GetMapping(value = "/findAll-posts")
     public ResponseEntity<List<Post>> getAll(HttpSession session) {
         try {
             Utils.loginValidation(session);
