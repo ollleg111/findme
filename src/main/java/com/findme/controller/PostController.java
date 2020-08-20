@@ -4,8 +4,10 @@ import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.Post;
+import com.findme.models.PostFilter;
 import com.findme.service.PostService;
 import com.findme.util.Utils;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,6 +106,18 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/getListWithFilter")
+    public ResponseEntity<List<Post>> getList(HttpSession session, PostFilter postFilter){
+        try {
+            Utils.loginValidation(session);
+            return new ResponseEntity<>(postService.getList(postFilter), HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
