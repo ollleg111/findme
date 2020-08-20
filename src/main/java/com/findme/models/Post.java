@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -60,10 +61,7 @@ public class Post {
 
     //юзеры, которые отмечены в после (аналог фейсбук функции - with user1, user2, user3)
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "USERS_TAGGED",
-            joinColumns = {@JoinColumn(name = "POST_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
-    private Set<User> usersTagged;
+    @JoinTable(name = "USERS_TAGGED", joinColumns = {@JoinColumn(name = "POST_ID")}, inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
+    private List<User> usersTagged;
 }
 

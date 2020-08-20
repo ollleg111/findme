@@ -106,7 +106,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/add-User")
+    @PostMapping(value = "/add-user")
     public ResponseEntity<String> save(@RequestBody User user) {
         try {
             userService.save(user);
@@ -154,7 +154,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/findAll-users")
+    @GetMapping(value = "/getAll-users")
     public ResponseEntity<List<User>> getAll() {
         try {
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);

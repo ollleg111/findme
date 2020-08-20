@@ -107,7 +107,7 @@ public class PostController {
         }
     }
 
-    @GetMapping(value = "/findAll-posts")
+    @GetMapping(value = "/getAll-posts")
     public ResponseEntity<List<Post>> getAll(HttpSession session) {
         try {
             Utils.loginValidation(session);
