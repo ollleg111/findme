@@ -5,6 +5,7 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.Post;
 import com.findme.models.PostFilter;
+import com.findme.models.User;
 import com.findme.service.PostService;
 import com.findme.util.Utils;
 import jdk.nashorn.internal.objects.annotations.Getter;
@@ -109,11 +110,25 @@ public class PostController {
         }
     }
 
-    @GetMapping(value = "/getListWithFilter")
-    public ResponseEntity<List<Post>> getList(HttpSession session, PostFilter postFilter){
+    @GetMapping(value = "/getDataSortedPostsList")
+    public ResponseEntity<List<Post>> getDataSortedPostsList(HttpSession session){
         try {
             Utils.loginValidation(session);
-            return new ResponseEntity<>(postService.getList(postFilter), HttpStatus.OK);
+            return new ResponseEntity<>(postService.getDataSortedPostsList((User)session.getAttribute("user")),
+                    HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/getListWithFilter")
+    public ResponseEntity<List<Post>> getListWithFilter(HttpSession session, PostFilter postFilter){
+        try {
+            Utils.loginValidation(session);
+            return new ResponseEntity<>(postService.getFilteredList((User)session.getAttribute("user"), postFilter),
+                    HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
