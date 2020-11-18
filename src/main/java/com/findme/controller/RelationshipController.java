@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
+@RequestMapping("/relation")
 public class RelationshipController {
     private RelationshipService relationshipService;
 

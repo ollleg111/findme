@@ -22,8 +22,8 @@ public class RelationshipService {
     private Relationship relationship;
 
     @Autowired
-    public void setRelationship(Relationship relationship) {
-        this.relationship = relationship;
+    public Relationship getRelationship() {
+        return relationship;
     }
 
     @Autowired
