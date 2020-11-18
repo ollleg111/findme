@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 public class NotFriendValidator extends GeneralValidator {
 
-    @Autowired
     public NotFriendValidator(String status, Relationship relationship) {
         super(status, relationship);
     }

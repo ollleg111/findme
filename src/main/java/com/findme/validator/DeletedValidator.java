@@ -10,10 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-@Component
 public class DeletedValidator extends GeneralValidator {
 
-    @Autowired
     public DeletedValidator(String status, Relationship relationship) {
         super(status, relationship);
     }

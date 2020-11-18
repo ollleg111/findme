@@ -11,19 +11,16 @@ https://www.youtube.com/watch?v=66_0-u8P5DQ
 https://www.youtube.com/watch?v=HEExe3Bu_2k
  */
 
-@Component
 public abstract class GeneralValidator {
     GeneralValidator nextValidation;
     RelationshipDAO dao;
     String status;
     Relationship relationship;
 
-    @Autowired
     public RelationshipDAO getDao() {
         return dao;
     }
 
-    @Autowired
     public GeneralValidator(String status, Relationship relationship) {
         this.status = status;
         this.relationship = relationship;

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 public class WaitingValidator extends GeneralValidator {
 
-    @Autowired
     public WaitingValidator(String status, Relationship relationship) {
         super(status, relationship);
     }

@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 public class FriendsValidator extends GeneralValidator {
 
-    @Autowired
     public FriendsValidator(String status, Relationship relationship) {
         super(status, relationship);
     }
