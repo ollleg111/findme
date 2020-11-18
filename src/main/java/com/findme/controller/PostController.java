@@ -8,7 +8,6 @@ import com.findme.models.PostFilter;
 import com.findme.models.User;
 import com.findme.service.PostService;
 import com.findme.util.Utils;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

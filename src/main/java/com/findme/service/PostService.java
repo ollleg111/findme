@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class PostService {
+
     private PostDAO postDAO;
     private RelationshipService relationshipService;
 
