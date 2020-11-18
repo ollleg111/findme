@@ -17,20 +17,30 @@ import java.util.regex.Pattern;
 @Service
 public class PostService {
     private PostDAO postDAO;
-    private UserService userService;
+    private Post post;
     private RelationshipService relationshipService;
+
+    @Autowired
+    public RelationshipService getRelationshipService() {
+        return relationshipService;
+    }
+
+    @Autowired
+    public Post getPost() {
+        return post;
+    }
 
     @Autowired
     public PostService(PostDAO postDAO) {
         this.postDAO = postDAO;
     }
 
-    @Autowired
-    public PostService(PostDAO postDAO, UserService userService, RelationshipService relationshipService) {
-        this.postDAO = postDAO;
-        this.userService = userService;
-        this.relationshipService = relationshipService;
-    }
+//    @Autowired
+//    public PostService(PostDAO postDAO, UserService userService, RelationshipService relationshipService) {
+//        this.postDAO = postDAO;
+//        this.userService = userService;
+//        this.relationshipService = relationshipService;
+//    }
 
     public Post findById(Long id) throws DaoException, NotFoundException {
         Post post = postDAO.findById(id);
@@ -67,7 +77,7 @@ public class PostService {
     }
 
     private void validate(Post post) throws BadRequestException {
-        Relationship relationship = relationshipService.getRelationship(
+        Relationship relationship = getRelationshipService().getRelationship(
                 post.getUserPosted().getId(),
                 post.getUserPagePosted().getId());
 
