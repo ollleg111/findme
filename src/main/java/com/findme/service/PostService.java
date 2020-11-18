@@ -16,17 +16,11 @@ import java.util.regex.Pattern;
 @Service
 public class PostService {
     private PostDAO postDAO;
-    private Post post;
     private RelationshipService relationshipService;
 
     @Autowired
     public RelationshipService getRelationshipService() {
         return relationshipService;
-    }
-
-    @Autowired
-    public Post getPost() {
-        return post;
     }
 
     @Autowired
