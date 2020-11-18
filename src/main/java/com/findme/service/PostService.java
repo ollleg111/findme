@@ -4,13 +4,12 @@ import com.findme.dao.PostDAO;
 import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.NotFoundException;
-import com.findme.models.Post;
-import com.findme.models.Relationship;
-import com.findme.models.RelationshipStatus;
+import com.findme.models.*;
 import com.findme.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -74,6 +73,47 @@ public class PostService {
 
     public List<Post> findAll() throws DaoException {
         return postDAO.findAll();
+    }
+
+    public List<Post> getDataSortedPostsList(User user) throws DaoException {
+        return postDAO.getDataSortedPostsList(user.getId());
+    }
+
+    /*
+        Так же необходимо сделать фильтрацию
+        - показвывть все посты (по умолчанию)
+        - показывать посты только юзера чья страница
+        - показывать посты друзей
+        - показывать посты определенного пользователя
+     */
+    /*
+        public class PostFilter {
+        boolean ownerPosts;
+        boolean friendsPosts;
+        long userId;
+        }
+     */
+    public List<Post> getFilteredList(User owner, PostFilter postFilter) throws DaoException {
+        if (postFilter != null) {
+            List<Post> posts = new ArrayList<>();
+
+            // - показывать посты только юзера чья страница
+            if (postFilter.isOwnerPosts()) {
+                posts.addAll(postDAO.getFilteredPostsById(owner.getId()));
+            }
+            // - показывать посты друзей
+            if (postFilter.isFriendsPosts()) {
+                posts.addAll(postDAO.getFilteredByFriends(owner.getId()));
+            }
+            // - показывать посты определенного пользователя
+            if (postFilter.getUserId() > 0) {
+                posts.addAll(postDAO.getFilteredPostsById(postFilter.getUserId()));
+            }
+            return posts;
+        } else {
+            // - показвывть все посты (по умолчанию)
+            return findAll();
+        }
     }
 
     private void validate(Post post) throws BadRequestException {
