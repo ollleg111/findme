@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +22,7 @@ CONSTRAINT USER_FK FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
 
 /*
 ID NUMBER PRIMARY KEY,
-MESSAGE NVARCHAR2(200),
+MESSAGE NVARCHAR2(200) NOT NULL,
 DATE_POSTED TIMESTAMP,
 LOCATION NVARCHAR2(30),
 USER_ID NUMBER NOT NULL,
@@ -40,6 +42,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
     private Long id;
 
+    @NotEmpty(message = "Message text should not be empty")
+    @Size(min = 2, max = 200, message = "Message text should be between 2 and 200 characters")
     @Column(name = "MESSAGE")
     private String message;
 

@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /*
@@ -31,6 +33,8 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGES_SEQ")
     private Long id;
 
+    @NotEmpty(message = "Message text should not be empty")
+    @Size(min = 2, max = 100, message = "Message text should be between 2 and 100 characters")
     @Column(name = "TEXT")
     private String text;
 
