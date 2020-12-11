@@ -6,6 +6,7 @@ import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import com.findme.util.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
     private UserService userService;
 
@@ -38,6 +40,7 @@ public class UserController {
  */
         try {
             model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
+            log.info("Get user with id: " + userId);
             return "profile";
         } catch (BadRequestException e) {
             return "BadRequestException " + e.getMessage();
@@ -52,6 +55,7 @@ public class UserController {
     public ResponseEntity<String> deleteById(@PathVariable String userId) {
         try {
             userService.deleteById(Utils.stringToLong(userId));
+            log.info("Delete user with id: " + userId);
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -98,6 +102,7 @@ public class UserController {
     public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) {
         try {
             userService.findById(Utils.stringToLong(userId));
+            log.info("Find user with id: " + userId);
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -110,6 +115,7 @@ public class UserController {
     public ResponseEntity<String> save(@RequestBody User user) {
         try {
             userService.save(user);
+            log.info("Add user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>(" User was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -122,6 +128,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
             userService.save(user);
+            log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>(" User was registered", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -134,6 +141,7 @@ public class UserController {
     public ResponseEntity<String> update(@RequestBody User user) {
         try {
             userService.update(user);
+            log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>(" User was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -146,6 +154,7 @@ public class UserController {
     public ResponseEntity<String> delete(@RequestBody User user) {
         try {
             userService.delete(user);
+            log.info("Delete user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -154,9 +163,10 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/getAll-users")
+    @GetMapping(value = "/getUsersList")
     public ResponseEntity<List<User>> getAll() {
         try {
+            log.info("Get users list from method getAll()");
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

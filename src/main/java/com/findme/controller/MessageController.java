@@ -6,6 +6,7 @@ import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
 import com.findme.service.MessageService;
 import com.findme.util.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/message")
+@Slf4j
 public class MessageController {
     private MessageService messageService;
 
@@ -31,6 +34,7 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
+            log.info("Get message id: " + messageId);
             return "profile";
         } catch (BadRequestException e) {
             return "BadRequestException " + e.getMessage();
@@ -46,6 +50,7 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
+            log.info("delete message id: " + messageId);
             return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -60,6 +65,7 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             messageService.findById(Utils.stringToLong(messageId));
+            log.info("Find message id: " + messageId);
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -69,10 +75,12 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public ResponseEntity<String> save(HttpSession session, @RequestBody Message message) {
+    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("message") @Valid Message message) {
         try {
             Utils.loginValidation(session);
             messageService.save(message);
+            log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
+                    message.getDateSent() + " " + message.getText());
             return new ResponseEntity<>(" Message was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -82,10 +90,12 @@ public class MessageController {
     }
 
     @PutMapping(value = "/update-message")
-    public ResponseEntity<String> update(HttpSession session, @RequestBody Message message) {
+    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("message") @Valid Message message) {
         try {
             Utils.loginValidation(session);
             messageService.update(message);
+            log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
+                    message.getDateSent() + " " + message.getText());
             return new ResponseEntity<>(" Message was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -99,7 +109,9 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             messageService.delete(message);
-            return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
+            log.info("Delete message data: " + message.getId() + " " + message.getDateRead() + " " +
+                    message.getDateSent() + " " + message.getText());
+            return new ResponseEntity<>(" Message was deleted", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -107,10 +119,10 @@ public class MessageController {
         }
     }
 
-    @GetMapping(value = "/getAll-messages")
-    public ResponseEntity<List<Message>> getAll(HttpSession session) {
+    @GetMapping(value = "/getMessagesList")
+    public ResponseEntity<List<Message>> getAll() {
         try {
-            Utils.loginValidation(session);
+            log.info("Get messages list from method getAll()");
             return new ResponseEntity<>(messageService.findAll(), HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

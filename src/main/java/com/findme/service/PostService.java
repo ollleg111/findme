@@ -19,6 +19,9 @@ public class PostService {
     private PostDAO postDAO;
     private RelationshipService relationshipService;
 
+    // - максимальное колличество постов от друзей
+    private final int MAX_FEED_LIST = 10;
+
     @Autowired
     public RelationshipService getRelationshipService() {
         return relationshipService;
@@ -88,6 +91,7 @@ public class PostService {
         long userId;
         }
      */
+
     public List<Post> getFilteredList(User owner, PostFilter postFilter) throws DaoException {
         if (postFilter != null) {
             List<Post> posts = new ArrayList<>();
@@ -109,6 +113,15 @@ public class PostService {
             // - показвывть все посты (по умолчанию)
             return findAll();
         }
+    }
+    public List<Post> getFeedList(User owner) throws DaoException, NotFoundException {
+        // - показывать посты друзей
+        List<Post> posts = postDAO.getFilteredByFriends(owner.getId());
+        if(posts != null) {
+            //TODO
+            return posts;
+        }
+        throw new NotFoundException("We do not have any friends posts");
     }
 
     private void validate(Post post) throws BadRequestException {
