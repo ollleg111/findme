@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -91,7 +92,6 @@ public class PostService {
         long userId;
         }
      */
-
     public List<Post> getFilteredList(User owner, PostFilter postFilter) throws DaoException {
         if (postFilter != null) {
             List<Post> posts = new ArrayList<>();
@@ -117,11 +117,15 @@ public class PostService {
     public List<Post> getFeedList(User owner) throws DaoException, NotFoundException {
         // - показывать посты друзей
         List<Post> posts = postDAO.getFilteredByFriends(owner.getId());
+        ArrayList<Post> returnList = new ArrayList<>(MAX_FEED_LIST);
+
         if(posts != null) {
-            //TODO
-            return posts;
-        }
-        throw new NotFoundException("We do not have any friends posts");
+            if(posts.size() <= MAX_FEED_LIST) {
+                returnList.ensureCapacity(MAX_FEED_LIST);
+            }
+            returnList.addAll(posts);
+            return returnList;
+        } return Collections.emptyList();
     }
 
     private void validate(Post post) throws BadRequestException {
