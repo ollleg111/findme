@@ -31,18 +31,18 @@ public class PostController {
     }
 
     @GetMapping(path = "/{postId}")
-    public String getPost(HttpSession session, Model model, @PathVariable String postId) {
+    public ResponseEntity<String> getPost(HttpSession session, Model model, @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
             log.info("Add post with id: " + postId);
-            return "profile";
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
-            return "BadRequestException " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
-            return "Error 404 " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
-            return "System Error " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -140,7 +140,7 @@ public class PostController {
             Utils.loginValidation(session);
             log.info("Get posts list from method getListWithFilter(HttpSession session, Model model, @ModelAttribute PostFilter postFilter)");
             List<Post> postList = postService.getFilteredList((User)session.getAttribute("user"), postFilter);
-            model.addAttribute("postList", postList);
+            model.addAttribute("postlist", postList);
             return new ResponseEntity<>(postList, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -155,7 +155,7 @@ public class PostController {
             Utils.loginValidation(session);
             log.info("Get posts list from method feed(HttpSession session, Model model)");
             List<Post> feedList = postService.getFeedList((User)session.getAttribute("user"));
-            model.addAttribute("feed", feedList);
+            model.addAttribute("postlist", feedList);
             return new ResponseEntity<>(feedList, HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

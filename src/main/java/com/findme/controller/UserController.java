@@ -30,24 +30,18 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}")
-    public String getUser(Model model, @PathVariable String userId) {
-/*
-        Example from lesson!!!
-        User user = new User();
-        user.setFirstName("Andrey");
-        user.setCity("TestCity");
-        model.addAttribute("text", "value");
- */
+    public ResponseEntity<String> getUser(Model model, @PathVariable String userId) {
+
         try {
             model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
             log.info("Get user with id: " + userId);
-            return "profile";
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
-            return "BadRequestException " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
-            return "Error 404 " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
-            return "System Error " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -174,19 +168,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /*
-    Example from lesson!!!
-        @PostMapping(value = "/register-user")
-    public String registerUser(HttpSession session,
-                               HttpServletRequest request,
-                               HttpServletResponse response,
-                               @ModelAttribute User user)  {
-
-        session.setAttribute("product1", "iphone6s");
-        session.setAttribute("product2", "...");
-
-        return "ok";
-    }
-     */
 }

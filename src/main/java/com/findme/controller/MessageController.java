@@ -30,18 +30,18 @@ public class MessageController {
     }
 
     @GetMapping(path = "/{messageId}")
-    public String getMessage(HttpSession session, Model model, @PathVariable String messageId) {
+    public ResponseEntity<String> getMessage(HttpSession session, Model model, @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Get message id: " + messageId);
-            return "profile";
+            return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
-            return "BadRequestException " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
-            return "Error 404 " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
-            return "System Error " + e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -61,10 +61,10 @@ public class MessageController {
 
     //-----------------------------------------------------------------------------------------------
     @GetMapping(value = "/findById-message")
-    public ResponseEntity<String> findById(HttpSession session, @RequestParam(value = "id") String messageId) {
+    public ResponseEntity<String> findById(HttpSession session, Model model, @RequestParam(value = "id") String messageId) {
         try {
             Utils.loginValidation(session);
-            messageService.findById(Utils.stringToLong(messageId));
+            model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Find message id: " + messageId);
             return new ResponseEntity<>(" ok ", HttpStatus.OK);
         } catch (BadRequestException e) {
