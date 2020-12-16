@@ -6,6 +6,7 @@ import com.findme.exceptions.DaoException;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.*;
 import com.findme.util.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class PostService {
 
     private PostDAO postDAO;
@@ -111,21 +113,24 @@ public class PostService {
             return posts;
         } else {
             // - показвывть все посты (по умолчанию)
+            log.info("Show all posts)");
             return findAll();
         }
     }
     public List<Post> getFeedList(User owner) throws DaoException, NotFoundException {
-        // - показывать посты друзей
+        // - показывать посты друзей, колличество постов ограничено константой
         List<Post> posts = postDAO.getFilteredByFriends(owner.getId());
-        ArrayList<Post> returnList = new ArrayList<>(MAX_FEED_LIST);
 
         if(posts != null) {
-            if(posts.size() <= MAX_FEED_LIST) {
+            if(posts.size() >= MAX_FEED_LIST) {
+                ArrayList<Post> returnList = new ArrayList<>(posts);
                 returnList.ensureCapacity(MAX_FEED_LIST);
+                return returnList;
             }
-            returnList.addAll(posts);
-            return returnList;
-        } return Collections.emptyList();
+            return posts;
+        }
+        log.info("Do not have any posts)");
+        return Collections.emptyList();
     }
 
     private void validate(Post post) throws BadRequestException {
