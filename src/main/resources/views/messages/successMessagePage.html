@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me</title>
+</head>
+
+<body>
+<header>
+    Message getting data
+</header>
+<h1>Message success page</h1>
+
+<form th:method="GET" th:action="@{/message}" th:object="{message}">
+    <div>
+        <label for="text">Text</label>
+        <input type="text" th:field="*{text}" id="text">
+
+        <br/>
+
+        <label for="dateSent">Date sent</label>
+        <input type="date" th:field="*{dateSent}" id="dateSent">
+
+        <br/>
+
+        <label for="dateRead">Date Posted</label>
+        <input type="date" th:field="*{dateRead}" id="dateRead">
+    </div>
+</form>
+
+</body>
+</html>

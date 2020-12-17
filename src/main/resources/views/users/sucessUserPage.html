@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me</title>
+</head>
+
+<body>
+<header>
+    User getting data
+</header>
+<h1>User success page</h1>
+
+<form th:method="GET" th:action="@{/user}" th:object="{user}">
+    <div>
+        <label for="firstName">First Name</label>
+        <input type="text" th:field="*{firstName}" id="firstName">
+
+        <br/>
+
+        <label for="lastName">last Name</label>
+        <input type="text" th:field="*{lastName}" id="lastName">
+
+        <br/>
+
+        <label for="phoneNumber">Phone number</label>
+        <input type="text" th:field="*{phoneNumber}" id="phoneNumber">
+
+        <br/>
+
+        <label for="country">Country</label>
+        <input type="text" th:field="*{country}" id="country">
+
+        <br/>
+
+        <label for="city">Location</label>
+        <input type="text" th:field="*{city}" id="city">
+
+        <br/>
+
+        <label for="age">Age</label>
+        <input type="number" th:field="*{age}" id="age">
+
+        <br/>
+
+        <label for="dateRegistered">Date registered</label>
+        <input type="date" th:field="*{dateRegistered}" id="dateRegistered">
+
+        <br/>
+
+        <label for="dateLastActive">Date last active</label>
+        <input type="date" th:field="*{dateLastActive}" id="dateLastActive">
+
+        <br/>
+
+        <label for="relationshipStatus">Location</label>
+        <input type="checkbox" th:field="*{relationshipStatus}" id="relationshipStatus">
+
+        <br/>
+
+        <label for="religion">
+            <input type="checkbox" th:field="*{religion}" id="religion">
+            Religion
+        </label>
+        <br/>
+
+        <label for="school">
+            <input type="text" th:field="*{school}" id="school">
+            School
+        </label>
+        <br/>
+
+        <label for="university">University</label>
+        <input type="text" th:field="*{university}" id="university">
+    </div>
+</form>
+
+</body>
+
+</html>

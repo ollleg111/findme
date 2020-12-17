@@ -35,7 +35,7 @@ public class RelationshipController {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService.save(Utils.stringToLong(userIdFrom), Utils.stringToLong(userIdTo));
             log.info("Add relationship data with user id from " + userIdFrom + " user id to " + userIdTo);
-            return new ResponseEntity<>(" Relationship was saved", HttpStatus.CREATED);
+            return new ResponseEntity<>("Relationship was saved", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e) {
@@ -53,7 +53,7 @@ public class RelationshipController {
             relationshipService.update(Utils.stringToLong(userIdFrom),Utils.stringToLong(userIdTo),status);
             log.info("Update relationship data with user id from: " + userIdFrom + " user id to: " + userIdTo + " status: " +
                     status);
-            return new ResponseEntity<>(" Relationship was updated", HttpStatus.OK);
+            return new ResponseEntity<>("Relationship was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

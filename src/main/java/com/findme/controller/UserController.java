@@ -31,11 +31,10 @@ public class UserController {
 
     @GetMapping(path = "/{userId}")
     public ResponseEntity<String> getUser(Model model, @PathVariable String userId) {
-
         try {
             model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
             log.info("Get user with id: " + userId);
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+            return new ResponseEntity<>("users/successUserPage", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
@@ -50,7 +49,7 @@ public class UserController {
         try {
             userService.deleteById(Utils.stringToLong(userId));
             log.info("Delete user with id: " + userId);
-            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
+            return new ResponseEntity<>("User was deleted", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -70,8 +69,8 @@ public class UserController {
                     request.getParameter("mail"),
                     request.getParameter("password"));
             session.setAttribute("user", user);
-
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+            log.info("login complete");
+            return new ResponseEntity<>("login complete", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e) {
@@ -83,36 +82,10 @@ public class UserController {
     public ResponseEntity<String> logout(HttpSession session) {
         try {
             session.invalidate();
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+            log.info("logout complete");
+            return new ResponseEntity<>("logout complete", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //-----------------------------------------------------------------------------------------------
-    @GetMapping(value = "/findById-users")
-    public ResponseEntity<String> findById(@RequestParam(value = "id") String userId) {
-        try {
-            userService.findById(Utils.stringToLong(userId));
-            log.info("Find user with id: " + userId);
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping(value = "/add-user")
-    public ResponseEntity<String> save(@RequestBody User user) {
-        try {
-            userService.save(user);
-            log.info("Add user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>(" User was saved", HttpStatus.CREATED);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -123,7 +96,7 @@ public class UserController {
         try {
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>(" User was registered", HttpStatus.CREATED);
+            return new ResponseEntity<>("users/index", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e) {
@@ -136,7 +109,8 @@ public class UserController {
         try {
             userService.update(user);
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>(" User was updated", HttpStatus.OK);
+            //TODO
+            return new ResponseEntity<>("users/index", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -149,7 +123,7 @@ public class UserController {
         try {
             userService.delete(user);
             log.info("Delete user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>(" User was deleted ", HttpStatus.OK);
+            return new ResponseEntity<>("User was deleted", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

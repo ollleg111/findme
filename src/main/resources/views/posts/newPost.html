@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me</title>
+</head>
+
+<body>
+<header>
+    Post
+</header>
+<h1>Post page</h1>
+
+<form th:method="POST" th:action="@{/post}" th:object="{post}">
+    <div>
+        <label for="message">Message</label>
+        <input type="text" th:field="*{message}" id="message">
+
+        <br/>
+
+        <label for="datePosted">Date posted</label>
+        <input type="date" th:field="*{datePosted}" id="datePosted">
+
+        <br/>
+
+        <label for="location">Location</label>
+        <input type="text" th:field="*{location}" id="location">
+
+        <input type="submit" value="Add post"/>
+    </div>
+</form>
+
+</body>
+
+</html>

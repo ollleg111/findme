@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Find me</title>
 </head>
 
@@ -10,7 +11,7 @@
 </header>
 <!--    <div>-->
 <h1>Welcome to Find me</h1>
-Some Text
+Registration form
 <!--    </div>-->
 
 <form id="registration-form">
@@ -78,7 +79,7 @@ Some Text
     $("#registration-form").submit(function (e) {
         $.ajax({
             type: "POST",
-            url: "/register-user",
+            url: "/user/register-user",
             data: $('registration-form').serialize(),
             success: function sucsess(data) {
                 alert("success!");

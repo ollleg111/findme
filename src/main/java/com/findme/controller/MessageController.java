@@ -34,8 +34,8 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
-            log.info("Get message id: " + messageId);
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+            log.info("Get message with id: " + messageId);
+            return new ResponseEntity<>("messages/successMessagePage", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
@@ -50,23 +50,8 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
-            log.info("delete message id: " + messageId);
-            return new ResponseEntity<>(" Message was deleted ", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //-----------------------------------------------------------------------------------------------
-    @GetMapping(value = "/findById-message")
-    public ResponseEntity<String> findById(HttpSession session, Model model, @RequestParam(value = "id") String messageId) {
-        try {
-            Utils.loginValidation(session);
-            model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
-            log.info("Find message id: " + messageId);
-            return new ResponseEntity<>(" ok ", HttpStatus.OK);
+            log.info("Delete message with id: " + messageId);
+            return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -81,7 +66,7 @@ public class MessageController {
             messageService.save(message);
             log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>(" Message was saved", HttpStatus.CREATED);
+            return new ResponseEntity<>("messages/newMessage", HttpStatus.CREATED);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e) {
@@ -96,7 +81,8 @@ public class MessageController {
             messageService.update(message);
             log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>(" Message was updated", HttpStatus.OK);
+            //TODO
+            return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -111,7 +97,7 @@ public class MessageController {
             messageService.delete(message);
             log.info("Delete message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>(" Message was deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
