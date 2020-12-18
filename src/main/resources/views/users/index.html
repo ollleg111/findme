@@ -16,13 +16,29 @@ Registration form
 
 <form id="registration-form">
     <p>First Name: <input type="text" name="firstName"/></p>
+    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+
     <p>Last Name: <input type="text" name="lastName"/></p>
+    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+
     <p>Phone Number: <input type="text" name="phoneNumber"/></p>
+    <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Name error</div>
+
     <p>Country: <input type="text" name="country"/></p>
+    <div th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Name error</div>
+
     <p>Mail: <input type="text" name="mail"/></p>
+    <div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">Name error</div>
+
     <p>Password: <input type="text" name="password"/></p>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</div>
+
     <p>City: <input type="text" name="city"/></p>
+    <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Name error</div>
+
     <p>Age: <input type="text" name="age"/></p>
+    <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</div>
+
     <p>Relationship Status: <select type="text" name="relationshipStatus">
         <option value="SINGLE">Single</option>
         <option value="MARRIED">Married</option>
@@ -36,7 +52,10 @@ Registration form
     </select>
     </p>
     <p>School: <input type="text" name="school"/></p>
+    <div th:if="${#fields.hasErrors('school')}" th:errors="*{school}">Name error</div>
+
     <p>University: <input type="text" name="university"/></p>
+    <div th:if="${#fields.hasErrors('university')}" th:errors="*{university}">Name error</div>
 
     <button type="submit">Register</button>
 </form>

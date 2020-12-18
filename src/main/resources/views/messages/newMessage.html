@@ -15,16 +15,17 @@
     <div>
         <label for="text">Text</label>
         <input type="text" th:field="*{text}" id="text">
-
+        <div th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Name error</div>
         <br/>
 
         <label for="dateSent">Date sent</label>
         <input type="date" th:field="*{dateSent}" id="dateSent">
-
+        <div th:if="${#fields.hasErrors('dateSent')}" th:errors="*{dateSent}">Name error</div>
         <br/>
 
         <label for="dateRead">Date Posted</label>
         <input type="date" th:field="*{dateRead}" id="dateRead">
+        <div th:if="${#fields.hasErrors('dateRead')}" th:errors="*{dateRead}">Name error</div>
 
         <input type="submit" value="Add message"/>
     </div>
