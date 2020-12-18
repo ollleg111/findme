@@ -81,8 +81,8 @@ public class PostController {
         }
     }
 
-    @PutMapping(value = "/update-post")
-    public ResponseEntity<String> update(HttpSession session, @RequestBody Post post,
+    @PatchMapping(value = "/update-post")
+    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("post") @Validated Post post,
                                          BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);

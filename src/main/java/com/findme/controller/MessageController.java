@@ -79,7 +79,7 @@ public class MessageController {
         }
     }
 
-    @PutMapping(value = "/update-message")
+    @PatchMapping(value = "/update-message")
     public ResponseEntity<String> update(HttpSession session, @ModelAttribute("message") @Valid Message message,
                                          BindingResult bindingResult) {
         try {

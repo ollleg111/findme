@@ -109,8 +109,8 @@ public class UserController {
         }
     }
 
-    @PutMapping(value = "/update-user")
-    public ResponseEntity<String> update(@RequestBody User user, BindingResult bindingResult) {
+    @PatchMapping(value = "/update-user")
+    public ResponseEntity<String> update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
         try {
             if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.OK);
 
