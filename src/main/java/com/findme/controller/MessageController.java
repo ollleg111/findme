@@ -31,18 +31,18 @@ public class MessageController {
     }
 
     @GetMapping(path = "/{messageId}")
-    public ResponseEntity<String> getMessage(HttpSession session, Model model, @PathVariable String messageId) {
+    public String getMessage(HttpSession session, Model model, @PathVariable String messageId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Get message with id: " + messageId);
-            return new ResponseEntity<>("messages/successMessagePage", HttpStatus.OK);
+            return "messages/successMessagePage";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
@@ -61,40 +61,36 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("message") @Valid Message message,
+    public String save(HttpSession session, @ModelAttribute("message") @Valid Message message,
                                        BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
-
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.save(message);
             log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>("messages/newMessage", HttpStatus.CREATED);
+            return "messages/newMessage";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
     @PatchMapping(value = "/update-message")
-    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("message") @Valid Message message,
+    public String update(HttpSession session, @ModelAttribute("message") @Valid Message message,
                                          BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
-
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.update(message);
             log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
+            return "messages/newMessage";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 

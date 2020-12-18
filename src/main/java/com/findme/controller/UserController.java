@@ -32,17 +32,17 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}")
-    public ResponseEntity<String> getUser(Model model, @PathVariable String userId) {
+    public String getUser(Model model, @PathVariable String userId) {
         try {
             model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
             log.info("Get user with id: " + userId);
-            return new ResponseEntity<>("users/successUserPage", HttpStatus.OK);
+            return "users/successUserPage";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
@@ -94,33 +94,31 @@ public class UserController {
     }
 
     @PostMapping(value = "/register-user")
-    public ResponseEntity<String> registerUser(@ModelAttribute("user") @Validated User user,
+    public String registerUser(@ModelAttribute("user") @Validated User user,
                                                BindingResult bindingResult) {
         try {
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "users/index";
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>("users/index", HttpStatus.CREATED);
+            return "users/index";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
     @PatchMapping(value = "/update-user")
-    public ResponseEntity<String> update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
         try {
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "users/index";
             userService.update(user);
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>("users/index", HttpStatus.OK);
+            return "users/index";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 

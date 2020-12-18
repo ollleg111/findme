@@ -33,18 +33,18 @@ public class PostController {
     }
 
     @GetMapping(path = "/{postId}")
-    public ResponseEntity<String> getPost(HttpSession session, Model model, @PathVariable String postId) {
+    public String getPost(HttpSession session, Model model, @PathVariable String postId) {
         try {
             Utils.loginValidation(session);
             model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
             log.info("Get post with id: " + postId);
-            return new ResponseEntity<>("posts/successPostPage", HttpStatus.OK);
+            return "posts/successPostPage";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
@@ -63,40 +63,36 @@ public class PostController {
     }
 
     @PostMapping(value = "/add-post")
-    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("post") @Validated Post post,
+    public String save(HttpSession session, @ModelAttribute("post") @Validated Post post,
                                        BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
-
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "posts/newPost";
             postService.save(post);
             log.info("Add post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            return new ResponseEntity<>("posts/newPost", HttpStatus.CREATED);
+            return "posts/newPost";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
     @PatchMapping(value = "/update-post")
-    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("post") @Validated Post post,
+    public String update(HttpSession session, @ModelAttribute("post") @Validated Post post,
                                          BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
-
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
-
+            if(bindingResult.hasErrors()) return "posts/newPost";
             postService.update(post);
             log.info("Update post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
+            return "posts/newPost";
         } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "errors/errorInternalServerError";
         }
     }
 
