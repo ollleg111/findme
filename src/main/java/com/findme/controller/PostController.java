@@ -68,7 +68,7 @@ public class PostController {
         try {
             Utils.loginValidation(session);
 
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.BAD_REQUEST);
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
 
             postService.save(post);
             log.info("Add post data: " + post.getMessage() + " " + post.getLocation() + " " +
@@ -82,13 +82,17 @@ public class PostController {
     }
 
     @PutMapping(value = "/update-post")
-    public ResponseEntity<String> update(HttpSession session, @RequestBody Post post) {
+    public ResponseEntity<String> update(HttpSession session, @RequestBody Post post,
+                                         BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
+
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
+
             postService.update(post);
             log.info("Update post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            return new ResponseEntity<>("Post was updated", HttpStatus.OK);
+            return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

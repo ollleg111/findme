@@ -66,7 +66,7 @@ public class MessageController {
         try {
             Utils.loginValidation(session);
 
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.BAD_REQUEST);
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
 
             messageService.save(message);
             log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
@@ -80,13 +80,17 @@ public class MessageController {
     }
 
     @PutMapping(value = "/update-message")
-    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("message") @Valid Message message) {
+    public ResponseEntity<String> update(HttpSession session, @ModelAttribute("message") @Valid Message message,
+                                         BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
+
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
+
             messageService.update(message);
             log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            return new ResponseEntity<>("Message was updated", HttpStatus.OK);
+            return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

@@ -97,7 +97,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(@ModelAttribute("user") @Validated User user,
                                                BindingResult bindingResult) {
         try {
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.BAD_REQUEST);
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.OK);
 
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
@@ -110,11 +110,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/update-user")
-    public ResponseEntity<String> update(@RequestBody User user) {
+    public ResponseEntity<String> update(@RequestBody User user, BindingResult bindingResult) {
         try {
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.OK);
+
             userService.update(user);
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>("User was updated", HttpStatus.OK);
+            return new ResponseEntity<>("users/index", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
