@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -60,9 +61,13 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("message") @Valid Message message) {
+    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("message") @Valid Message message,
+                                       BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
+
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("messages/newMessage", HttpStatus.BAD_REQUEST);
+
             messageService.save(message);
             log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
@@ -81,8 +86,7 @@ public class MessageController {
             messageService.update(message);
             log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
-            //TODO
-            return new ResponseEntity<>("messages/newMessage", HttpStatus.OK);
+            return new ResponseEntity<>("Message was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

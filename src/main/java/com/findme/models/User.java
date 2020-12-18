@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -86,9 +87,11 @@ public class User {
     @Column(name = "AGE")
     private Integer age;
 
+    @DateTimeFormat
     @Column(name = "DATE_REGISTERED")
     private Date dateRegistered;
 
+    @DateTimeFormat
     @Column(name = "DATE_LAST_ACTIVE")
     private Date dateLastActive;
 

@@ -3,6 +3,7 @@ package com.findme.models;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -47,6 +48,7 @@ public class Post {
     @Column(name = "MESSAGE")
     private String message;
 
+    @DateTimeFormat
     @Column(name = "DATE_POSTED")
     private Date datePosted;
 

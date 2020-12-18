@@ -11,24 +11,13 @@
 </header>
 <h1>Posts list page</h1>
 
-<form th:method="GET" th:action="@{/postList}" th:object="{postList}">
-    <div>
-        <label for="message">Message</label>
-        <input type="text" th:field="*{message}" id="message">
+<div th:each="post : ${postList}">
 
-        <br/>
+    <a th:text="${post.getMessage()}">Message</a>
+    <a th:text="${post.getDatePosted()}">Date posted</a>
+    <a th:text="${post.getLocation()}">Location</a>
 
-        <label for="datePosted">Date posted</label>
-        <input type="date" th:field="*{datePosted}" id="datePosted">
-
-        <br/>
-
-        <label for="location">Location</label>
-        <input type="text" th:field="*{location}" id="location">
-
-    </div>
-</form>
+</div>
 
 </body>
-
 </html>

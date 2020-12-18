@@ -13,17 +13,17 @@
 
 <form th:method="GET" th:action="@{/post}" th:object="{post}">
     <div>
-        <label for="message">Message</label>
+        <label for="message">enter Message</label>
         <input type="text" th:field="*{message}" id="message">
 
         <br/>
 
-        <label for="datePosted">Date posted</label>
+        <label for="datePosted">enter Date posted</label>
         <input type="date" th:field="*{datePosted}" id="datePosted">
 
         <br/>
 
-        <label for="location">Location</label>
+        <label for="location">enter Location</label>
         <input type="text" th:field="*{location}" id="location">
     </div>
 </form>

@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -61,9 +63,13 @@ public class PostController {
     }
 
     @PostMapping(value = "/add-post")
-    public ResponseEntity<String> save(HttpSession session, @RequestBody Post post) {
+    public ResponseEntity<String> save(HttpSession session, @ModelAttribute("post") @Validated Post post,
+                                       BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
+
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("posts/newPost", HttpStatus.BAD_REQUEST);
+
             postService.save(post);
             log.info("Add post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
@@ -82,8 +88,7 @@ public class PostController {
             postService.update(post);
             log.info("Update post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            //TODO
-            return new ResponseEntity<>("posts/newPost", HttpStatus.OK);
+            return new ResponseEntity<>("Post was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

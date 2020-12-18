@@ -3,6 +3,7 @@ package com.findme.models;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -38,9 +39,11 @@ public class Message {
     @Column(name = "TEXT")
     private String text;
 
+    @DateTimeFormat
     @Column(name = "DATE_SENT")
     private Date dateSent;
 
+    @DateTimeFormat
     @Column(name = "DATE_READ")
     private Date dateRead;
 

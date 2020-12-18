@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,8 +94,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/register-user")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@ModelAttribute("user") @Validated User user,
+                                               BindingResult bindingResult) {
         try {
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("users/index", HttpStatus.BAD_REQUEST);
+
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>("users/index", HttpStatus.CREATED);
@@ -109,8 +114,7 @@ public class UserController {
         try {
             userService.update(user);
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
-            //TODO
-            return new ResponseEntity<>("users/index", HttpStatus.OK);
+            return new ResponseEntity<>("User was updated", HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
