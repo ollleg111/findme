@@ -38,10 +38,13 @@ public class UserController {
             log.info("Get user with id: " + userId);
             return "users/successUserPage";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorNotFound";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -94,7 +97,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register-user")
-    public String registerUser(@ModelAttribute("user") @Validated User user,
+    public String registerUser(@ModelAttribute("user") @Validated User user, Model model,
                                                BindingResult bindingResult) {
         try {
             if(bindingResult.hasErrors()) return "users/index";
@@ -102,22 +105,26 @@ public class UserController {
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return "users/index";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
 
     @PatchMapping(value = "/update-user")
-    public String update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") @Validated User user, Model model, BindingResult bindingResult) {
         try {
             if(bindingResult.hasErrors()) return "users/index";
             userService.update(user);
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
             return "users/index";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }

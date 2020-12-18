@@ -38,10 +38,13 @@ public class MessageController {
             log.info("Get message with id: " + messageId);
             return "messages/successMessagePage";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorNotFound";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -61,7 +64,7 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public String save(HttpSession session, @ModelAttribute("message") @Valid Message message,
+    public String save(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
                                        BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
@@ -71,14 +74,16 @@ public class MessageController {
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
 
     @PatchMapping(value = "/update-message")
-    public String update(HttpSession session, @ModelAttribute("message") @Valid Message message,
+    public String update(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
                                          BindingResult bindingResult) {
         try {
             Utils.loginValidation(session);
@@ -88,8 +93,10 @@ public class MessageController {
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
         } catch (BadRequestException e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
+            model.addAttribute(e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
