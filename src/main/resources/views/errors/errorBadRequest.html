@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bad Request</title>
 </head>
 <body>
+    <h1>Error 400. Bad Request</h1>
+    <div>
+        <p th:text="${errorMessage}"></p>
+    </div>
 
 </body>
 </html>

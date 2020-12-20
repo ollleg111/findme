@@ -38,13 +38,13 @@ public class MessageController {
             log.info("Get message with id: " + messageId);
             return "messages/successMessagePage";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -74,10 +74,10 @@ public class MessageController {
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -93,10 +93,10 @@ public class MessageController {
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }

@@ -38,13 +38,13 @@ public class UserController {
             log.info("Get user with id: " + userId);
             return "users/successUserPage";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -105,10 +105,10 @@ public class UserController {
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return "users/index";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -121,10 +121,10 @@ public class UserController {
             log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
             return "users/index";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }

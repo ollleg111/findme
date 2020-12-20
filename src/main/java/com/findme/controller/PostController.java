@@ -40,13 +40,13 @@ public class PostController {
             log.info("Get post with id: " + postId);
             return "posts/successPostPage";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorNotFound";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -76,10 +76,10 @@ public class PostController {
                     post.getDatePosted() );
             return "posts/newPost";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
@@ -95,10 +95,10 @@ public class PostController {
                     post.getDatePosted() );
             return "posts/newPost";
         } catch (BadRequestException e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
-            model.addAttribute(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
         }
     }
