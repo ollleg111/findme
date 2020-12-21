@@ -1,8 +1,5 @@
 package com.findme.controller;
 
-import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.InternalServerError;
-import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
 import com.findme.service.MessageService;
 import com.findme.util.Utils;
@@ -32,12 +29,13 @@ public class MessageController {
 
     @GetMapping(path = "/{messageId}")
     public String getMessage(HttpSession session, Model model, @PathVariable String messageId) {
-        try {
+        //try {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Get message with id: " + messageId);
             return "messages/successMessagePage";
-        } catch (BadRequestException e) {
+
+        /*} catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (NotFoundException e) {
@@ -46,85 +44,85 @@ public class MessageController {
         } catch (InternalServerError e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
-        }
+        }*/
     }
 
     @DeleteMapping(value = "/delete-message/{messageId}")
     public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String messageId) {
-        try {
+        //try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
             log.info("Delete message with id: " + messageId);
             return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-        } catch (BadRequestException e) {
+        /*} catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }*/
     }
 
     @PostMapping(value = "/add-message")
     public String save(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
                                        BindingResult bindingResult) {
-        try {
+        //try {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.save(message);
             log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
-        } catch (BadRequestException e) {
+        /*} catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
-        }
+        }*/
     }
 
     @PatchMapping(value = "/update-message")
     public String update(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
                                          BindingResult bindingResult) {
-        try {
+        //try {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.update(message);
             log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
             return "messages/newMessage";
-        } catch (BadRequestException e) {
+        /*} catch (BadRequestException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorBadRequest";
         } catch (InternalServerError e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "errors/errorInternalServerError";
-        }
+        }*/
     }
 
     @DeleteMapping(value = "/delete-message")
     public ResponseEntity<String> delete(HttpSession session, @RequestBody Message message) {
-        try {
+        //try {
             Utils.loginValidation(session);
             messageService.delete(message);
             log.info("Delete message data: " + message.getId() + " " + message.getDateRead() + " " +
                     message.getDateSent() + " " + message.getText());
             return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-        } catch (BadRequestException e) {
+        /*} catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }*/
     }
 
     @GetMapping(value = "/getMessagesList")
     public ResponseEntity<List<Message>> getAll() {
-        try {
+        //try {
             log.info("Get messages list from method getAll()");
             return new ResponseEntity<>(messageService.findAll(), HttpStatus.OK);
-        } catch (BadRequestException e) {
+        /*} catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }*/
     }
 }
