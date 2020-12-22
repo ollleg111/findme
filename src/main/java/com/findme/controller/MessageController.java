@@ -62,7 +62,7 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public String save(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
+    public String save(HttpSession session, /*Model model,*/ @ModelAttribute("message") @Valid Message message,
                                        BindingResult bindingResult) {
         //try {
             Utils.loginValidation(session);
@@ -81,7 +81,7 @@ public class MessageController {
     }
 
     @PatchMapping(value = "/update-message")
-    public String update(HttpSession session, Model model, @ModelAttribute("message") @Valid Message message,
+    public String update(HttpSession session, /*Model model,*/ @ModelAttribute("message") @Valid Message message,
                                          BindingResult bindingResult) {
         //try {
             Utils.loginValidation(session);

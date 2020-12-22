@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register-user")
-    public String registerUser(@ModelAttribute("user") @Validated User user, Model model,
+    public String registerUser(@ModelAttribute("user") @Validated User user,/* Model model,*/
                                                BindingResult bindingResult) {
         //try {
             user.setDateRegistered(new Date());
@@ -110,7 +110,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/update-user")
-    public String update(@ModelAttribute("user") @Validated User user, Model model, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") @Validated User user, /*Model model, */BindingResult bindingResult) {
         //try {
             if(bindingResult.hasErrors()) return "users/index";
             userService.update(user);
