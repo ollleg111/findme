@@ -77,20 +77,21 @@ public class PostController {
     }
 
     @GetMapping(value = "/getDataSortedPostsList")
-    public void getDataSortedPostsList(HttpSession session, Model model){
+    public ResponseEntity<List<Post>> getDataSortedPostsList(HttpSession session, Model model){
             Utils.loginValidation(session);
             log.info("Get posts list from method getDataSortedPostsList(HttpSession session, Model model)");
-            List<Post> postList = postService.getDataSortedPostsList((User)session.getAttribute("user"));
-            model.addAttribute("posts/postList", postList);
+            List<Post> postDataList = postService.getDataSortedPostsList((User)session.getAttribute("user"));
+            model.addAttribute("posts/postList", postDataList);
+            return new ResponseEntity<>(postDataList, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getListWithFilter")
     public ResponseEntity<List<Post>> getListWithFilter(HttpSession session, Model model, @ModelAttribute PostFilter postFilter){
             Utils.loginValidation(session);
             log.info("Get posts list from method getListWithFilter(HttpSession session, Model model, @ModelAttribute PostFilter postFilter)");
-            List<Post> postList = postService.getFilteredList((User)session.getAttribute("user"), postFilter);
-            model.addAttribute("posts/postList", postList);
-            return new ResponseEntity<>(postList, HttpStatus.OK);
+            List<Post> postFilterList = postService.getFilteredList((User)session.getAttribute("user"), postFilter);
+            model.addAttribute("posts/postList", postFilterList);
+            return new ResponseEntity<>(postFilterList, HttpStatus.OK);
     }
 
     @GetMapping(value = "/feed")
