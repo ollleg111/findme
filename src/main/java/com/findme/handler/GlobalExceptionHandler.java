@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BadRequestException.class)
     public ModelAndView handlerBadRequestException (BadRequestException e) throws Exception {
-        if (AnnotationUtils.findAnnotation(e.getClass(),ResponseStatus.class) != null)
+        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
             throw e;
         log.error("Error 400. Bad Request. " + e.getMessage());
         return new ModelAndView("errors/errorBadRequest");
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = InternalServerError.class)
     public ModelAndView handlerInternalServerError (InternalServerError e) throws Exception {
-        if (AnnotationUtils.findAnnotation(e.getClass(),ResponseStatus.class) != null)
+        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
             throw e;
         log.error("Error 500. Internal Server Error. " + e.getMessage());
         return new ModelAndView("errors/errorInternalServerError");
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NotFoundException.class)
     public ModelAndView handlerNotFoundException (NotFoundException e) throws Exception {
-        if (AnnotationUtils.findAnnotation(e.getClass(),ResponseStatus.class) != null)
+        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
             throw e;
         log.error("Error 404. Not Found Exception. " + e.getMessage());
         return new ModelAndView("errors/errorNotFound");

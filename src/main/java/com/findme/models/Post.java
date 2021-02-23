@@ -32,7 +32,7 @@ USER_PAGE_POSTED_ID NUMBER NOT NULL,
 CONSTRAINT USER_POST_FK FOREIGN KEY (USER_PAGE_POSTED_ID) REFERENCES USERS(ID)
  */
 
-@Entity
+@Entity(name = "post")
 @Table(name = "POST")
 @Getter
 @Setter

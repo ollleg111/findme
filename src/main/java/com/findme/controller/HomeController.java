@@ -14,9 +14,6 @@ public class HomeController {
     }
 
     @GetMapping(path = "/test-ajax")
-//    public String testAjax(){
-//        return "index";
-//    }
     public ResponseEntity<String> testAjax() {
         return new ResponseEntity<String>("trouble", HttpStatus.NOT_FOUND);
     }

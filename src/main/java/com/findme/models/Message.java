@@ -23,20 +23,27 @@ CONSTRAINT USER_TO_FK FOREIGN KEY (USER_TO_ID) REFERENCES USERS(ID)
 );
  */
 
-@Entity
+@Entity(name = "message")
 @Table(name = "MESSAGE")
 @Getter
 @Setter
 @ToString
 public class Message {
+
     @Id
-    @SequenceGenerator(name = "MESSAGES_SEQ", sequenceName = "MESSAGES_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGES_SEQ")
+    @SequenceGenerator(
+            name = "MESSAGES_SEQ",
+            sequenceName = "MESSAGES_SEQ",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "MESSAGES_SEQ"
+    )
     private Long id;
 
     @NotEmpty(message = "Message text should not be empty")
     @Size(min = 2, max = 100, message = "Message text should be between 2 and 100 characters")
-    @Column(name = "TEXT")
+    @Column(name = "TEXT", nullable = false, columnDefinition = "TEXT")
     private String text;
 
     @DateTimeFormat

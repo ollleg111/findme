@@ -7,27 +7,24 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Date;
 
-/*
-CREATE TABLE RELATIONSHIP(
-ID NUMBER PRIMARY KEY,
-USER_FROM_ID NUMBER NOT NULL,
-CONSTRAINT RELATIONSHIP_USER_FROM_FK FOREIGN KEY (USER_FROM_ID) REFERENCES USERS(ID),
-USER_TO_ID NUMBER NOT NULL,
-CONSTRAINT RELATIONSHIP_USER_TO_FK FOREIGN KEY (USER_TO_ID) REFERENCES USERS(ID),
-STATUS NVARCHAR2(20), CHECK(STATUS IN('WAITING_FOR_ACCEPT','REQUEST_REJECTED','FRIENDS','NOT_FRIENDS','DELETED')),
-
-);
- */
-
-@Entity
+@Entity(name = "relationship")
 @Table(name = "RELATIONSHIP")
 @Getter
 @Setter
 @ToString
 public class Relationship {
+
     @Id
-    @SequenceGenerator(name = "RELATIONSHIP_SEQ", sequenceName = "RELATIONSHIP_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RELATIONSHIP_SEQ")
+    @SequenceGenerator(
+            name = "RELATIONSHIP_SEQ",
+            sequenceName = "RELATIONSHIP_SEQ",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "RELATIONSHIP_SEQ"
+    )
+
     private Long id;
 
     @ManyToOne
