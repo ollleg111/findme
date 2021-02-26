@@ -39,8 +39,15 @@ CONSTRAINT USER_POST_FK FOREIGN KEY (USER_PAGE_POSTED_ID) REFERENCES USERS(ID)
 @ToString
 public class Post {
     @Id
-    @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
+    @SequenceGenerator(
+            name = "POST_SEQ",
+            sequenceName = "POST_SEQ",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "POST_SEQ"
+    )
     private Long id;
 
     @NotEmpty(message = "Message text should not be empty")

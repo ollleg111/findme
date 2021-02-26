@@ -29,14 +29,14 @@ CONSTRAINT USER_TO_FK FOREIGN KEY (USER_TO_ID) REFERENCES USERS(ID)
 @Setter
 @ToString
 public class Message {
-
     @Id
     @SequenceGenerator(
             name = "MESSAGES_SEQ",
             sequenceName = "MESSAGES_SEQ",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
             generator = "MESSAGES_SEQ"
     )
     private Long id;

@@ -21,7 +21,6 @@ import java.util.List;
 @Setter
 @ToString
 public class User {
-
     @Id
     @SequenceGenerator(
             name = "USERS_SEQ",

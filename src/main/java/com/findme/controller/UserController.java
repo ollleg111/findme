@@ -1,10 +1,12 @@
 package com.findme.controller;
 
+import com.findme.exceptions.BadRequestException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import com.findme.util.Utils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,14 +22,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@AllArgsConstructor
 @Slf4j
 public class UserController {
     private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping(path = "/{userId}")
     public String getUser(Model model, @PathVariable String userId) {
@@ -38,26 +36,44 @@ public class UserController {
 
     @DeleteMapping(value = "/delete-user/{userId}")
     public ResponseEntity<String> deleteById(@PathVariable String userId) {
+        try {
             userService.deleteById(Utils.stringToLong(userId));
             log.info("Delete user with id: " + userId);
             return new ResponseEntity<>("User was deleted", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping(path = "/login")
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
+        try {
             User user = userService.login(
                     request.getParameter("mail"),
                     request.getParameter("password"));
             session.setAttribute("user", user);
             log.info("login complete");
             return new ResponseEntity<>("login complete", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(path = "/logout")
     public ResponseEntity<String> logout(HttpSession session) {
+        try {
             session.invalidate();
             log.info("logout complete");
             return new ResponseEntity<>("logout complete", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping(value = "/register-user")
@@ -82,14 +98,23 @@ public class UserController {
 
     @DeleteMapping(value = "/delete-user")
     public ResponseEntity<String> delete(@RequestBody User user) {
+        try {
             userService.delete(user);
             log.info("Delete user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>("User was deleted", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/getUsersList")
-    public ResponseEntity<List<User>> getAll() {
-            log.info("Get users list from method getAll()");
-            return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<User>> getAll(HttpSession session, Model model) {
+            Utils.loginValidation(session);
+            log.info("Get users list from method getAll(HttpSession session, Model model)");
+            List<User> getAll = userService.findAll();
+            model.addAttribute("user/usersList", getAll);
+            return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }

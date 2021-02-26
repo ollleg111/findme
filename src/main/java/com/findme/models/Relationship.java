@@ -13,7 +13,6 @@ import java.util.Date;
 @Setter
 @ToString
 public class Relationship {
-
     @Id
     @SequenceGenerator(
             name = "RELATIONSHIP_SEQ",

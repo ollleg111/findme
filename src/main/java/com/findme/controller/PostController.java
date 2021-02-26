@@ -1,12 +1,14 @@
 package com.findme.controller;
 
+import com.findme.exceptions.BadRequestException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.Post;
 import com.findme.models.PostFilter;
 import com.findme.models.User;
 import com.findme.service.PostService;
 import com.findme.util.Utils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,14 +22,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/post")
+@AllArgsConstructor
 @Slf4j
 public class PostController {
     private PostService postService;
-
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     @GetMapping(path = "/{postId}")
     public String getPost(HttpSession session, Model model, @PathVariable String postId) {
@@ -39,10 +37,16 @@ public class PostController {
 
     @DeleteMapping(value = "/delete-post/{postId}")
     public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String postId) {
+        try {
             Utils.loginValidation(session);
             postService.deleteById(Utils.stringToLong(postId));
             log.info("Delete post with id: " + postId);
             return new ResponseEntity<>("Post was deleted", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping(value = "/add-post")
@@ -69,11 +73,17 @@ public class PostController {
 
     @DeleteMapping(value = "/delete-post")
     public ResponseEntity<String> delete(HttpSession session, @RequestBody Post post) {
+        try {
             Utils.loginValidation(session);
             postService.delete(post);
             log.info("Delete post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
             return new ResponseEntity<>("Post was deleted", HttpStatus.OK);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/getDataSortedPostsList")
@@ -104,8 +114,11 @@ public class PostController {
     }
 
     @GetMapping(value = "/getPostsList")
-    public ResponseEntity<List<Post>> getAll() {
-            log.info("Get posts list from method getAll()");
-            return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Post>> getAll(HttpSession session, Model model) {
+            Utils.loginValidation(session);
+            log.info("Get posts list from method getAll(HttpSession session, Model model)");
+            List<Post> getAll = postService.findAll();
+            model.addAttribute("posts/postList", getAll);
+            return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }
