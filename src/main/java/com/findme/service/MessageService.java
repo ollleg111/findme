@@ -4,19 +4,15 @@ import com.findme.dao.MessageDAO;
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class MessageService {
     private MessageDAO messageDAO;
-
-    @Autowired
-    public MessageService(MessageDAO messageDAO) {
-        this.messageDAO = messageDAO;
-    }
 
     public Message findById(Long id) throws DaoException, NotFoundException{
         Message message = messageDAO.findById(id);

@@ -6,19 +6,15 @@ import com.findme.exceptions.DaoException;
 import com.findme.exceptions.NotFoundException;
 import com.findme.exceptions.ServiceException;
 import com.findme.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class UserService {
     private UserDAO userDAO;
-
-    @Autowired
-    public UserService(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
 
     public User findById(Long id) throws DaoException, NotFoundException {
         User user = userDAO.findById(id);
