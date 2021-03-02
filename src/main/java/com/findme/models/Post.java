@@ -68,7 +68,7 @@ public class Post {
     private User userPosted;
 
     @ManyToOne
-    @JoinColumn(name = "USER_PAGE_POSTED_ID")
+    @JoinColumn(name = "USER_POSTED_ID")
     private User userPagePosted;
 
     //юзеры, которые отмечены в после (аналог фейсбук функции - with user1, user2, user3)

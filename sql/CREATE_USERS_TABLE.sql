@@ -66,3 +66,25 @@ UNIVERSITY NVARCHAR2(50) NOT NULL
 
 CREATE SEQUENCE USERS_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
 
+----------------------------------------------change to postgres
+
+CREATE TABLE users (
+    id numeric,
+    CONSTRAINT user_pk PRIMARY KEY (id),
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    phone_number varchar(15) not null,
+    e_mail varchar(50) not null,
+    password varchar(50) not null,
+    country varchar(50) not null,
+    city varchar(50) not null,
+    age numeric(3,0) not null,
+    date_registered TIMESTAMP WITH TIME ZONE,
+    date_last_active TIMESTAMP WITH TIME ZONE,
+    relationship_status varchar(12) default 'SINGLE',
+    check (relationship_status = 'MARRIED' or relationship_status = 'SINGLE'),
+    religion varchar(50), check (religion in ('CHRISTIAN','BUDDHIST','CATHOLIC','MUSLIM')),
+    school varchar(50) not null,
+    university varchar(50) not null
+);
+
