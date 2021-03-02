@@ -143,3 +143,7 @@ CREATE SEQUENCE POST_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
 CREATE SEQUENCE USERS_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
 CREATE SEQUENCE MESSAGES_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
 CREATE SEQUENCE RELATIONSHIP_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
+
+INSERT INTO public.users(
+	id, first_name, last_name, phone_number, e_mail, password, country, city, age, date_registered, date_last_active, relationship_status, religion, school, university)
+	VALUES (1, 'AAAA', 'AAAA', '12345678', 'aaaa@gmail.com', 'AAAA', 'AAAA', 'AAAA', 25, '10-10-10', '10-10-10', 'SINGLE', 'CHRISTIAN', 'AAAA', 'AAAA');

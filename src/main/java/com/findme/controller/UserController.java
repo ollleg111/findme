@@ -47,6 +47,14 @@ public class UserController {
         }
     }
 
+    @PatchMapping(value = "/update-user")
+    public String update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) return "users/index";
+        userService.update(user);
+        log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
+        return "users/successUserPage";
+    }
+
     @PostMapping(path = "/login")
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
         try {
@@ -86,27 +94,6 @@ public class UserController {
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return "users/index";
-    }
-
-    @PatchMapping(value = "/update-user")
-    public String update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
-            if(bindingResult.hasErrors()) return "users/index";
-            userService.update(user);
-            log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
-            return "users/index";
-    }
-
-    @DeleteMapping(value = "/delete-user")
-    public ResponseEntity<String> delete(@RequestBody User user) {
-        try {
-            userService.delete(user);
-            log.info("Delete user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>("User was deleted", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @GetMapping(value = "/getUsersList")

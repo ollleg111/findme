@@ -1,6 +1,6 @@
 package com.findme.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,15 +23,11 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableWebMvc
+@AllArgsConstructor
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com"})
 public class AppConfig implements WebMvcConfigurer {
     private ApplicationContext applicationContext;
-
-    @Autowired
-    public AppConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
