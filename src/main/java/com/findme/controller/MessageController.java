@@ -26,7 +26,10 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping(path = "/{messageId}")
-    public String getMessage(HttpSession session, Model model, @PathVariable String messageId) {
+    public String getMessage(
+            HttpSession session,
+            Model model,
+            @PathVariable String messageId) {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Get message with id: " + messageId);

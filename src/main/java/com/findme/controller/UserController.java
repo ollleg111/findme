@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -56,11 +55,12 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> login(
+            HttpSession session,
+            @RequestParam("mail") String mail,
+            @RequestParam("password") String password) {
         try {
-            User user = userService.login(
-                    request.getParameter("mail"),
-                    request.getParameter("password"));
+            User user = userService.login(mail, password);
             session.setAttribute("user", user);
             log.info("login complete");
             return new ResponseEntity<>("login complete", HttpStatus.OK);
