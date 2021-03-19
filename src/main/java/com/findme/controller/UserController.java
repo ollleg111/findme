@@ -27,7 +27,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping(path = "/{userId}")
-    public String getUser(Model model, @PathVariable String userId) {
+    public String getUser(
+            Model model,
+            @PathVariable String userId)
+    {
             model.addAttribute("user", userService.findById(Utils.stringToLong(userId)));
             log.info("Get user with id: " + userId);
             return "users/successUserPage";
@@ -47,7 +50,10 @@ public class UserController {
     }
 
     @PatchMapping(value = "/update-user")
-    public String update(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
+    public String update(
+            @ModelAttribute("user") @Validated User user,
+            BindingResult bindingResult)
+    {
         if(bindingResult.hasErrors()) return "users/index";
         userService.update(user);
         log.info("Update user data: " + user.getFirstName() + " " + user.getLastName());
@@ -58,7 +64,8 @@ public class UserController {
     public ResponseEntity<String> login(
             HttpSession session,
             @RequestParam("mail") String mail,
-            @RequestParam("password") String password) {
+            @RequestParam("password") String password)
+    {
         try {
             User user = userService.login(mail, password);
             session.setAttribute("user", user);
@@ -85,8 +92,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/register-user")
-    public String registerUser(@ModelAttribute("user") @Validated User user,
-                                               BindingResult bindingResult) {
+    public String registerUser(
+            @ModelAttribute("user") @Validated User user,
+            BindingResult bindingResult)
+    {
             user.setDateRegistered(new Date());
             user.setDateLastActive(new Date());
 
@@ -97,7 +106,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/getUsersList")
-    public ResponseEntity<List<User>> getAll(HttpSession session, Model model) {
+    public ResponseEntity<List<User>> getAll(
+            HttpSession session,
+            Model model)
+    {
             Utils.loginValidation(session);
             log.info("Get users list from method getAll(HttpSession session, Model model)");
             List<User> getAll = userService.findAll();

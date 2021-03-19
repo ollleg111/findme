@@ -24,9 +24,11 @@ public class RelationshipController {
     private RelationshipService relationshipService;
 
     @PostMapping(value = "/relationship-add")
-    public ResponseEntity<String> addRelationship(HttpSession session,
-                                                  @RequestParam(value = "userIdFrom") String userIdFrom,
-                                                  @RequestParam(value = "userIdTo") String userIdTo) {
+    public ResponseEntity<String> addRelationship(
+            HttpSession session,
+            @RequestParam(value = "userIdFrom") String userIdFrom,
+            @RequestParam(value = "userIdTo") String userIdTo)
+    {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService.save(Utils.stringToLong(userIdFrom), Utils.stringToLong(userIdTo));
@@ -40,10 +42,12 @@ public class RelationshipController {
     }
 
     @PutMapping(value = "/relationship-update")
-    public ResponseEntity<String> updateRelationship(HttpSession session,
-                                                     @RequestParam(value = "userIdFrom") String userIdFrom,
-                                                     @RequestParam(value = "userIdTo") String userIdTo,
-                                                     @RequestParam(value = "status") String status) {
+    public ResponseEntity<String> updateRelationship(
+            HttpSession session,
+            @RequestParam(value = "userIdFrom") String userIdFrom,
+            @RequestParam(value = "userIdTo") String userIdTo,
+            @RequestParam(value = "status") String status)
+    {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             relationshipService.update(Utils.stringToLong(userIdFrom),Utils.stringToLong(userIdTo),status);
@@ -58,7 +62,10 @@ public class RelationshipController {
     }
 
     @GetMapping(value = "/relationship-get-income/{userId}")
-    public ResponseEntity<List<User>> getIncomeRequest(HttpSession session, @PathVariable String userId) {
+    public ResponseEntity<List<User>> getIncomeRequest(
+            HttpSession session,
+            @PathVariable String userId)
+    {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             log.info("Get income relationship with id: " + userId);
@@ -71,7 +78,10 @@ public class RelationshipController {
     }
 
     @GetMapping(value = "/relationship-get-outcome/{userId}")
-    public ResponseEntity<List<User>> getOutcomeRequest(HttpSession session, @PathVariable String userId) {
+    public ResponseEntity<List<User>> getOutcomeRequest(
+            HttpSession session,
+            @PathVariable String userId)
+    {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             log.info("Get outcome relationship with id: " + userId);
@@ -84,7 +94,11 @@ public class RelationshipController {
     }
 
     @GetMapping(value = "/relationship-status/{userIdFrom}/{userIdTo}")
-    public ResponseEntity<RelationshipStatus> getRelationshipStatus(HttpSession session, @PathVariable String userIdFrom, @PathVariable String userIdTo) {
+    public ResponseEntity<RelationshipStatus> getRelationshipStatus(
+            HttpSession session,
+            @PathVariable String userIdFrom,
+            @PathVariable String userIdTo)
+    {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             log.info("Get relationship data with user id from: " + userIdFrom + " user id to: " + userIdTo);

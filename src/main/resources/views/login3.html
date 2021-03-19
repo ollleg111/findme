@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Find me</title>
+</head>
+
+<body>
+<header>
+    Header
+</header>
+<h1>Login</h1>
+
+<form id="login-form">
+    <p>e-mail: <input type="text" name="mail"/></p>
+    <p>password: <input type="text" name="password"/></p>
+
+
+    <button type="submit">Login</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</body>
+
+<script>
+
+    $("#login-form").submit(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/login",
+            data: $('login-form').serialize(),
+            success: function sucsess(data, status, request) {
+                alert("success!");
+            },
+            error: function error(xhr) {
+                alert("error!");
+            }
+        });
+    });
+</script>
+
+</html>

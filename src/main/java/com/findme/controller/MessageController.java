@@ -29,7 +29,8 @@ public class MessageController {
     public String getMessage(
             HttpSession session,
             Model model,
-            @PathVariable String messageId) {
+            @PathVariable String messageId)
+    {
             Utils.loginValidation(session);
             model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
             log.info("Get message with id: " + messageId);
@@ -37,7 +38,10 @@ public class MessageController {
     }
 
     @DeleteMapping(value = "/delete-message/{messageId}")
-    public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String messageId) {
+    public ResponseEntity<String> deleteById(
+            HttpSession session,
+            @PathVariable String messageId)
+    {
         try {
             Utils.loginValidation(session);
             messageService.deleteById(Utils.stringToLong(messageId));
@@ -51,8 +55,11 @@ public class MessageController {
     }
 
     @PostMapping(value = "/add-message")
-    public String save(HttpSession session, @ModelAttribute("message") @Valid Message message,
-                                       BindingResult bindingResult) {
+    public String save(
+            HttpSession session,
+            @ModelAttribute("message") @Valid Message message,
+            BindingResult bindingResult)
+    {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.save(message);
@@ -62,8 +69,11 @@ public class MessageController {
     }
 
     @PatchMapping(value = "/update-message")
-    public String update(HttpSession session,  @ModelAttribute("message") @Valid Message message,
-                                         BindingResult bindingResult) {
+    public String update(
+            HttpSession session,
+            @ModelAttribute("message") @Valid Message message,
+            BindingResult bindingResult)
+    {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "messages/newMessage";
             messageService.update(message);
@@ -73,7 +83,10 @@ public class MessageController {
     }
 
     @DeleteMapping(value = "/delete-message")
-    public ResponseEntity<String> delete(HttpSession session, @RequestBody Message message) {
+    public ResponseEntity<String> delete(
+            HttpSession session,
+            @RequestBody Message message)
+    {
         try {
             Utils.loginValidation(session);
             messageService.delete(message);
@@ -88,7 +101,10 @@ public class MessageController {
     }
 
     @GetMapping(value = "/getMessagesList")
-    public ResponseEntity<List<Message>> getAll(HttpSession session, Model model) {
+    public ResponseEntity<List<Message>> getAll(
+            HttpSession session,
+            Model model)
+    {
             Utils.loginValidation(session);
             log.info("Get messages list from method getAll(HttpSession session, Model model)");
             List<Message> getAll = messageService.findAll();

@@ -28,7 +28,11 @@ public class PostController {
     private PostService postService;
 
     @GetMapping(path = "/{postId}")
-    public String getPost(HttpSession session, Model model, @PathVariable String postId) {
+    public String getPost(
+            HttpSession session,
+            Model model,
+            @PathVariable String postId)
+    {
             Utils.loginValidation(session);
             model.addAttribute("post", postService.findById(Utils.stringToLong(postId)));
             log.info("Get post with id: " + postId);
@@ -36,7 +40,10 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/delete-post/{postId}")
-    public ResponseEntity<String> deleteById(HttpSession session, @PathVariable String postId) {
+    public ResponseEntity<String> deleteById(
+            HttpSession session,
+            @PathVariable String postId)
+    {
         try {
             Utils.loginValidation(session);
             postService.deleteById(Utils.stringToLong(postId));
@@ -50,8 +57,11 @@ public class PostController {
     }
 
     @PostMapping(value = "/add-post")
-    public String save(HttpSession session, @ModelAttribute("post") @Validated Post post,
-                                       BindingResult bindingResult) {
+    public String save(
+            HttpSession session,
+            @ModelAttribute("post") @Validated Post post,
+            BindingResult bindingResult)
+    {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "posts/newPost";
             postService.save(post);
@@ -61,8 +71,11 @@ public class PostController {
     }
 
     @PatchMapping(value = "/update-post")
-    public String update(HttpSession session, @ModelAttribute("post") @Validated Post post,
-                                         BindingResult bindingResult) {
+    public String update(
+            HttpSession session,
+            @ModelAttribute("post") @Validated Post post,
+            BindingResult bindingResult)
+    {
             Utils.loginValidation(session);
             if(bindingResult.hasErrors()) return "posts/newPost";
             postService.update(post);
@@ -72,7 +85,10 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/delete-post")
-    public ResponseEntity<String> delete(HttpSession session, @RequestBody Post post) {
+    public ResponseEntity<String> delete(
+            HttpSession session,
+            @RequestBody Post post)
+    {
         try {
             Utils.loginValidation(session);
             postService.delete(post);
@@ -96,7 +112,11 @@ public class PostController {
     }
 
     @GetMapping(value = "/getListWithFilter")
-    public ResponseEntity<List<Post>> getListWithFilter(HttpSession session, Model model, @ModelAttribute PostFilter postFilter){
+    public ResponseEntity<List<Post>> getListWithFilter(
+            HttpSession session,
+            Model model,
+            @ModelAttribute PostFilter postFilter)
+    {
             Utils.loginValidation(session);
             log.info("Get posts list from method getListWithFilter(HttpSession session, Model model, @ModelAttribute PostFilter postFilter)");
             List<Post> postFilterList = postService.getFilteredList((User)session.getAttribute("user"), postFilter);
@@ -105,7 +125,10 @@ public class PostController {
     }
 
     @GetMapping(value = "/feed")
-    public ResponseEntity<List<Post>> feed(HttpSession session, Model model){
+    public ResponseEntity<List<Post>> feed(
+            HttpSession session,
+            Model model)
+    {
             Utils.loginValidation(session);
             log.info("Get posts list from method feed(HttpSession session, Model model)");
             List<Post> feedList = postService.getFeedList((User)session.getAttribute("user"));
@@ -114,7 +137,10 @@ public class PostController {
     }
 
     @GetMapping(value = "/getPostsList")
-    public ResponseEntity<List<Post>> getAll(HttpSession session, Model model) {
+    public ResponseEntity<List<Post>> getAll(
+            HttpSession session,
+            Model model)
+    {
             Utils.loginValidation(session);
             log.info("Get posts list from method getAll(HttpSession session, Model model)");
             List<Post> getAll = postService.findAll();

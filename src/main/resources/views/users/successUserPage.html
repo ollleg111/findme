@@ -7,68 +7,56 @@
 
 <body>
 <header>
-    User getting data
+    <h1>User getting data</h1>
 </header>
-<h1>User success page</h1>
 
-<form th:method="GET" th:action="@{/user}" th:object="{user}">
+<form th:method="GET" th:action="@{/user}" th:object="${user}">
     <div>
-        <label for="firstName">enter First Name</label>
+        <label for="firstName">user First Name</label>
         <input type="text" th:field="*{firstName}" id="firstName">
 
         <br/>
 
-        <label for="lastName">enter last Name</label>
+        <label for="lastName">user Last Name</label>
         <input type="text" th:field="*{lastName}" id="lastName">
 
         <br/>
 
-        <label for="phoneNumber">enter Phone number</label>
+        <label for="phoneNumber">user Phone number</label>
         <input type="text" th:field="*{phoneNumber}" id="phoneNumber">
 
         <br/>
 
-        <label for="country">enter Сountry</label>
+        <label for="country">user Country</label>
         <input type="text" th:field="*{country}" id="country">
 
         <br/>
 
-        <label for="city">enter Location</label>
+        <label for="city">user Location</label>
         <input type="text" th:field="*{city}" id="city">
 
         <br/>
 
-        <label for="age">enter Age</label>
+        <label for="age">user Age</label>
         <input type="number" th:field="*{age}" id="age">
 
         <br/>
 
-        <label for="dateRegistered">enter Date registered</label>
+        <label for="dateRegistered">user Date registered</label>
         <input type="date" th:field="*{dateRegistered}" id="dateRegistered">
 
         <br/>
 
-        <label for="dateLastActive">enter Date last active</label>
+        <label for="dateLastActive">user Date last active</label>
         <input type="date" th:field="*{dateLastActive}" id="dateLastActive">
 
         <br/>
 
-        <label for="relationshipStatus">enter Location</label>
-        <input type="checkbox" th:field="*{relationshipStatus}" id="relationshipStatus">
+        <label for="religion">user Religion</label>
+            <input type="text" th:field="*{religion}" id="religion">
 
-        <br/>
-
-        <label for="religion">
-            <input type="checkbox" th:field="*{religion}" id="religion">
-            Religion
-        </label>
-        <br/>
-
-        <label for="school">
+        <label for="school">user School</label>
             <input type="text" th:field="*{school}" id="school">
-            School
-        </label>
-        <br/>
 
         <label for="university">enter University</label>
         <input type="text" th:field="*{university}" id="university">
