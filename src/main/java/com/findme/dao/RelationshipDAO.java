@@ -5,6 +5,7 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,8 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
     private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
     private static final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
     private static final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
+
+    private static final String SELECT_FROM = "SELECT * FROM RELATIONSHIP";
 
     private String alarmMessage = RelationshipDAO.class.getName();
 
@@ -127,15 +130,22 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         super.delete(relationship);
     }
 
-    @Override
-    public List<Relationship> findAll() throws DaoException {
-        return super.findAll();
-    }
-
+    @Transactional
     public Integer getRelationsByStatus(Long userIdFrom) throws InternalServerError {
         List<User> users = getIn(userIdFrom);
         if (users.isEmpty())
             return null;
         return users.size();
+    }
+
+    @Transactional
+    public List<Relationship> findAll() throws DaoException {
+        try {
+            Query query = entityManager.createNativeQuery(SELECT_FROM, Relationship.class);
+            return query.getResultList();
+        } catch (DaoException e) {
+            throw new HibernateException("Operation filed in method findAll() from class "
+                    + alarmMessage);
+        }
     }
 }

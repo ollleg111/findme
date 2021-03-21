@@ -7,11 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.List;
 
-@Repository
 @Transactional
+@Repository
 class GeneralDAO<T> {
     private Class<T> typeParameterClass;
 
@@ -25,8 +23,6 @@ class GeneralDAO<T> {
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
-    private static final String SELECT_FROM = "SELECT * FROM = ?";
 
     public T findById(Long id) throws DaoException {
         try {
@@ -70,17 +66,6 @@ class GeneralDAO<T> {
             System.err.println("delete is failed");
             System.err.println(exception.getMessage());
             throw new HibernateException(" The method delete(T t) was failed in class "
-                    + typeParameterClass.getName());
-        }
-    }
-
-    public List<T> findAll() throws DaoException {
-        try {
-            Query query = entityManager.createNativeQuery(SELECT_FROM, String.class);
-            query.setParameter(1, typeParameterClass.getName());
-            return query.getResultList();
-        } catch (DaoException e) {
-            throw new HibernateException("Operation filed in method findAll() from class "
                     + typeParameterClass.getName());
         }
     }

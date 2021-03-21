@@ -1,12 +1,10 @@
 package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
-import com.findme.exceptions.InternalServerError;
 import com.findme.models.Post;
-import com.findme.models.PostFilter;
-import com.findme.models.Relationship;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +30,10 @@ public class PostDAO extends GeneralDAO<Post> {
     private static final String GET_ALL_OWNER_FRIENDS_POSTS = "SELECT P.* FROM POST INNER JOIN RELATIONSHIP R ON" +
             " P.USER_ID = ?1 WHERE R.STATUS = 'FRIENDS'" ;
 
+    private static final String SELECT_FROM = "SELECT * FROM POST";
+
+    private String alarmMessage = PostDAO.class.getName();
+
     @Override
     public Post findById(Long id) throws DaoException {
         return super.findById(id);
@@ -52,11 +54,7 @@ public class PostDAO extends GeneralDAO<Post> {
         super.delete(post);
     }
 
-    @Override
-    public List<Post> findAll() throws DaoException {
-        return super.findAll();
-    }
-
+    @Transactional
     public List<Post> getDataSortedPostsList(Long userId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_POSTS_SORTED_BY_DATE, Post.class);
@@ -64,7 +62,7 @@ public class PostDAO extends GeneralDAO<Post> {
             return query.getResultList();
         } catch (DaoException e) {
             throw new HibernateException("Operation filed in method getDataSortedPostsList(Long userId)" +
-                    " from class" + PostDAO.class.getName());
+                    " from class" + alarmMessage);
         }
     }
 
@@ -75,7 +73,7 @@ public class PostDAO extends GeneralDAO<Post> {
             return query.getResultList();
         } catch (DaoException e) {
             throw new HibernateException("Operation filed in method getFilteredPostsById(Long ownerId)" +
-                    " from class" + PostDAO.class.getName());
+                    " from class" + alarmMessage);
         }
     }
 
@@ -86,8 +84,18 @@ public class PostDAO extends GeneralDAO<Post> {
             return query.getResultList();
         } catch (DaoException e) {
             throw new HibernateException("Operation filed in method getFilteredByFriends(Long ownerId)" +
-                    " from class" + PostDAO.class.getName());
+                    " from class" + alarmMessage);
         }
     }
 
+    @Transactional
+    public List<Post> findAll() throws DaoException {
+        try {
+            Query query = entityManager.createNativeQuery(SELECT_FROM, Post.class);
+            return query.getResultList();
+        } catch (DaoException e) {
+            throw new HibernateException("Operation filed in method findAll() from class "
+                    + alarmMessage);
+        }
+    }
 }

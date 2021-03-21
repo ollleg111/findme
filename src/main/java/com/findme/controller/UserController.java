@@ -101,7 +101,7 @@ public class UserController {
             HttpSession session,
             Model model)
     {
-            Utils.loginValidation(session);
+            // TODO Utils.loginValidation(session);
             log.info("Get users list from method getAll(HttpSession session, Model model)");
             List<User> getAll = userService.findAll();
             model.addAttribute("user/usersList", getAll);

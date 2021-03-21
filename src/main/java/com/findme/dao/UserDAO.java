@@ -3,6 +3,7 @@ package com.findme.dao;
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,8 @@ public class UserDAO extends GeneralDAO<User> {
                     " USERS.E_MAIL = ? AND" +
                     " USERS.PASSWORD = ?";
 
+    private static final String SELECT_FROM = "SELECT * FROM USERS";
+
     private String alarmMessage = UserDAO.class.getName();
 
     @Override
@@ -53,11 +56,6 @@ public class UserDAO extends GeneralDAO<User> {
     @Override
     public void delete(User user) throws DaoException {
         super.delete(user);
-    }
-
-    @Override
-    public List<User> findAll() throws DaoException {
-        return super.findAll();
     }
 
     @Transactional
@@ -87,6 +85,17 @@ public class UserDAO extends GeneralDAO<User> {
         } catch (InternalServerError e) {
             throw new InternalServerError("Operation with user data was filed in method" +
                     "getUser(String email, String password) from class " + alarmMessage);
+        }
+    }
+
+    @Transactional
+    public List<User> findAll() throws DaoException {
+        try {
+            Query query = entityManager.createNativeQuery(SELECT_FROM, UserDAO.class);
+            return query.getResultList();
+        } catch (DaoException e) {
+            throw new HibernateException("Operation filed in method findAll() from class "
+                    + alarmMessage);
         }
     }
 }
