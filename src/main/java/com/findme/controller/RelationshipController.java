@@ -17,13 +17,13 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@RequestMapping("/relation")
+@RequestMapping("/relationships")
 @AllArgsConstructor
 @Slf4j
 public class RelationshipController {
-    private RelationshipService relationshipService;
+    private final RelationshipService relationshipService;
 
-    @PostMapping(value = "/relationship-add")
+    @PostMapping(value = "/add")
     public ResponseEntity<String> addRelationship(
             HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
@@ -41,7 +41,7 @@ public class RelationshipController {
         }
     }
 
-    @PutMapping(value = "/relationship-update")
+    @PutMapping(value = "/update")
     public ResponseEntity<String> updateRelationship(
             HttpSession session,
             @RequestParam(value = "userIdFrom") String userIdFrom,
@@ -61,7 +61,7 @@ public class RelationshipController {
         }
     }
 
-    @GetMapping(value = "/relationship-get-income/{userId}")
+    @GetMapping(value = "/get-income/{userId}")
     public ResponseEntity<List<User>> getIncomeRequest(
             HttpSession session,
             @PathVariable String userId)
@@ -69,7 +69,9 @@ public class RelationshipController {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             log.info("Get income relationship with id: " + userId);
-            return new ResponseEntity<>(relationshipService.getIncome(Utils.stringToLong(userId)),HttpStatus.OK);
+            return new ResponseEntity<>(
+                    relationshipService.getIncome(Utils.stringToLong(userId)),
+                    HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -77,7 +79,7 @@ public class RelationshipController {
         }
     }
 
-    @GetMapping(value = "/relationship-get-outcome/{userId}")
+    @GetMapping(value = "/get-outcome/{userId}")
     public ResponseEntity<List<User>> getOutcomeRequest(
             HttpSession session,
             @PathVariable String userId)
@@ -85,7 +87,9 @@ public class RelationshipController {
         try {
             Utils.isUserWithLogin(session, Utils.stringToLong(userId));
             log.info("Get outcome relationship with id: " + userId);
-            return new ResponseEntity<>(relationshipService.getOutcome(Utils.stringToLong(userId)),HttpStatus.OK);
+            return new ResponseEntity<>(
+                    relationshipService.getOutcome(Utils.stringToLong(userId)),
+                    HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {
@@ -93,7 +97,7 @@ public class RelationshipController {
         }
     }
 
-    @GetMapping(value = "/relationship-status/{userIdFrom}/{userIdTo}")
+    @GetMapping(value = "/status/{userIdFrom}/{userIdTo}")
     public ResponseEntity<RelationshipStatus> getRelationshipStatus(
             HttpSession session,
             @PathVariable String userIdFrom,
@@ -103,7 +107,8 @@ public class RelationshipController {
             Utils.isUserWithLogin(session, Utils.stringToLong(userIdFrom));
             log.info("Get relationship data with user id from: " + userIdFrom + " user id to: " + userIdTo);
             return new ResponseEntity<>(
-                    relationshipService.getStatus(Utils.stringToLong(userIdFrom),Utils.stringToLong(userIdTo)),HttpStatus.OK);
+                    relationshipService.getStatus(Utils.stringToLong(userIdFrom), Utils.stringToLong(userIdTo)),
+                    HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InternalServerError e) {

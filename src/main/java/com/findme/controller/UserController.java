@@ -20,11 +20,11 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 @AllArgsConstructor
 @Slf4j
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping(path = "/{userId}")
     public String getUser(
@@ -36,7 +36,7 @@ public class UserController {
             return "users/successUserPage";
     }
 
-    @DeleteMapping(value = "/delete-user/{userId}")
+    @DeleteMapping(value = "/deleteById/{userId}")
     public ResponseEntity<String> deleteById(@PathVariable String userId) {
         try {
             userService.deleteById(Utils.stringToLong(userId));
@@ -49,7 +49,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping(value = "/update-user")
+    @PatchMapping(value = "/update")
     public String update(
             @ModelAttribute("user") @Validated User user,
             BindingResult bindingResult)
@@ -66,46 +66,36 @@ public class UserController {
             @RequestParam("mail") String mail,
             @RequestParam("password") String password)
     {
-        try {
             User user = userService.login(mail, password);
             session.setAttribute("user", user);
             log.info("login complete");
             return new ResponseEntity<>("login complete", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @GetMapping(path = "/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        try {
+    public ResponseEntity<String> logout(HttpSession session)
+    {
             session.invalidate();
             log.info("logout complete");
             return new ResponseEntity<>("logout complete", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
-    @PostMapping(value = "/register-user")
-    public String registerUser(
+    @PostMapping(value = "/register")
+    public ResponseEntity<String> registerUser(
+            HttpSession session,
             @ModelAttribute("user") @Validated User user,
             BindingResult bindingResult)
     {
             user.setDateRegistered(new Date());
             user.setDateLastActive(new Date());
 
-            if(bindingResult.hasErrors()) return "users/index";
+            if(bindingResult.hasErrors()) return new ResponseEntity<>("register incomplete", HttpStatus.I_AM_A_TEAPOT);
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
-            return "users/index";
+            return new ResponseEntity<>("register complete", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getUsersList")
+    @GetMapping(value = "/getList")
     public ResponseEntity<List<User>> getAll(
             HttpSession session,
             Model model)

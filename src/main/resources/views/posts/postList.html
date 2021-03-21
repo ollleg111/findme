@@ -7,17 +7,27 @@
 
 <body>
 <header>
-    Post List
+    Post's List
 </header>
-<h1>Posts list page</h1>
+<h1>Post's List</h1>
 
-<div th:each="post : ${postList}">
+<form th:method="GET" th:action="@{/post}" th:object="${post}">
+    <div>
+        <label for="message">post's Message</label>
+        <input type="text" th:field="*{message}" id="message">
 
-    <a th:text="${post.getMessage()}">Message</a>
-    <a th:text="${post.getDatePosted()}">Date posted</a>
-    <a th:text="${post.getLocation()}">Location</a>
+        <br/>
 
-</div>
+        <label for="datePosted">post's Date posted</label>
+        <input type="date" th:field="*{datePosted}" id="datePosted">
+
+        <br/>
+
+        <label for="location">post's Location</label>
+        <input type="text" th:field="*{location}" id="location">
+    </div>
+</form>
 
 </body>
+
 </html>

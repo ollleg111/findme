@@ -21,11 +21,11 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@RequestMapping("/post")
+@RequestMapping("/posts")
 @AllArgsConstructor
 @Slf4j
 public class PostController {
-    private PostService postService;
+    private final PostService postService;
 
     @GetMapping(path = "/{postId}")
     public String getPost(
@@ -39,7 +39,7 @@ public class PostController {
             return "posts/successPostPage";
     }
 
-    @DeleteMapping(value = "/delete-post/{postId}")
+    @DeleteMapping(value = "/deleteById/{postId}")
     public ResponseEntity<String> deleteById(
             HttpSession session,
             @PathVariable String postId)
@@ -56,7 +56,7 @@ public class PostController {
         }
     }
 
-    @PostMapping(value = "/add-post")
+    @PostMapping(value = "/add")
     public String save(
             HttpSession session,
             @ModelAttribute("post") @Validated Post post,
@@ -70,7 +70,7 @@ public class PostController {
             return "posts/newPost";
     }
 
-    @PatchMapping(value = "/update-post")
+    @PatchMapping(value = "/update")
     public String update(
             HttpSession session,
             @ModelAttribute("post") @Validated Post post,
@@ -84,7 +84,7 @@ public class PostController {
             return "posts/newPost";
     }
 
-    @DeleteMapping(value = "/delete-post")
+    @DeleteMapping(value = "/delete")
     public ResponseEntity<String> delete(
             HttpSession session,
             @RequestBody Post post)
@@ -136,7 +136,7 @@ public class PostController {
             return new ResponseEntity<>(feedList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getPostsList")
+    @GetMapping(value = "/getList")
     public ResponseEntity<List<Post>> getAll(
             HttpSession session,
             Model model)
@@ -144,7 +144,7 @@ public class PostController {
             Utils.loginValidation(session);
             log.info("Get posts list from method getAll(HttpSession session, Model model)");
             List<Post> getAll = postService.findAll();
-            model.addAttribute("posts/postList", getAll);
+            model.addAttribute("posts/postsList", getAll);
             return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }

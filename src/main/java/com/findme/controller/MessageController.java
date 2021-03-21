@@ -19,11 +19,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/message")
+@RequestMapping("/messages")
 @AllArgsConstructor
 @Slf4j
 public class MessageController {
-    private MessageService messageService;
+    private final MessageService messageService;
 
     @GetMapping(path = "/{messageId}")
     public String getMessage(
@@ -37,7 +37,7 @@ public class MessageController {
             return "messages/successMessagePage";
     }
 
-    @DeleteMapping(value = "/delete-message/{messageId}")
+    @DeleteMapping(value = "/deleteById/{messageId}")
     public ResponseEntity<String> deleteById(
             HttpSession session,
             @PathVariable String messageId)
@@ -54,7 +54,7 @@ public class MessageController {
         }
     }
 
-    @PostMapping(value = "/add-message")
+    @PostMapping(value = "/add")
     public String save(
             HttpSession session,
             @ModelAttribute("message") @Valid Message message,
@@ -68,7 +68,7 @@ public class MessageController {
             return "messages/newMessage";
     }
 
-    @PatchMapping(value = "/update-message")
+    @PatchMapping(value = "/update")
     public String update(
             HttpSession session,
             @ModelAttribute("message") @Valid Message message,
@@ -82,7 +82,7 @@ public class MessageController {
             return "messages/newMessage";
     }
 
-    @DeleteMapping(value = "/delete-message")
+    @DeleteMapping(value = "/delete")
     public ResponseEntity<String> delete(
             HttpSession session,
             @RequestBody Message message)
@@ -100,7 +100,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping(value = "/getMessagesList")
+    @GetMapping(value = "/getList")
     public ResponseEntity<List<Message>> getAll(
             HttpSession session,
             Model model)
