@@ -90,6 +90,7 @@ public class UserController {
             user.setDateLastActive(new Date());
 
             if(bindingResult.hasErrors()) return new ResponseEntity<>("register incomplete", HttpStatus.I_AM_A_TEAPOT);
+
             userService.save(user);
             log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
             return new ResponseEntity<>("register complete", HttpStatus.OK);

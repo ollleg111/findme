@@ -147,3 +147,9 @@ CREATE SEQUENCE RELATIONSHIP_SEQ INCREMENT BY 1 MAXVALUE 1000 CYCLE;
 INSERT INTO public.users(
 	id, first_name, last_name, phone_number, e_mail, password, country, city, age, date_registered, date_last_active, relationship_status, religion, school, university)
 	VALUES (1, 'AAAA', 'AAAA', '12345678', 'aaaa@gmail.com', 'AAAA', 'AAAA', 'AAAA', 25, '10-10-10', '10-10-10', 'SINGLE', 'CHRISTIAN', 'AAAA', 'AAAA');
+INSERT INTO public.users(
+	id, first_name, last_name, phone_number, e_mail, password, country, city, age, date_registered, date_last_active, relationship_status, religion, school, university)
+	VALUES (2, 'BBBB', 'BBBB', '12345678', 'BBBB@gmail.com', 'BBBB', 'BBBB', 'BBBB', 25, '10-10-10', '10-10-10', 'SINGLE', 'CHRISTIAN', 'BBBB', 'BBBB');
+INSERT INTO public.users(
+	id, first_name, last_name, phone_number, e_mail, password, country, city, age, date_registered, date_last_active, relationship_status, religion, school, university)
+	VALUES (3, 'CCCC', 'CCCC', '12345678', 'CCCC@gmail.com', 'CCCC', 'CCCC', 'CCCC', 25, '10-10-10', '10-10-10', 'SINGLE', 'CHRISTIAN', 'CCCC', 'CCCC');UES ('CCCC', 'CCCC', '12345678', 'CCCC@gmail.com', 'CCCC', 'CCCC', 'CCCC', 25, '10-10-10', '10-10-10', 'SINGLE', 'CHRISTIAN', 'CCCC', 'CCCC');
