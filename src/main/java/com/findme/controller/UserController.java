@@ -60,6 +60,7 @@ public class UserController {
         return "users/successUserPage";
     }
 
+    //http://localhost:8080/users/login?mail=aaaa@gmail.com&password=AAAA
     @PostMapping(path = "/login")
     public ResponseEntity<String> login(
             HttpSession session,
@@ -82,7 +83,6 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<String> registerUser(
-            HttpSession session,
             @ModelAttribute("user") @Validated User user,
             BindingResult bindingResult)
     {
@@ -101,7 +101,7 @@ public class UserController {
             HttpSession session,
             Model model)
     {
-            // TODO Utils.loginValidation(session);
+            Utils.loginValidation(session);
             log.info("Get users list from method getAll(HttpSession session, Model model)");
             List<User> getAll = userService.findAll();
             model.addAttribute("user/usersList", getAll);

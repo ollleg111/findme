@@ -64,9 +64,7 @@ public class UserDAO extends GeneralDAO<User> {
             Query query = entityManager.createNativeQuery(VALIDATION_MAIL_AND_PHONE_NUMBER, Boolean.class);
             query.setParameter(1, phoneNumber);
             query.setParameter(2, mail);
-
             return query.getSingleResult() == null;
-
         } catch (InternalServerError exception) {
             System.err.println(exception.getMessage());
             throw new InternalServerError("Operation with User was filed in method" +
@@ -77,10 +75,9 @@ public class UserDAO extends GeneralDAO<User> {
     @Transactional
     public User getUser(String mail, String password) throws InternalServerError {
         try {
-            Query query = entityManager.createNativeQuery(GET_USER, Boolean.class);
+            Query query = entityManager.createNativeQuery(GET_USER, User.class);
             query.setParameter(1, mail);
             query.setParameter(2, password);
-
             return (User) query.getSingleResult();
         } catch (InternalServerError e) {
             throw new InternalServerError("Operation with user data was filed in method" +
@@ -91,7 +88,7 @@ public class UserDAO extends GeneralDAO<User> {
     @Transactional
     public List<User> findAll() throws DaoException {
         try {
-            Query query = entityManager.createNativeQuery(SELECT_FROM, UserDAO.class);
+            Query query = entityManager.createNativeQuery(SELECT_FROM, User.class);
             return query.getResultList();
         } catch (DaoException e) {
             throw new HibernateException("Operation filed in method findAll() from class "
