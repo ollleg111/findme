@@ -27,7 +27,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @GetMapping(path = "/{postId}")
+    @GetMapping(path = "/findById/{postId}")
     public String getPost(
             HttpSession session,
             Model model,
@@ -67,7 +67,7 @@ public class PostController {
             postService.save(post);
             log.info("Add post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            return "posts/newPost";
+            return "posts/successPostPage";
     }
 
     @PatchMapping(value = "/update")
@@ -81,7 +81,7 @@ public class PostController {
             postService.update(post);
             log.info("Update post data: " + post.getMessage() + " " + post.getLocation() + " " +
                     post.getDatePosted() );
-            return "posts/newPost";
+            return "posts/successPostPage";
     }
 
     @DeleteMapping(value = "/delete")
@@ -138,13 +138,11 @@ public class PostController {
 
     @GetMapping(value = "/getList")
     public ResponseEntity<List<Post>> getAll(
-            HttpSession session,
-            Model model)
+            HttpSession session)
     {
             Utils.loginValidation(session);
-            log.info("Get posts list from method getAll(HttpSession session, Model model)");
+            log.info("Get posts list from method getAll(HttpSession session");
             List<Post> getAll = postService.findAll();
-            model.addAttribute("posts/postsList", getAll);
             return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }

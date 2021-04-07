@@ -1,9 +1,9 @@
 package com.findme.controller;
 
-import com.findme.exceptions.BadRequestException;
-import com.findme.exceptions.InternalServerError;
 import com.findme.models.Message;
+import com.findme.models.User;
 import com.findme.service.MessageService;
+import com.findme.service.UserService;
 import com.findme.util.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -24,48 +25,38 @@ import java.util.List;
 @Slf4j
 public class MessageController {
     private final MessageService messageService;
+    private final UserService userService;
 
-    @GetMapping(path = "/{messageId}")
+    @GetMapping(path = "/findById/{messageId}")
     public String getMessage(
             HttpSession session,
             Model model,
             @PathVariable String messageId)
     {
-            Utils.loginValidation(session);
-            model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
-            log.info("Get message with id: " + messageId);
-            return "messages/successMessagePage";
+        Utils.loginValidation(session);
+        model.addAttribute("message", messageService.findById(Utils.stringToLong(messageId)));
+        log.info("Get message with id: " + messageId);
+        return "messages/successMessagePage";
     }
 
-    @DeleteMapping(value = "/deleteById/{messageId}")
-    public ResponseEntity<String> deleteById(
+    @PostMapping(value = "/send")
+    public ResponseEntity<String> send(
             HttpSession session,
-            @PathVariable String messageId)
+            @RequestParam String userToId,
+            @RequestParam String messageText)
     {
-        try {
-            Utils.loginValidation(session);
-            messageService.deleteById(Utils.stringToLong(messageId));
-            log.info("Delete message with id: " + messageId);
-            return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+        Utils.loginValidation(session);
 
-    @PostMapping(value = "/add")
-    public String save(
-            HttpSession session,
-            @ModelAttribute("message") @Valid Message message,
-            BindingResult bindingResult)
-    {
-            Utils.loginValidation(session);
-            if(bindingResult.hasErrors()) return "messages/newMessage";
-            messageService.save(message);
-            log.info("Add message data: " + message.getId() + " " + message.getDateRead() + " " +
-                    message.getDateSent() + " " + message.getText());
-            return "messages/newMessage";
+        Message message = new Message();
+        message.setText(messageText);
+        message.setDateSent(new Date());
+        message.setUserFrom((User)session.getAttribute("user"));
+        message.setUserTo(userService.findById(Utils.stringToLong(userToId)));
+        messageService.save(message);
+
+        log.info("Message with date: " + message.getDateSent() + " and text: " + message.getText() +
+        " was sent now");
+        return new ResponseEntity<>("Message was send", HttpStatus.OK);
     }
 
     @PatchMapping(value = "/update")
@@ -74,41 +65,54 @@ public class MessageController {
             @ModelAttribute("message") @Valid Message message,
             BindingResult bindingResult)
     {
-            Utils.loginValidation(session);
-            if(bindingResult.hasErrors()) return "messages/newMessage";
-            messageService.update(message);
-            log.info("Update message data: " + message.getId() + " " + message.getDateRead() + " " +
-                    message.getDateSent() + " " + message.getText());
-            return "messages/newMessage";
+        Utils.loginValidation(session);
+        if(bindingResult.hasErrors()) return "messages/newMessage";
+        messageService.update(message);
+        log.info("Message was updated");
+        return "messages/successMessagePage";
     }
 
     @DeleteMapping(value = "/delete")
     public ResponseEntity<String> delete(
             HttpSession session,
+            @ModelAttribute Message message)
+    {
+        Utils.loginValidation(session);
+        messageService.delete(message);
+        log.info("Message was deleted");
+        return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteById/{messageId}")
+    public ResponseEntity<String> deleteById(
+            HttpSession session,
+            @PathVariable String messageId)
+    {
+        Utils.loginValidation(session);
+        messageService.deleteById(Utils.stringToLong(messageId));
+        log.info("Message was deleted");
+        return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
+    }
+
+    //TODO ?????????????
+    @DeleteMapping(value = "/deleteSelected")
+    public ResponseEntity<String> deleteSelected(
+            HttpSession session,
             @RequestBody Message message)
     {
-        try {
             Utils.loginValidation(session);
             messageService.delete(message);
-            log.info("Delete message data: " + message.getId() + " " + message.getDateRead() + " " +
-                    message.getDateSent() + " " + message.getText());
+            log.info("Messages were deleted");
             return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-        } catch (BadRequestException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (InternalServerError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @GetMapping(value = "/getList")
     public ResponseEntity<List<Message>> getAll(
-            HttpSession session,
-            Model model)
+            HttpSession session)
     {
             Utils.loginValidation(session);
-            log.info("Get messages list from method getAll(HttpSession session, Model model)");
+            log.info("Get messages list from method getAll(HttpSession session)");
             List<Message> getAll = messageService.findAll();
-            model.addAttribute("messages/messagesList", getAll);
             return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }

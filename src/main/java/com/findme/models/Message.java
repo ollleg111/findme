@@ -1,8 +1,6 @@
 package com.findme.models;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -27,6 +25,9 @@ CONSTRAINT USER_TO_FK FOREIGN KEY (USER_TO_ID) REFERENCES USERS(ID)
 @Table(name = "MESSAGE")
 @Getter
 @Setter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Message {
     @Id
@@ -42,8 +43,8 @@ public class Message {
     private Long id;
 
     @NotEmpty(message = "Message text should not be empty")
-    @Size(min = 2, max = 100, message = "Message text should be between 2 and 100 characters")
-    @Column(name = "TEXT", nullable = false, columnDefinition = "TEXT")
+    @Size(min = 2, max = 140, message = "Message text should be between 2 and 140 characters")
+    @Column(name = "TEXT", nullable = false, columnDefinition = "TEXT", length = 140)
     private String text;
 
     @DateTimeFormat
@@ -53,6 +54,14 @@ public class Message {
     @DateTimeFormat
     @Column(name = "DATE_READ")
     private Date dateRead;
+
+    @DateTimeFormat
+    @Column(name = "DATE_EDITED")
+    private Date dateEdited;
+
+    @DateTimeFormat
+    @Column(name = "DATE_DELETED")
+    private Date dateDeleted;
 
     @ManyToOne
     @JoinColumn(name = "USER_FROM_ID", nullable = false)

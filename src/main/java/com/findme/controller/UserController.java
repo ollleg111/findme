@@ -26,7 +26,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/findById/{userId}")
     public String getUser(
             Model model,
             @PathVariable String userId)
@@ -82,29 +82,27 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> registerUser(
+    public String registerUser(
             @ModelAttribute("user") @Validated User user,
             BindingResult bindingResult)
     {
             user.setDateRegistered(new Date());
             user.setDateLastActive(new Date());
 
-            if(bindingResult.hasErrors()) return new ResponseEntity<>("register incomplete", HttpStatus.I_AM_A_TEAPOT);
+            if(bindingResult.hasErrors()) return "users/index";
 
             userService.save(user);
-            log.info("Register user data: " + user.getFirstName() + " " + user.getLastName());
-            return new ResponseEntity<>("register complete", HttpStatus.OK);
+            log.info("Register user with data: " + user.getFirstName() + " " + user.getLastName());
+            return "users/successUserPage";
     }
 
     @GetMapping(value = "/getList")
     public ResponseEntity<List<User>> getAll(
-            HttpSession session,
-            Model model)
+            HttpSession session)
     {
             Utils.loginValidation(session);
-            log.info("Get users list from method getAll(HttpSession session, Model model)");
+            log.info("Get users list from method getAll(HttpSession session");
             List<User> getAll = userService.findAll();
-            model.addAttribute("user/usersList", getAll);
             return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }
