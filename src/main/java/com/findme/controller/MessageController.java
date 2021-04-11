@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -46,16 +45,13 @@ public class MessageController {
             @RequestParam String messageText)
     {
         Utils.loginValidation(session);
-
         Message message = new Message();
         message.setText(messageText);
-        message.setDateSent(new Date());
         message.setUserFrom((User)session.getAttribute("user"));
         message.setUserTo(userService.findById(Utils.stringToLong(userToId)));
         messageService.save(message);
-
-        log.info("Message with date: " + message.getDateSent() + " and text: " + message.getText() +
-        " was sent now");
+        log.info("Message from user: " + message.getUserFrom().getFirstName() + " was sent now to user:" +
+                message.getUserTo().getFirstName());
         return new ResponseEntity<>("Message was send", HttpStatus.OK);
     }
 
@@ -81,29 +77,6 @@ public class MessageController {
         messageService.delete(message);
         log.info("Message was deleted");
         return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/deleteById/{messageId}")
-    public ResponseEntity<String> deleteById(
-            HttpSession session,
-            @PathVariable String messageId)
-    {
-        Utils.loginValidation(session);
-        messageService.deleteById(Utils.stringToLong(messageId));
-        log.info("Message was deleted");
-        return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
-    }
-
-    //TODO ?????????????
-    @DeleteMapping(value = "/deleteSelected")
-    public ResponseEntity<String> deleteSelected(
-            HttpSession session,
-            @RequestBody Message message)
-    {
-            Utils.loginValidation(session);
-            messageService.delete(message);
-            log.info("Messages were deleted");
-            return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
     }
 
     @GetMapping(value = "/getList")

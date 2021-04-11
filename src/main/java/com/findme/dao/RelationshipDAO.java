@@ -25,50 +25,12 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         setTypeParameterClass(Relationship.class);
     }
 
-    //private static final String RELATIONSHIP_ADD = "INSERT INTO RELATIONSHIP(USER_FROM_ID,USER_TO_ID,STATUS) VALUES(?1,?2,?3)";
-    //private static final String RELATIONSHIP_UPDATE = "UPDATE RELATIONSHIP SET USER_FROM_ID = ?1, USER_TO_ID = ?2, STATUS = ?3";
     private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
     private static final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
     private static final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
-
     private static final String SELECT_FROM = "SELECT * FROM RELATIONSHIP";
 
     private String alarmMessage = RelationshipDAO.class.getName();
-
-    /*
-    @Transactional
-    public void addRelationship(Long userIdFrom, Long userIdTo, RelationshipStatus status) throws InternalServerError {
-        try {
-            int result = entityManager
-                    .createNativeQuery(RELATIONSHIP_ADD)
-                    .setParameter(1, userIdFrom)
-                    .setParameter(2, userIdTo)
-                    .setParameter(3, status.toString())
-                    .executeUpdate();
-        } catch (InternalServerError exception) {
-            System.err.println(exception.getMessage());
-            throw new InternalServerError("Operation was filed in method" +
-                    " save(String userIdFrom, String userIdTo) from class " + alarmMessage);
-        }
-    }
-
-    @Transactional
-    public void updateRelationship(Long userIdFrom, Long userIdTo, String status)
-            throws InternalServerError {
-        try {
-            int result = entityManager
-                    .createNativeQuery(RELATIONSHIP_UPDATE)
-                    .setParameter(1, userIdFrom)
-                    .setParameter(2, userIdTo)
-                    .setParameter(3, status)
-                    .executeUpdate();
-        } catch (InternalServerError exception) {
-            System.err.println(exception.getMessage());
-            throw new InternalServerError("Operation was filed in method" +
-                    " update(String userIdFrom, String userIdTo, String status) from class " + alarmMessage);
-        }
-    }
-     */
 
     @Transactional
     public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {

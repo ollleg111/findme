@@ -43,7 +43,7 @@ public class Message {
     private Long id;
 
     @NotEmpty(message = "Message text should not be empty")
-    @Size(min = 2, max = 140, message = "Message text should be between 2 and 140 characters")
+    @Size(min = 1, max = 140, message = "Message text should be between 1 and 140 characters")
     @Column(name = "TEXT", nullable = false, columnDefinition = "TEXT", length = 140)
     private String text;
 

@@ -82,7 +82,6 @@ public class RelationshipService {
     public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws DaoException {
         return relationshipDAO.getRelationship(userIdFrom, userIdTo);
     }
-
     private void initCheck(String status, Relationship relationship) {
         GeneralValidator waitingValidator = new WaitingValidator(status, relationship);
         GeneralValidator rejectedValidator = new RejectedValidator(status, relationship);
