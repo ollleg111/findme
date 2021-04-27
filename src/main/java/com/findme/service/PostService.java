@@ -6,6 +6,7 @@ import com.findme.exceptions.DaoException;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.*;
 import com.findme.util.Constants;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,30 +18,15 @@ import java.util.regex.Pattern;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class PostService {
-
-    private PostDAO postDAO;
+    private final PostDAO postDAO;
     private RelationshipService relationshipService;
-
-    // - максимальное колличество постов от друзей
-    private final int MAX_FEED_LIST = 10;
 
     @Autowired
     public RelationshipService getRelationshipService() {
         return relationshipService;
     }
-
-    @Autowired
-    public PostService(PostDAO postDAO) {
-        this.postDAO = postDAO;
-    }
-
-//    @Autowired
-//    public PostService(PostDAO postDAO, UserService userService, RelationshipService relationshipService) {
-//        this.postDAO = postDAO;
-//        this.userService = userService;
-//        this.relationshipService = relationshipService;
-//    }
 
     public Post findById(Long id) throws DaoException, NotFoundException {
         Post post = postDAO.findById(id);
@@ -122,9 +108,9 @@ public class PostService {
         List<Post> posts = postDAO.getFilteredByFriends(owner.getId());
 
         if(posts != null) {
-            if(posts.size() >= MAX_FEED_LIST) {
+            if(posts.size() >= Constants.MAX_FEED_LIST) {
                 ArrayList<Post> returnList = new ArrayList<>(posts);
-                returnList.ensureCapacity(MAX_FEED_LIST);
+                returnList.ensureCapacity(Constants.MAX_FEED_LIST);
                 return returnList;
             }
             return posts;
@@ -152,7 +138,7 @@ public class PostService {
         /*
         максимальная допустимая длина 200 символов
          */
-        if (post.getMessage().length() >= Constants.MAX_LENGTH_OF_MESSAGE)
+        if (post.getMessage().length() >= Constants.MAX_LENGTH_OF_POST)
             throw new BadRequestException("Post's message cannot be more than 200 symbols");
 
         /*

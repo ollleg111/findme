@@ -103,7 +103,10 @@ public class PostController {
     }
 
     @GetMapping(value = "/getDataSortedPostsList")
-    public ResponseEntity<List<Post>> getDataSortedPostsList(HttpSession session, Model model){
+    public ResponseEntity<List<Post>> getDataSortedPostsList(
+            HttpSession session,
+            Model model)
+    {
             Utils.loginValidation(session);
             log.info("Get posts list from method getDataSortedPostsList(HttpSession session, Model model)");
             List<Post> postDataList = postService.getDataSortedPostsList((User)session.getAttribute("user"));

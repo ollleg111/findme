@@ -17,8 +17,8 @@ import java.util.List;
 
 @Service
 public class RelationshipService {
-    private RelationshipDAO relationshipDAO;
-    private UserDAO userDAO;
+    private final RelationshipDAO relationshipDAO;
+    private final UserDAO userDAO;
     private Relationship relationship;
 
     @Autowired

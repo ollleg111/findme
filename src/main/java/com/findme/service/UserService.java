@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public User findById(Long id) throws DaoException, NotFoundException {
         User user = userDAO.findById(id);

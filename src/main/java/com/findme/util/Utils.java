@@ -24,6 +24,6 @@ public class Utils {
 
     public static void isUserWithLogin(HttpSession session, Long userId) throws BadRequestException {
         User user = (User) session.getAttribute("user");
-        if (user == null || user.getId() != userId) throw new BadRequestException("You must write the login");
+        if (user == null || user.getId().equals(userId)) throw new BadRequestException("You must write the login");
     }
 }

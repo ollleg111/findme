@@ -63,9 +63,22 @@ public class MessageController {
     {
         Utils.loginValidation(session);
         if(bindingResult.hasErrors()) return "messages/newMessage";
+        message.setUserFrom((User)session.getAttribute("user"));
         messageService.update(message);
         log.info("Message was updated");
         return "messages/successMessagePage";
+    }
+
+    @PutMapping(value = "/read")
+    public ResponseEntity<String> read(
+            HttpSession session,
+            @ModelAttribute Message message)
+    {
+        Utils.loginValidation(session);
+        message.setUserFrom((User)session.getAttribute("user"));
+        messageService.updateDateRead(message);
+        log.info("Message was read");
+        return new ResponseEntity<>("Message was read", HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete")
@@ -74,9 +87,24 @@ public class MessageController {
             @ModelAttribute Message message)
     {
         Utils.loginValidation(session);
-        messageService.delete(message);
+        message.setUserFrom((User)session.getAttribute("user"));
+        messageService.updateDateDelete(message);
         log.info("Message was deleted");
         return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteSelectedMessages")
+    public ResponseEntity<String> deleteMessages(
+            HttpSession session,
+            @ModelAttribute List<Message> messages)
+    {
+        Utils.loginValidation(session);
+        for(Message message : messages){
+            message.setUserFrom((User)session.getAttribute("user"));
+        }
+        messageService.updateMessages(messages);
+        log.info("Messages was deleted");
+        return new ResponseEntity<>("Messages was deleted", HttpStatus.OK);
     }
 
     @GetMapping(value = "/getList")

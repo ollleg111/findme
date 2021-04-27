@@ -14,13 +14,13 @@ public class HomeController {
     }
 
     @GetMapping(path = "/test-ajax")
-    public ResponseEntity<String> testAjax() {
-        return new ResponseEntity<String>("trouble", HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(path = "/test-ajax")
     public String trouble() {
         return "trouble";
     }
 
+    @GetMapping(path = "/test-ajax2")
+    public ResponseEntity<String> testAjax()
+    {
+        return new ResponseEntity<String>("trouble", HttpStatus.NOT_FOUND);
+    }
 }

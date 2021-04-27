@@ -21,16 +21,16 @@ public class PostDAO extends GeneralDAO<Post> {
         setTypeParameterClass(Post.class);
     }
 
-    private static final String GET_ALL_POSTS_SORTED_BY_DATE = "SELECT P.* FROM POST P INNER JOIN RELATIONSHIP R ON" +
+    private final String GET_ALL_POSTS_SORTED_BY_DATE = "SELECT P.* FROM POST P INNER JOIN RELATIONSHIP R ON" +
             " (R.USER_FROM_ID = ?1 AND R.USER_TO_ID = P.USER_POSTED_ID) OR" +
             " (R.USER_TO_ID = ?1 AND R.USER_FROM_ID = P.USER_POSTED_ID) WHERE R.STATUS = 'FRIENDS' ORDER BY" +
             " P.DATE_POSTED DESC";
 
-    private static final String GET_ALL_USER_POSTS = "SELECT * FROM POST WHERE USER_ID = ?1";
-    private static final String GET_ALL_OWNER_FRIENDS_POSTS = "SELECT P.* FROM POST INNER JOIN RELATIONSHIP R ON" +
+    private final String GET_ALL_USER_POSTS = "SELECT * FROM POST WHERE USER_ID = ?1";
+    private final String GET_ALL_OWNER_FRIENDS_POSTS = "SELECT P.* FROM POST INNER JOIN RELATIONSHIP R ON" +
             " P.USER_ID = ?1 WHERE R.STATUS = 'FRIENDS'" ;
 
-    private static final String SELECT_FROM = "SELECT * FROM POST";
+    private final String SELECT_FROM = "SELECT * FROM POST";
 
     private String alarmMessage = PostDAO.class.getName();
 

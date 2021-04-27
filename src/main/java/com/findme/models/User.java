@@ -32,7 +32,7 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "USERS_SEQ"
     )
-    private long id;
+    private Long id;
 
     @NotEmpty(message = "First Name should not be empty")
     @Size(min = 2, max = 50, message = "Name should be between 2 and 50 characters")

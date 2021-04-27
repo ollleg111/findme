@@ -25,10 +25,10 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         setTypeParameterClass(Relationship.class);
     }
 
-    private static final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
-    private static final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
-    private static final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
-    private static final String SELECT_FROM = "SELECT * FROM RELATIONSHIP";
+    private final String RELATIONSHIP_GET = "SELECT FROM RELATIONSHIP WHERE (USER_FROM_ID = ?1 AND USER_TO_ID = ?2) OR (USER_FROM_ID = ?2 AND USER_TO_ID = ?1)";
+    private final String RELATIONSHIP_GET_INPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_TO_ID = ?2";
+    private final String RELATIONSHIP_GET_OUTPUT = "SELECT * FROM RELATIONSHIP WHERE STATUS = ?1 AND USER_FROM_ID = ?2";
+    private final String SELECT_FROM = "SELECT * FROM RELATIONSHIP";
 
     private String alarmMessage = RelationshipDAO.class.getName();
 

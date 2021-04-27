@@ -1,6 +1,7 @@
 package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.Message;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,9 @@ public class MessageDAO extends GeneralDAO<Message> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final String SELECT_FROM = "SELECT * FROM MESSAGE";
+    private final String SELECT_FROM = "SELECT * FROM MESSAGE";
+    private final String UPDATE_DATE_DELETED = " update Message m set m.dateDeleted = ? where m in "
+
 
     private String alarmMessage = MessageDAO.class.getName();
 
@@ -43,6 +46,13 @@ public class MessageDAO extends GeneralDAO<Message> {
     @Override
     public void delete(Message message) throws DaoException {
         super.delete(message);
+    }
+
+    public List<Message> updateMessages (List<Message> messages) throws InternalServerError {
+        try {
+            entityManager.createNativeQuery(UPDATE_DATE_DELETED)
+                    .setParameter()
+        }
     }
 
     @Transactional
