@@ -66,6 +66,7 @@ public class PostDAO extends GeneralDAO<Post> {
         }
     }
 
+    @Transactional
     public List<Post> getFilteredPostsById(Long ownerId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_USER_POSTS, Post.class);
@@ -77,6 +78,7 @@ public class PostDAO extends GeneralDAO<Post> {
         }
     }
 
+    @Transactional
     public List<Post> getFilteredByFriends(Long ownerId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_OWNER_FRIENDS_POSTS, Post.class);

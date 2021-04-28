@@ -11,11 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -54,7 +52,7 @@ public class MessageController {
                 message.getUserTo().getFirstName());
         return new ResponseEntity<>("Message was send", HttpStatus.OK);
     }
-
+    /*
     @PatchMapping(value = "/update")
     public String update(
             HttpSession session,
@@ -67,6 +65,19 @@ public class MessageController {
         messageService.update(message);
         log.info("Message was updated");
         return "messages/successMessagePage";
+    }
+    */
+
+    @PatchMapping(value = "/update")
+    public ResponseEntity<String> update(
+            HttpSession session,
+            @ModelAttribute Message message)
+    {
+        Utils.loginValidation(session);
+        message.setUserFrom((User)session.getAttribute("user"));
+        messageService.update(message);
+        log.info("Message was updated");
+        return new ResponseEntity<>("Message was updated", HttpStatus.OK);
     }
 
     @PutMapping(value = "/read")
@@ -93,18 +104,69 @@ public class MessageController {
         return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteSelectedMessages")
-    public ResponseEntity<String> deleteMessages(
+    @GetMapping(value = "/historyTo/{userToId}")
+    public String historyTo(
             HttpSession session,
-            @ModelAttribute List<Message> messages)
+            Model model,
+            @RequestParam String userToId,
+            @RequestParam String messageIndex)
     {
         Utils.loginValidation(session);
-        for(Message message : messages){
+        Integer indexFromList = 0;
+        List<Message> messagesList;
+        if (messageIndex != null){
+            indexFromList = Integer.valueOf(messageIndex);
+            messagesList = messageService.findMessagesToUserId(
+                    ((User)session.getAttribute("user")).getId(),
+                    Utils.stringToLong(userToId),
+                    indexFromList);
+            /*
+            Сообщения должны подгружаться батчами по 20
+             */
+            indexFromList = indexFromList + 20;
+        } else {
+            messagesList = messageService.findMessagesToUserId(
+                    ((User)session.getAttribute("user")).getId(),
+                    Utils.stringToLong(userToId),
+                    indexFromList);
+            /*
+            Сообщения должны подгружаться батчами по 20
+             */
+            indexFromList = 20;
+        }
+        model.addAttribute("messages", messagesList);
+        model.addAttribute("messagesIndexFromList", indexFromList);
+        log.info("Messages was found");
+        return "messages/messageList";
+    }
+
+
+    @PutMapping(value = "/updateListMessages")
+    public ResponseEntity<String> updateListMessages(
+            HttpSession session,
+            @ModelAttribute List<Message> messagesList)
+    {
+        Utils.loginValidation(session);
+        for(Message message : messagesList){
             message.setUserFrom((User)session.getAttribute("user"));
         }
-        messageService.updateMessages(messages);
+        messageService.updateListMessagesToUser(messagesList);
         log.info("Messages was deleted");
         return new ResponseEntity<>("Messages was deleted", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/updateAllToUser")
+    public ResponseEntity<String> updateAllDateMessages(
+            HttpSession session,
+            @RequestParam String userToId)
+    {
+        Utils.loginValidation(session);
+        messageService.updateAllMessagesToUser(
+                ((User)session.getAttribute("user")).getId(),
+                Utils.stringToLong(userToId));
+        log.info("Messages to user with id: " + userToId + " was deleted");
+        return new ResponseEntity<>("Messages to user with id: " + userToId +
+                " was deleted", HttpStatus.OK);
     }
 
     @GetMapping(value = "/getList")

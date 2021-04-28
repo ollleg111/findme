@@ -70,23 +70,43 @@ public class MessageService {
     }
 
     public Message updateDateDelete(Message message) throws DaoException {
+        /*
+        Также должна быть возможность удалить любое свое сообщение с переписки
+         */
         Message updatingMessage = findById(message.getId());
         updateValidation(message , updatingMessage);
         message.setDateDeleted(new Date());
         return messageDAO.update(message);
     }
 
-    public void updateMessages(List<Message> messages) throws DaoException {
-        if(messages.size() > Constants.MESSAGE_LIST_SIZE){
-            throw new BadRequestException("List of messages bigger than ten messages");
-            List<Message> messageList = new ArrayList<>();
-            for(Message message : messages){
-                Message m = findById(message.getId());
-                updateValidation(m, message);
-                messageList.add(m);
-            }
+    public void updateAllMessagesToUser(Long userFromId, Long userToId) throws DaoException {
+        /*
+        Или удалить всю переписку сразу
+         */
+        messageDAO.updateAllMessagesToUser(userFromId, userToId);
+    }
+
+    public void updateListMessagesToUser(List<Message> messages) throws DaoException {
+        /*
+        Также должна быть возможность удалить любое свое сообщение с переписки (или несколько, максимум 10 за раз)
+         */
+        if(messages.size() > Constants.MESSAGE_LIST_SIZE)
+            throw new BadRequestException("You can update not more than ten messages");
+        List<Long> messageIDList = new ArrayList<>();
+        for(Message message : messages){
+            Message m = findById(message.getId());
+            updateValidation(m, message);
+            messageIDList.add(m.getId());
         }
-        messageDAO.updateMessages(messageList);
+        messageDAO.updateListMessages(messageIDList);
+    }
+    /*
+    Залогиненный пользователь может открывать любую из истории своих переписок и видеть ее сообщения.
+     */
+    public List<Message> findMessagesToUserId(Long userFromId, Long userToId, Integer index){
+        List<Message> messageList = messageDAO.getMessages(userFromId, userToId, index);
+
+        return null;
     }
 
     public void delete(Message message) throws DaoException {
