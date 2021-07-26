@@ -168,14 +168,4 @@ public class MessageController {
         return new ResponseEntity<>("Messages to user with id: " + userToId +
                 " was deleted", HttpStatus.OK);
     }
-
-    @GetMapping(value = "/getList")
-    public ResponseEntity<List<Message>> getAll(
-            HttpSession session)
-    {
-            Utils.loginValidation(session);
-            log.info("Get messages list from method getAll(HttpSession session)");
-            List<Message> getAll = messageService.findAll();
-            return new ResponseEntity<>(getAll, HttpStatus.OK);
-    }
 }

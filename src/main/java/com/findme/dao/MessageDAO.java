@@ -98,15 +98,4 @@ public class MessageDAO extends GeneralDAO<Message> {
                     + alarmMessage);
         }
     }
-
-    @Transactional
-    public List<Message> findAll() throws DaoException {
-        try {
-            Query query = entityManager.createNativeQuery(SELECT_FROM, Message.class);
-            return query.getResultList();
-        } catch (DaoException e) {
-            throw new HibernateException("Operation filed in method findAll() from class "
-                    + alarmMessage);
-        }
-    }
 }

@@ -138,14 +138,4 @@ public class PostController {
             model.addAttribute("posts/postList", feedList);
             return new ResponseEntity<>(feedList, HttpStatus.OK);
     }
-
-    @GetMapping(value = "/getList")
-    public ResponseEntity<List<Post>> getAll(
-            HttpSession session)
-    {
-            Utils.loginValidation(session);
-            log.info("Get posts list from method getAll(HttpSession session");
-            List<Post> getAll = postService.findAll();
-            return new ResponseEntity<>(getAll, HttpStatus.OK);
-    }
 }

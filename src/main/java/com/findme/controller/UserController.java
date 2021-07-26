@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -94,15 +93,5 @@ public class UserController {
             userService.save(user);
             log.info("Register user with data: " + user.getFirstName() + " " + user.getLastName());
             return "users/successUserPage";
-    }
-
-    @GetMapping(value = "/getList")
-    public ResponseEntity<List<User>> getAll(
-            HttpSession session)
-    {
-            Utils.loginValidation(session);
-            log.info("Get users list from method getAll(HttpSession session");
-            List<User> getAll = userService.findAll();
-            return new ResponseEntity<>(getAll, HttpStatus.OK);
     }
 }

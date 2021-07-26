@@ -9,8 +9,6 @@ import com.findme.models.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -44,10 +42,6 @@ public class UserService {
                 new NotFoundException("User does not exist in method deleteById(Long id) from class " +
                         UserService.class.getName());
         userDAO.delete(user);
-    }
-
-    public List<User> findAll() throws DaoException {
-        return userDAO.findAll();
     }
 
     public User login(String mail, String password) throws ServiceException {

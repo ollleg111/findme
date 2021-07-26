@@ -3,14 +3,12 @@ package com.findme.dao;
 import com.findme.exceptions.DaoException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
-import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
 
 @Repository
 public class UserDAO extends GeneralDAO<User> {
@@ -82,17 +80,6 @@ public class UserDAO extends GeneralDAO<User> {
         } catch (InternalServerError e) {
             throw new InternalServerError("Operation with user data was filed in method" +
                     "getUser(String email, String password) from class " + alarmMessage);
-        }
-    }
-
-    @Transactional
-    public List<User> findAll() throws DaoException {
-        try {
-            Query query = entityManager.createNativeQuery(SELECT_FROM, User.class);
-            return query.getResultList();
-        } catch (DaoException e) {
-            throw new HibernateException("Operation filed in method findAll() from class "
-                    + alarmMessage);
         }
     }
 }

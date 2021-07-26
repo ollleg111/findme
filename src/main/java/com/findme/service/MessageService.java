@@ -115,10 +115,6 @@ public class MessageService {
         messageDAO.delete(message);
     }
 
-    public List<Message> findAll() throws DaoException {
-        return messageDAO.findAll();
-    }
-
      /*
     Пользователь который отправил сообщение может его редактировать и удалять, если оно не было прочитано
      */

@@ -58,10 +58,6 @@ public class PostService {
         postDAO.delete(post);
     }
 
-    public List<Post> findAll() throws DaoException {
-        return postDAO.findAll();
-    }
-
     public List<Post> getDataSortedPostsList(User user) throws DaoException {
         return postDAO.getDataSortedPostsList(user.getId());
     }

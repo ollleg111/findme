@@ -5,7 +5,6 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
-import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,16 +97,5 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         if (users.isEmpty())
             return null;
         return users.size();
-    }
-
-    @Transactional
-    public List<Relationship> findAll() throws DaoException {
-        try {
-            Query query = entityManager.createNativeQuery(SELECT_FROM, Relationship.class);
-            return query.getResultList();
-        } catch (DaoException e) {
-            throw new HibernateException("Operation filed in method findAll() from class "
-                    + alarmMessage);
-        }
     }
 }
