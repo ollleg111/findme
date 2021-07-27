@@ -32,8 +32,6 @@ public class UserDAO extends GeneralDAO<User> {
                     " USERS.E_MAIL = ? AND" +
                     " USERS.PASSWORD = ?";
 
-    private static final String SELECT_FROM = "SELECT * FROM USERS";
-
     private String alarmMessage = UserDAO.class.getName();
 
     @Override

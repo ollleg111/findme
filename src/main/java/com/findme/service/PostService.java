@@ -143,6 +143,9 @@ public class PostService {
          */
         if (Pattern.compile(Constants.URL_REGEX).matcher(post.getMessage()).find())
             throw new BadRequestException("Post's massage have URLs");
+    }
 
+    public List<Post> findAll() throws DaoException {
+        return postDAO.findAll();
     }
 }

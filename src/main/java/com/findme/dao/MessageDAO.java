@@ -17,7 +17,6 @@ public class MessageDAO extends GeneralDAO<Message> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final String SELECT_FROM = "SELECT * FROM MESSAGE";
     private final String UPDATE_ALL_DATE_DELETED = "UPDATE MESSAGE SET MESSAGE.dateDeleted = ?1 WHERE " +
             "((MESSAGE.userFromId.id =?2 AND MESSAGE.userToId.id =?3) OR (MESSAGE.userToId.id =?3 AND MESSAGE.userFromId.id =?2))";
     private final String UPDATE_DATE_DELETED = "UPDATE MESSAGE SET MESSAGE.dateDeleted = ?1 WHERE MESSAGE.ID  =?2";

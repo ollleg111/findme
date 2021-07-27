@@ -3,6 +3,7 @@ package com.findme.controller;
 import com.findme.models.Message;
 import com.findme.models.User;
 import com.findme.service.MessageService;
+import com.findme.service.SetDateAction;
 import com.findme.service.UserService;
 import com.findme.util.Utils;
 import lombok.AllArgsConstructor;
@@ -52,21 +53,6 @@ public class MessageController {
                 message.getUserTo().getFirstName());
         return new ResponseEntity<>("Message was send", HttpStatus.OK);
     }
-    /*
-    @PatchMapping(value = "/update")
-    public String update(
-            HttpSession session,
-            @ModelAttribute("message") @Valid Message message,
-            BindingResult bindingResult)
-    {
-        Utils.loginValidation(session);
-        if(bindingResult.hasErrors()) return "messages/newMessage";
-        message.setUserFrom((User)session.getAttribute("user"));
-        messageService.update(message);
-        log.info("Message was updated");
-        return "messages/successMessagePage";
-    }
-    */
 
     @PatchMapping(value = "/update")
     public ResponseEntity<String> update(
@@ -75,7 +61,7 @@ public class MessageController {
     {
         Utils.loginValidation(session);
         message.setUserFrom((User)session.getAttribute("user"));
-        messageService.update(message);
+        messageService.update(message, SetDateAction.UPDATE);
         log.info("Message was updated");
         return new ResponseEntity<>("Message was updated", HttpStatus.OK);
     }
@@ -87,7 +73,7 @@ public class MessageController {
     {
         Utils.loginValidation(session);
         message.setUserFrom((User)session.getAttribute("user"));
-        messageService.updateDateRead(message);
+        messageService.update(message, SetDateAction.READ);
         log.info("Message was read");
         return new ResponseEntity<>("Message was read", HttpStatus.OK);
     }
@@ -99,7 +85,7 @@ public class MessageController {
     {
         Utils.loginValidation(session);
         message.setUserFrom((User)session.getAttribute("user"));
-        messageService.updateDateDelete(message);
+        messageService.update(message, SetDateAction.DELETE);
         log.info("Message was deleted");
         return new ResponseEntity<>("Message was deleted", HttpStatus.OK);
     }

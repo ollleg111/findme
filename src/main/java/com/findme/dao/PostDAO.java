@@ -89,4 +89,15 @@ public class PostDAO extends GeneralDAO<Post> {
                     " from class" + alarmMessage);
         }
     }
+
+    @Transactional
+    public List<Post> findAll() throws DaoException {
+        try {
+            Query query = entityManager.createNativeQuery(SELECT_FROM, Post.class);
+            return query.getResultList();
+        } catch (DaoException e) {
+            throw new HibernateException("Operation filed in method findAll() from class "
+                    + alarmMessage);
+        }
+    }
 }

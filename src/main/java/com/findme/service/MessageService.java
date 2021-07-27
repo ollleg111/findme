@@ -49,33 +49,30 @@ public class MessageService {
         return messageDAO.save(message);
     }
 
-    public Message update(Message message) throws DaoException {
+    public Message update(Message message, SetDateAction en) throws DaoException {
+        Message updatingMessage = findById(message.getId());
+        updateValidation(message, updatingMessage);
+
+        if(en.toString().equals(SetDateAction.READ.toString())){
+            message.setDateRead(new Date());
+            return messageDAO.update(message);
+        }
+
+        /*
+        Также должна быть возможность удалить любое свое сообщение с переписки
+         */
+        if(en.toString().equals(SetDateAction.DELETE.toString())){
+            message.setDateDeleted(new Date());
+            return messageDAO.update(message);
+        }
+
         /*
         Максимальная длина сообщения 140 символов
          */
         if(message.getText() != null && message.getText().length() < Constants.MAX_SYMBOL_QUANTITY)
             throw new BadRequestException("Message can not be more than 140 symbols");
 
-        Message updatingMessage = findById(message.getId());
-        updateValidation(message , updatingMessage);
         message.setDateEdited(new Date());
-        return messageDAO.update(message);
-    }
-
-    public Message updateDateRead(Message message) throws DaoException {
-        Message updatingMessage = findById(message.getId());
-        updateValidation(message , updatingMessage);
-        message.setDateRead(new Date());
-        return messageDAO.update(message);
-    }
-
-    public Message updateDateDelete(Message message) throws DaoException {
-        /*
-        Также должна быть возможность удалить любое свое сообщение с переписки
-         */
-        Message updatingMessage = findById(message.getId());
-        updateValidation(message , updatingMessage);
-        message.setDateDeleted(new Date());
         return messageDAO.update(message);
     }
 
