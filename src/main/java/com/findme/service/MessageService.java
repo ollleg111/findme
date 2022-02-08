@@ -101,9 +101,8 @@ public class MessageService {
     Залогиненный пользователь может открывать любую из истории своих переписок и видеть ее сообщения.
      */
     public List<Message> findMessagesToUserId(Long userFromId, Long userToId, Integer index){
-        List<Message> messageList = messageDAO.getMessages(userFromId, userToId, index);
 
-        return null;
+        return messageDAO.getMessages(userFromId, userToId, index);
     }
 
     public void delete(Message message) throws DaoException {
