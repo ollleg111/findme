@@ -3,12 +3,10 @@ package com.findme.dao;
 import com.findme.exceptions.DaoException;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Transactional
 @Repository
 class GeneralDAO<T> {
     private Class<T> typeParameterClass;

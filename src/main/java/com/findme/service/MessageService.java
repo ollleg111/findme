@@ -115,6 +115,7 @@ public class MessageService {
      /*
     Пользователь который отправил сообщение может его редактировать и удалять, если оно не было прочитано
      */
+
     private void updateValidation(Message message, Message updatingMessage) throws BadRequestException {
         /*
         Пользователь который отправил сообщение

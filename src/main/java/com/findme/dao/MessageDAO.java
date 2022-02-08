@@ -4,7 +4,6 @@ import com.findme.exceptions.DaoException;
 import com.findme.models.Message;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -50,7 +49,6 @@ public class MessageDAO extends GeneralDAO<Message> {
         super.delete(message);
     }
 
-    @Transactional
     public void updateAllMessagesToUser(Long userFromId, Long userToId) throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(UPDATE_ALL_DATE_DELETED);
@@ -64,7 +62,6 @@ public class MessageDAO extends GeneralDAO<Message> {
         }
     }
 
-    @Transactional
     public void updateListMessages(List<Long> messagesId) throws DaoException {
         try {
             for (Long id : messagesId){
@@ -79,7 +76,6 @@ public class MessageDAO extends GeneralDAO<Message> {
         }
     }
 
-    @Transactional
     public List<Message> getMessages(Long userFromId, Long userToId, Integer index) {
         try {
             Query query = entityManager.createNativeQuery(SELECT_MESSAGES, Message.class);

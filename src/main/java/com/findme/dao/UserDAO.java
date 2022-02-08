@@ -1,10 +1,9 @@
 package com.findme.dao;
 
 import com.findme.exceptions.DaoException;
-import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,29 +53,27 @@ public class UserDAO extends GeneralDAO<User> {
         super.delete(user);
     }
 
-    @Transactional
-    public boolean validationMailAndPhoneNumber(String phoneNumber, String mail) throws InternalServerError {
+    public boolean validationMailAndPhoneNumber(String phoneNumber, String mail) throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(VALIDATION_MAIL_AND_PHONE_NUMBER, Boolean.class);
             query.setParameter(1, phoneNumber);
             query.setParameter(2, mail);
             return query.getSingleResult() == null;
-        } catch (InternalServerError exception) {
-            System.err.println(exception.getMessage());
-            throw new InternalServerError("Operation with User was filed in method" +
+        } catch (DaoException e) {
+            System.err.println(e.getMessage());
+            throw new HibernateException("Operation with User was filed in method" +
                     " testPhoneAndMail(String phoneNumber, String mail) from class " + alarmMessage);
         }
     }
 
-    @Transactional
-    public User getUser(String mail, String password) throws InternalServerError {
+    public User getUser(String mail, String password) throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(GET_USER, User.class);
             query.setParameter(1, mail);
             query.setParameter(2, password);
             return (User) query.getSingleResult();
-        } catch (InternalServerError e) {
-            throw new InternalServerError("Operation with user data was filed in method" +
+        } catch (DaoException e) {
+            throw new HibernateException("Operation with user data was filed in method" +
                     "getUser(String email, String password) from class " + alarmMessage);
         }
     }

@@ -5,8 +5,8 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-
 public class RelationshipDAO extends GeneralDAO<Relationship> {
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,7 +29,6 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
 
     private String alarmMessage = RelationshipDAO.class.getName();
 
-    @Transactional
     public Relationship getRelationship(Long userIdFrom, Long userIdTo) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET, Relationship.class);
@@ -44,7 +42,6 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         }
     }
 
-    @Transactional
     public List<User> getIn(Long userId) throws InternalServerError {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_INPUT, User.class);
@@ -57,14 +54,13 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         }
     }
 
-    @Transactional
-    public List<User> getOut(Long userId) throws InternalServerError {
+    public List<User> getOut(Long userId) throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(RELATIONSHIP_GET_OUTPUT, User.class);
             query.setParameter(1, RelationshipStatus.WAITING_FOR_ACCEPT.toString());
             query.setParameter(1, userId);
             return query.getResultList();
-        } catch (InternalServerError e) {
+        } catch (HibernateException e) {
             throw new InternalServerError("Operation was filed in method getOut(String userId) from class "
                     + alarmMessage);
         }
@@ -90,8 +86,7 @@ public class RelationshipDAO extends GeneralDAO<Relationship> {
         super.delete(relationship);
     }
 
-    @Transactional
-    public Integer getRelationsByStatus(Long userIdFrom) throws InternalServerError {
+    public Integer getRelationsByStatus(Long userIdFrom) throws DaoException {
         List<User> users = getIn(userIdFrom);
         if (users.isEmpty())
             return null;

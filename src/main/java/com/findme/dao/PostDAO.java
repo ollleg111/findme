@@ -4,7 +4,6 @@ import com.findme.exceptions.DaoException;
 import com.findme.models.Post;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,7 +53,6 @@ public class PostDAO extends GeneralDAO<Post> {
         super.delete(post);
     }
 
-    @Transactional
     public List<Post> getDataSortedPostsList(Long userId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_POSTS_SORTED_BY_DATE, Post.class);
@@ -66,7 +64,6 @@ public class PostDAO extends GeneralDAO<Post> {
         }
     }
 
-    @Transactional
     public List<Post> getFilteredPostsById(Long ownerId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_USER_POSTS, Post.class);
@@ -78,7 +75,6 @@ public class PostDAO extends GeneralDAO<Post> {
         }
     }
 
-    @Transactional
     public List<Post> getFilteredByFriends(Long ownerId) throws DaoException{
         try {
             Query query = entityManager.createNativeQuery(GET_ALL_OWNER_FRIENDS_POSTS, Post.class);
@@ -90,7 +86,6 @@ public class PostDAO extends GeneralDAO<Post> {
         }
     }
 
-    @Transactional
     public List<Post> findAll() throws DaoException {
         try {
             Query query = entityManager.createNativeQuery(SELECT_FROM, Post.class);

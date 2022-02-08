@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
+
 @Entity(name = "users")
 @Table(name = "USERS")
 @Getter

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class PostService {
     private final PostDAO postDAO;
-    private RelationshipService relationshipService;
+    private final RelationshipService relationshipService;
 
     @Autowired
     public RelationshipService getRelationshipService() {
